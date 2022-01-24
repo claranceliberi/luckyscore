@@ -2,7 +2,7 @@ import FormationsVue from "@/views/FormationsView.vue";
 import TeamsView from "@/views/TeamsView.vue";
 
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "~/views/HomeView.vue";
+import Home from "~/views/public/HomeView.vue";
 const routes = [
   {
     path: "/",
