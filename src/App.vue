@@ -1,6 +1,4 @@
-<script setup lang="ts">
-  import FourTwoTwoTwo from "./components/FourTwoTwoTwo.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <router-view />

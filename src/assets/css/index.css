@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&family=Dongle:wght@300&display=swap");
+
+* {
+    font-family: "DM Sans", sans-serif;
+    /* font-family: "Dongle", sans-serif; */
+  }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

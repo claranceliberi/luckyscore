@@ -3,9 +3,10 @@
 <template>
   <div class="field">
     <div class="large-goal">
-      <div class="small-goal"></div>
+      <div class="small-goal">
+        <div class="user u1"><span class="p-names">Damour</span></div>
+      </div>
     </div>
-    <div class="user u1"><span class="p-names">Damour</span></div>
     <div class="user u2"><span class="p-names">Gershom</span></div>
     <div class="user u3"><span class="p-names">Fredson</span></div>
     <div class="user u4"><span class="p-names">Blessing</span></div>
@@ -21,11 +22,6 @@
 </template>
 
 <style scoped>
-  @import url("https://fonts.googleapis.com/css2?family=DM+Sans&family=Dongle:wght@300&display=swap");
-  * {
-    font-family: "DM Sans", sans-serif;
-    /* font-family: "Dongle", sans-serif; */
-  }
   .p-names {
     font-size: 1rem;
     font-weight: 700;
@@ -37,20 +33,18 @@
     width: 40%;
     height: 20%;
     border: 3px solid #fff;
-    position: relative;
-    top: 9.7%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 0%;
+    left: 30%;
   }
 
   .small-goal {
     width: 50%;
-    height: 80%;
+    height: 55%;
     border: 3px solid #fff;
-    position: relative;
-    top: 9.7%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute;
+    top: -3%;
+    left: 26%;
   }
   .field {
     height: 580px;
@@ -71,13 +65,12 @@
   }
 
   .u1 {
-    /* position: absolute; */
-    top: 6%;
-    left: 46%;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .u2 {
-    /* position: absolute; */
     top: 23%;
     left: 0%;
   }
