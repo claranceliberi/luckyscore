@@ -1,11 +1,40 @@
 import FormationsVue from "@/views/FormationsView.vue";
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
-import Fixtures from "~/views/public/home/FixturesView.vue";
 import Stats from "~/views/public/home/StatsView.vue";
 import Table from "~/views/public/home/TableView.vue";
 import Players from "~/views/public/home/PlayersView.vue";
+import Fixtures from "~/views/public/home/FixturesView.vue";
+
+import Dashboard from "~/views/DashboardView.vue";
+import IndexDashboard from "~/views/dashboard/IndexView.vue";
+import DashboardTeams from "~/views/dashboard/TeamsView.vue";
+import DashboardMatch from "~/views/dashboard/MatchesView.vue";
+
 const routes = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    children: [
+      { path: "/dashboard/", name: "Dashboard", component: IndexDashboard },
+      {
+        path: "/dashboard/table",
+        name: "DashboardTeams",
+        component: DashboardTeams,
+      },
+      {
+        path: "/dashboard/stats",
+        name: "DashboardMatches",
+        component: DashboardMatch,
+      },
+    ],
+  },
+  {
+    path: "/formations",
+    name: "About",
+    component: FormationsVue,
+  },
   {
     path: "/",
     name: "Home",
@@ -16,11 +45,6 @@ const routes = [
       { path: "/stats", name: "Stats", component: Stats },
       { path: "/players", name: "Players", component: Players },
     ],
-  },
-  {
-    path: "/formations",
-    name: "About",
-    component: FormationsVue,
   },
 ];
 
