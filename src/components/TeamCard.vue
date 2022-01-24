@@ -3,9 +3,9 @@
 <template>
   <div class="flex gap-4 w-72 h-28 bg-white px-8 items-center">
     <div
-      class="rounded-full h-12 w-12 border flex items-center justify-center border-gray-100"
+      class="rounded-full h-12 w-12 border flex items-center justify-center border-[#DEE2E6]"
     >
-      <span>logo</span>
+      <img alt="Team logo" src="../assets/team.svg" />
     </div>
 
     <div class="flex flex-col gap-2">

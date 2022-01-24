@@ -31,7 +31,7 @@
       </svg>
     </div>
     <div class="links">
-      <ul class="flex space-x-4 font-medium">
+      <ul class="flex space-x-16 font-medium">
         <li class="home">
           <router-link to="/">Home</router-link>
         </li>
