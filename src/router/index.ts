@@ -19,12 +19,12 @@ const routes = [
     children: [
       { path: "/dashboard/", name: "Dashboard", component: IndexDashboard },
       {
-        path: "/dashboard/table",
+        path: "/dashboard/teams",
         name: "DashboardTeams",
         component: DashboardTeams,
       },
       {
-        path: "/dashboard/stats",
+        path: "/dashboard/matches",
         name: "DashboardMatches",
         component: DashboardMatch,
       },

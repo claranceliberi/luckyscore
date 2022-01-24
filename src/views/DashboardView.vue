@@ -3,9 +3,9 @@
   import NavbarMolecule from "@/components/molecules/NavbarMolecule.vue";
 
   const links: ILink[] = [
-    { name: "Dashboard", href: "/" },
-    { name: "Teams", href: "/teams" },
-    { name: "Matches", href: "/matches" },
+    { name: "Dashboard", href: "/dashboard/" },
+    { name: "Teams", href: "/dashboard/teams" },
+    { name: "Matches", href: "/dashboard/matches" },
   ];
 </script>
 
@@ -15,7 +15,6 @@
       <NavbarMolecule rounded :links="links" />
     </div>
     <div class="dashboard--page">
-      dashboard default
       <router-view />
     </div>
   </div>
