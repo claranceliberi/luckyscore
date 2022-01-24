@@ -1,0 +1,17 @@
+name: production
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: install dependencies
+      run: npm install
+    - name: Lint code
+      run: npm run lint
+    - name: build
+      run: npm run build
