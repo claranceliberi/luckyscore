@@ -1,4 +1,5 @@
 import FormationsVue from "@/views/FormationsView.vue";
+import Matches from "@/views/MatchesViews.vue";
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/HomeView.vue";
 const routes = [
@@ -11,6 +12,11 @@ const routes = [
     path: "/formations",
     name: "About",
     component: FormationsVue,
+  },
+  {
+    path: "/matches",
+    name: "Matches",
+    component: Matches,
   },
 ];
 
