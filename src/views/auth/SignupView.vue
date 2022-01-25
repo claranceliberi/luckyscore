@@ -2,12 +2,10 @@
   <div class="w-full flex justify-center">
     <div class="form w-full bg-white max-w-md p-8">
       <div class="form--head pb-8">
-        <h1 class="font-bold text-2xl">Sign In</h1>
+        <h1 class="font-bold text-2xl">Sign Up</h1>
         <h3 class="font-semibold py-2">
-          Don’t have an account?
-          <router-link to="/signup" class="text-blue-700"
-            >Create account.</router-link
-          >
+          Do you have an account?
+          <router-link to="/signin" class="text-blue-700">Login.</router-link>
         </h3>
       </div>
       <div class="form--socials">
