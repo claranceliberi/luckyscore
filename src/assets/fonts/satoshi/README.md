@@ -1,16 +1,21 @@
 # Installing Webfonts
+
 Follow these simple Steps.
 
 ## 1.
+
 Put `satoshi/` Folder into a Folder called `fonts/`.
 
 ## 2.
+
 Put `satoshi.css` into your `css/` Folder.
 
 ## 3. (Optional)
+
 You may adapt the `url('path')` in `satoshi.css` depends on your Website Filesystem.
 
 ## 4.
+
 Import `satoshi.css` at the top of you main Stylesheet.
 
 ```
@@ -18,7 +23,6 @@ Import `satoshi.css` at the top of you main Stylesheet.
 ```
 
 ## 5.
-
 
 ```
 font-family: 'Satoshi-Variable';
@@ -34,4 +38,3 @@ font-family: 'Satoshi-BoldItalic';
 font-family: 'Satoshi-Black';
 font-family: 'Satoshi-BlackItalic';
 ```
-
