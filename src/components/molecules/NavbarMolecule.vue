@@ -54,6 +54,9 @@
         >
           <router-link :to="link.href"> {{ link.name }} </router-link>
         </li>
+        <li class="link">
+          <router-link to="/teams">Teams</router-link>
+        </li>
       </ul>
     </div>
     <div class="spacing w-2 h-2 block"></div>

@@ -22,8 +22,8 @@
   import Vue from "vue";
 
   export default {
-    props: ["name", "matches"],
     components: { SingleMatch },
+    props: ["name", "matches"],
   };
 </script>
 

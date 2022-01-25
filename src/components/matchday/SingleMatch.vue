@@ -26,8 +26,8 @@
 <template>
   <div class="pl-10">
     <div
-      class="flex items-center justify-between mr-18"
       v-if="match_status === 'Live'"
+      class="flex items-center justify-between mr-18"
     >
       <p class="text-red-500">
         {{ match_status }}
