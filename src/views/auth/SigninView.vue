@@ -1,3 +1,16 @@
+<script lang="ts" setup>
+  import { supabase } from "@/lib/supabase";
+
+  async function signInWithGithub() {
+    const { user, session, error } = await supabase.auth.signIn({
+      // provider can be 'github', 'google', 'gitlab', or 'bitbucket'
+      provider: "github",
+    });
+
+    console.log(user, session, error);
+  }
+</script>
+
 <template>
   <div class="w-full flex justify-center">
     <div class="form w-full bg-white max-w-md p-8">
@@ -87,6 +100,7 @@
         </button>
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
+          @click="signInWithGithub"
         >
           <div class="icon pr-11">
             <svg
