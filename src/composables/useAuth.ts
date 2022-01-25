@@ -1,6 +1,6 @@
+import { ApiError, Provider, Session } from "@supabase/supabase-js";
 import { ref } from "vue";
 import { supabase } from "~/lib/supabase";
-import { Session, Provider, ApiError } from "@supabase/supabase-js";
 
 const userSession = ref<Session | null>(null);
 
@@ -8,6 +8,12 @@ const userSession = ref<Session | null>(null);
  * Handles user login via email + password into a supabase session.
  * If not password is empty, it will send a magic link to the users email address.
  */
+
+type Credentials = {
+  email: string;
+  password: string;
+};
+
 async function handleLogin(credentials: Credentials) {
   try {
     const { error, user } = await supabase.auth.signIn({
@@ -122,4 +128,5 @@ export {
   handleLogout,
   handlePasswordReset,
   handleUpdateUser,
+  Credentials,
 };
