@@ -49,7 +49,7 @@
 
       <div
         v-if="matchStatus === 'Finished'"
-        class="flex-row w-10 bg-[#502274] -mr-5 text-white rounded text-center px-2 py-2"
+        class="flex-row w-10 bg-[#502274] text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
         <div class="mt-3">{{ awayScore }}</div>
