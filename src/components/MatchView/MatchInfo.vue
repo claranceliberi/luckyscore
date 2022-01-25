@@ -10,12 +10,6 @@
     <p>24/02/2022</p>
 
     <h1 class="font-black mt-4 mb-2">Stadium</h1>
-    <p>Ntvet-Rca Pitch</p>
+    <p class="text-appgrey">Ntvet-Rca Pitch</p>
   </div>
 </template>
-
-<style scoped>
-  p {
-    color: #6c757d;
-  }
-</style>

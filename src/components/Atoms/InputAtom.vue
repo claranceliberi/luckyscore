@@ -4,7 +4,7 @@
     <input
       :value="modelValue"
       :placeholder="props.placeholder"
-      class="py-2 px-5 w-72 border-[#502274] border-2 rounded focus:outline-none"
+      class="py-2 px-5 w-72 border-primary border-2 rounded focus:outline-none"
       :class="{
         '': !props.readonly,
         'secondary-bg': props.bg === 'secondary',
