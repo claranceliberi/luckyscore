@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
+  import { onBeforeMount } from "vue";
 
   async function signInWithGithub() {
     const { user, session, error } = await supabase.auth.signIn({
@@ -7,8 +8,29 @@
       provider: "github",
     });
 
-    console.log(user, session, error);
+    console.log("github", user, session, error);
   }
+
+  async function signInWithGoogle() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "google",
+    });
+
+    console.log("google", user, session, error);
+  }
+
+  async function signInWithFacebook() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "facebook",
+    });
+
+    console.log("facebook", user, session, error);
+  }
+  async function signout() {
+    const { error } = await supabase.auth.signOut();
+    console.log("logout", error);
+  }
+  onBeforeMount(signout);
 </script>
 
 <template>
@@ -26,6 +48,7 @@
       <div class="form--socials">
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
+          @click="signInWithGoogle"
         >
           <div class="icon pr-11">
             <svg
@@ -57,6 +80,7 @@
         </button>
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
+          @click="signInWithFacebook"
         >
           <div class="icon pr-11">
             <svg
