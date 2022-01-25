@@ -36,5 +36,13 @@
   </table>
 </template>
 <script lang="ts">
-  import Vue from "vue";
+  export default {
+    name: "StandingTableMolecule",
+    props: {
+      standings: {
+        type: Array,
+        required: true,
+      },
+    },
+  };
 </script>
