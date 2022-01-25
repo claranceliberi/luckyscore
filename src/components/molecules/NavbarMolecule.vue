@@ -46,7 +46,7 @@
       </svg>
     </div>
     <div class="links">
-      <ul class="flex space-x-16 font-medium">
+      <ul class="flex space-x-16 font-medium text-sm">
         <li
           v-for="(link, i) in props.links"
           :key="i"
