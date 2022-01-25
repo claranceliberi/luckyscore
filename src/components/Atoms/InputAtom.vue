@@ -8,7 +8,6 @@
       :class="{
         '': !props.readonly,
         'secondary-bg': props.bg === 'secondary',
-        'main-bg': props.bg === 'main',
       }"
       :type="props.type"
       :readonly="props.readonly"

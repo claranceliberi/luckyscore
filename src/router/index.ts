@@ -26,18 +26,16 @@ const routes = [
         path: "/dashboard/teams",
         name: "DashboardTeams",
         component: DashboardTeams,
-        children: [
-          {
-            path: "/dashboard/teams/new",
-            name: "newTeam",
-            component: NewTeamView,
-          },
-        ],
       },
       {
         path: "/dashboard/matches",
         name: "DashboardMatches",
         component: DashboardMatch,
+      },
+      {
+        path: "/dashboard/teams/new",
+        name: "newTeam",
+        component: NewTeamView,
       },
     ],
   },
