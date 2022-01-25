@@ -1,5 +1,20 @@
+<script lang="ts" setup>
+  import { ILink } from "~/types/global";
+
+  interface Props {
+    links: ILink[];
+    rounded?: boolean;
+  }
+  const props = withDefaults(defineProps<Props>(), {
+    rounded: false,
+  });
+</script>
+
 <template>
-  <div class="nav flex px-20 h-20 justify-between pt-8 bg-white">
+  <div
+    class="nav flex px-20 justify-between items-center bg-white"
+    :class="`${rounded ? 'rounded-full h-16 mt-8' : 'h-20'}`"
+  >
     <div class="logo">
       <svg
         width="115"
@@ -32,14 +47,12 @@
     </div>
     <div class="links">
       <ul class="flex space-x-16 font-medium">
-        <li class="home">
-          <router-link to="/">Home</router-link>
-        </li>
-        <li class="link">
-          <router-link to="/bet">Sports Bet</router-link>
-        </li>
-        <li class="link">
-          <router-link to="/stat">Stats</router-link>
+        <li
+          v-for="(link, i) in props.links"
+          :key="i"
+          :class="`${i < 1 ? 'home' : 'link'}`"
+        >
+          <router-link :to="link.href"> {{ link.name }} </router-link>
         </li>
         <li class="link">
           <router-link to="/teams">Teams</router-link>
