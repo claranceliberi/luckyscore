@@ -15,7 +15,7 @@
           match_status: "Finished",
           match_time: "18:30",
           match_hometeam_id: "7275",
-          match_hometeam_name: "Deportivo Alavés",
+          match_hometeam_name: "Deportivo",
           match_hometeam_score: "4",
           match_awayteam_id: "151",
           match_awayteam_name: "Granada",

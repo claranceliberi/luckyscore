@@ -14,8 +14,8 @@
   const props = defineProps<Props>();
 </script>
 <template>
-  <div class="pl-10">
-    <div
+  <div class="px-10">
+    <!-- <div
       v-if="matchStatus === 'Live'"
       class="flex items-center justify-between mr-18"
     >
@@ -30,16 +30,18 @@
     >
       <small class="text-red-500"></small>
       <p class="text-red-500 mr-5">FT</p>
-    </div>
+    </div> -->
 
-    <div class="flex justify-between">
-      <div class="flex-none w-48">
+    <div
+      class="flex justify-between flex-wrap items-center font-medium text-sm"
+    >
+      <div class="flex-none">
         <div class="flex">
           <img src="@/assets/icons/teamlogo.svg" />
           <h1 class="ml-2">{{ homeTeam }}</h1>
         </div>
 
-        <div class="flex">
+        <div class="flex mt-3">
           <img src="@/assets/icons/teamlogo.svg" />
           <h1 class="ml-2">{{ awayTeam }}</h1>
         </div>
@@ -47,14 +49,14 @@
 
       <div
         v-if="matchStatus === 'Finished'"
-        class="flex-initial w-12 game-score text-center"
+        class="flex-row w-10 bg-[#502274] -mr-5 text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
-        <div>{{ awayScore }}</div>
+        <div class="mt-3">{{ awayScore }}</div>
       </div>
 
-      <div class="line bg-gray-400"></div>
-      <div class="flex-initial w-40 pl-4">
+      <div class="line bg-gray-400 h-20"></div>
+      <div class="flex-initial items-center">
         <div>
           {{
             new Date(matchDate).toString().split(" ")[2] +
@@ -69,13 +71,7 @@
 </template>
 
 <style>
-  .game-score {
-    background-color: #502274;
-    border-radius: 4px;
-    color: #fff;
-  }
   .line {
     border: 1px solid #dee2e6;
-    margin: 0 3px;
   }
 </style>
