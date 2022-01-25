@@ -9,12 +9,15 @@
       <h1 class="text-2xl font-bold">Teams</h1>
 
       <router-link to="/dashboard/teams/new">
-        <button class="bg-primary px-6 py-4 w-auto h-14 rounded-3xl text-white">
+        <button
+          style="border-radius: 28px"
+          class="bg-primary px-6 py-4 w-auto h-14 rounded-3xl text-white"
+        >
           Add new team
         </button>
       </router-link>
     </div>
-    <div>
+    <div class="flex gap-6">
       <TeamCardVue />
     </div>
   </div>

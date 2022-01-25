@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2 pb-4">
-    <label class="font-medium">{{ props.title }}</label>
+    <label class="font-medium text-sm">{{ props.title }}</label>
     <input
       :value="modelValue"
       :placeholder="props.placeholder"
