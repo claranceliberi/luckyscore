@@ -1,36 +1,26 @@
-<script lang="ts">
+<script setup lang="ts">
   import Vue from "vue";
-  export default {
-    props: [
-      "home_team",
-      "away_team",
-      "home_score",
-      "away_score",
-      "match_time",
-      "match_date",
-      "match_status",
-    ],
 
-    methods: {
-      date_format(date: any) {
-        var mydate = new Date(date);
-        return (
-          mydate.toDateString().split(" ")[2] +
-          " " +
-          mydate.toDateString().split(" ")[1]
-        );
-      },
-    },
-  };
+  interface Props {
+    homeTeam: string;
+    awayTeam: string;
+    homeScore: string;
+    awayScore: string;
+    matchTime: string;
+    matchDate: string;
+    matchStatus: string;
+  }
+
+  const props = defineProps<Props>();
 </script>
 <template>
   <div class="pl-10">
     <div
-      v-if="match_status === 'Live'"
+      v-if="matchStatus === 'Live'"
       class="flex items-center justify-between mr-18"
     >
       <p class="text-red-500">
-        {{ match_status }}
+        {{ matchStatus }}
       </p>
       <small class="text-red-500 mr-5">05'</small>
     </div>
@@ -39,27 +29,27 @@
       <div class="flex-none w-48">
         <div class="flex">
           <img src="@/assets/icons/teamlogo.svg" />
-          <h1 class="ml-2">{{ home_team }}</h1>
+          <h1 class="ml-2">{{ homeTeam }}</h1>
         </div>
 
         <div class="flex">
           <img src="@/assets/icons/teamlogo.svg" />
-          <h1 class="ml-2">{{ away_team }}</h1>
+          <h1 class="ml-2">{{ awayTeam }}</h1>
         </div>
       </div>
 
       <div
-        v-if="match_status === 'Finished'"
+        v-if="matchStatus === 'Finished'"
         class="flex-initial w-12 game-score text-center"
       >
-        <div>{{ home_score }}</div>
-        <div>{{ away_score }}</div>
+        <div>{{ homeScore }}</div>
+        <div>{{ awayScore }}</div>
       </div>
 
       <div class="line bg-gray-400"></div>
       <div class="flex-initial w-40 pl-4">
-        <div>{{ date_format(match_date) }}</div>
-        <div>{{ match_time }}</div>
+        <div>{{}}</div>
+        <div>{{ matchTime }}</div>
       </div>
     </div>
   </div>
