@@ -11,7 +11,7 @@
       description: description.value,
     });
 
-    console.log(error);
+    // console.log(error);
   }
 </script>
 
