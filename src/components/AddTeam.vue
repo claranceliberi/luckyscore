@@ -22,7 +22,7 @@
     <InputAtom v-model="description" title="Team Desscription" />
     <button
       type="submit"
-      class="bg-[#502274] px-6 my-6 w-36 h-14 flex justify-center items-center rounded-3xl text-white"
+      class="bg-primary px-6 my-6 w-36 h-14 flex justify-center items-center rounded-3xl text-white"
     >
       Save team
     </button>

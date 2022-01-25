@@ -1,17 +1,23 @@
 <template>
   <div class="match__container mb-4">
-    <h1 className="header">Line-Ups</h1>
+    <h1 className="header text-2xl font-bold mb-5 mt-10">Line-Ups</h1>
     <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-4">
       <div class="w-full md:w-1/2">
         <div class="teams__header flex">
-          <div class="active w-1/2 pb-4">
-            <p>Welding L3</p>
+          <div
+            class="active cursor-pointer text-primary w-1/2 pb-4 border-b-2 border-primary"
+          >
+            <p class="text-center">Welding L3</p>
           </div>
-          <div class="w-1/2 pb-4">
+          <div
+            class="w-1/2 cursor-pointer pb-4 text-appgrey borber-b border-gray-200"
+          >
             <p>Culinary L2</p>
           </div>
         </div>
-        <div class="forms mt-4">
+        <div
+          class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
+        >
           <FourFourTwo></FourFourTwo>
         </div>
       </div>
@@ -33,34 +39,4 @@
   import FourFourTwo from "@/components/FourFourTwo.vue";
 </script>
 
-<style scoped>
-  .header {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-top: 40px;
-  }
-
-  .teams__header > div {
-    color: #6c757d;
-    border-bottom: 1px solid #dee2e6;
-    cursor: pointer;
-  }
-
-  .teams__header .active {
-    color: #4e2172;
-    border-bottom: 2px solid #4e2172;
-  }
-  .teams__header p {
-    text-align: center;
-  }
-
-  .forms {
-    gap: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-</style>
+<style scoped></style>
