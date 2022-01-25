@@ -24,6 +24,13 @@
       </p>
       <small class="text-red-500 mr-5">05'</small>
     </div>
+    <div
+      v-else-if="matchStatus === 'Finished'"
+      class="flex items-center justify-between mr-18"
+    >
+      <small class="text-red-500"></small>
+      <p class="text-red-500 mr-5">FT</p>
+    </div>
 
     <div class="flex justify-between">
       <div class="flex-none w-48">
@@ -48,7 +55,13 @@
 
       <div class="line bg-gray-400"></div>
       <div class="flex-initial w-40 pl-4">
-        <div>{{}}</div>
+        <div>
+          {{
+            new Date(matchDate).toString().split(" ")[2] +
+            " " +
+            new Date(matchDate).toString().split(" ")[1]
+          }}
+        </div>
         <div>{{ matchTime }}</div>
       </div>
     </div>
