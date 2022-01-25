@@ -1,8 +1,8 @@
 <template>
   <h1 class="font-bold">{{ name }}</h1>
-  <div class="grid grid-cols-3 gap-6 mt-3">
+  <div class="grid md:grid-cols-3 sm:grid-cols-1 gap-6 mt-3">
     <div v-for="(match, index) in matches" :key="index">
-      <div class="border-[#DEE2E6] border py-8">
+      <div class="border-[#DEE2E6] border rounded py-8">
         <SingleMatch
           :home-team="match.match_hometeam_name"
           :away-team="match.match_awayteam_name"
