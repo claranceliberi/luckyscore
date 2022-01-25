@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="bg-white shadow-md p-4 my-8">
+  <div class="bg-white shadow-sm p-4 my-8">
     <h1 class="font-black mt-4 mb-2">Who will win?</h1>
     <div class="flex my-4 items-end">
       <div

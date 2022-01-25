@@ -1,7 +1,7 @@
 <template>
-  <div class="match__container md:mx-16 mb-4">
-    <h1 className="header mx-12 md:mx-0">Line-Ups</h1>
-    <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-8">
+  <div class="match__container mb-4">
+    <h1 className="header">Line-Ups</h1>
+    <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-4">
       <div class="w-full md:w-1/2">
         <div class="teams__header flex">
           <div class="active w-1/2 pb-4">
@@ -16,9 +16,9 @@
         </div>
       </div>
       <div
-        class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-"
+        class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
       >
-        <div class="w-full md:w-1/2">
+        <div class="w-full md:w-3/5">
           <MatchInfo></MatchInfo>
           <MatchPrediction></MatchPrediction>
         </div>

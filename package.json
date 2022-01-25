@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
+    "dev": "yarn lint && vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore --fix src",
@@ -27,6 +27,7 @@
     "eslint-plugin-vue": "^8.3.0",
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
+    "sass": "^1.49.0",
     "tailwindcss": "^3.0.15",
     "typescript": "^4.5.5",
     "vite": "^2.7.13",

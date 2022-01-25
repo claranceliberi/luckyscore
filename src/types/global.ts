@@ -11,3 +11,8 @@ declare interface Todo {
   is_complete?: boolean;
   inserted_at?: string;
 }
+
+export interface ILink {
+  name: string;
+  href: string;
+}
