@@ -16,3 +16,23 @@ export interface ILink {
   name: string;
   href: string;
 }
+
+export interface IMatch {
+  match_id: string;
+  league_id: string;
+  league_name: string;
+  match_date: string;
+  match_status: string;
+  match_time: string;
+  match_hometeam_id: string;
+  match_hometeam_name: string;
+  match_hometeam_score: string;
+  match_awayteam_id: string;
+  match_awayteam_name: string;
+  match_awayteam_score: string;
+}
+
+export interface IFixtures {
+  name: string;
+  matches: IMatch[];
+}

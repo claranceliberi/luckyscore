@@ -1,6 +1,10 @@
 import FormationsVue from "@/views/FormationsView.vue";
+import TeamsView from "@/views/dashboard/TeamsView.vue";
+import NewTeamView from "@/views/NewTeamView.vue";
+
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
+import MatchView from "~/views/public/home/MatchView.vue";
 import Stats from "~/views/public/home/StatsView.vue";
 import Table from "~/views/public/home/TableView.vue";
 import Players from "~/views/public/home/PlayersView.vue";
@@ -28,6 +32,11 @@ const routes = [
         name: "DashboardMatches",
         component: DashboardMatch,
       },
+      {
+        path: "/dashboard/teams/new",
+        name: "newTeam",
+        component: NewTeamView,
+      },
     ],
   },
   {
@@ -44,6 +53,7 @@ const routes = [
       { path: "/table", name: "Table", component: Table },
       { path: "/stats", name: "Stats", component: Stats },
       { path: "/players", name: "Players", component: Players },
+      { path: "/match/:id", name: "Match", component: MatchView },
     ],
   },
 ];
