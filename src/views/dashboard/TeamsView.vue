@@ -9,9 +9,7 @@
       <h1 class="text-2xl font-bold">Teams</h1>
 
       <router-link to="/dashboard/teams/new">
-        <button
-          class="bg-[#502274] px-6 py-4 w-auto h-14 rounded-3xl text-white"
-        >
+        <button class="bg-primary px-6 py-4 w-auto h-14 rounded-3xl text-white">
           Add new team
         </button>
       </router-link>

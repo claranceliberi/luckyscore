@@ -9,7 +9,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <h2 class="text-[#6C757D] font-medium text-sm">Team</h2>
+      <h2 class="text-appgrey font-medium text-sm">Team</h2>
       <h1 class="font-bold text-base">Welding</h1>
     </div>
   </div>

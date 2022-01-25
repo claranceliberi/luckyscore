@@ -21,7 +21,7 @@
     <div class="navbar">
       <NavbarMolecule :links="homeLinks" />
     </div>
-    <div class="home--page__wrapper px-20">
+    <div class="home--page__wrapper px-1 md:px-20">
       <SubnavbarMoleculeVue :links="links">
         <div class="pb-14 pt-8">
           <h4 class="">Football Competition</h4>
