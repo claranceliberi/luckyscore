@@ -1,4 +1,7 @@
 import FormationsVue from "@/views/FormationsView.vue";
+import TeamsView from "@/views/dashboard/TeamsView.vue";
+import NewTeamView from "@/views/NewTeamView.vue";
+
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
 import MatchView from "~/views/public/home/MatchView.vue";
@@ -23,6 +26,13 @@ const routes = [
         path: "/dashboard/teams",
         name: "DashboardTeams",
         component: DashboardTeams,
+        children: [
+          {
+            path: "/dashboard/teams/new",
+            name: "newTeam",
+            component: NewTeamView,
+          },
+        ],
       },
       {
         path: "/dashboard/matches",
