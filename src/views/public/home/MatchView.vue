@@ -10,7 +10,7 @@
             <p class="text-center">Welding L3</p>
           </div>
           <div
-            class="w-1/2 cursor-pointer pb-4 text-appgrey borber-b border-gray-200"
+            class="w-1/2 cursor-pointer pb-4 text-appgrey border-b-2 border-gray-200"
           >
             <p>Culinary L2</p>
           </div>
@@ -24,9 +24,10 @@
       <div
         class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
       >
-        <div class="w-full md:w-3/5">
-          <MatchInfo></MatchInfo>
-          <MatchPrediction></MatchPrediction>
+        <div class="w-full md:w-4/5">
+          <!-- <MatchInfo></MatchInfo>
+          <MatchPrediction></MatchPrediction> -->
+          <MatchStats></MatchStats>
         </div>
       </div>
     </div>
@@ -35,6 +36,7 @@
 
 <script setup lang="" ts>
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
+  import MatchStats from "@/components/MatchView/MatchStats.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
 </script>
