@@ -1,22 +1,50 @@
-<script setup lang="ts"></script>
+<script lang="ts">
+  import { IPlayerMatch } from "@/types/global";
+  import { defineComponent } from "vue";
+  export default defineComponent({
+    name: "ThreeFiveTwo",
+    props: {
+      players: {
+        type: Array as () => IPlayerMatch[],
+        required: false,
+        default: () => [],
+      },
+    },
+    data() {
+      return {
+        pitch_players: [] as IPlayerMatch[],
+        loading: false,
+        goalkeeper: {} as IPlayerMatch | undefined,
+      };
+    },
+    created() {
+      this.goalkeeper = this.players.find(
+        (player) => player.pitch_position === 1,
+      );
+      this.pitch_players = this.players.filter(
+        (player) => player.pitch_position !== 1,
+      );
+    },
+  });
+</script>
 
 <template>
   <div class="field">
     <div class="large-goal">
       <div class="small-goal">
-        <div class="user u1"><span class="p-names">Damour</span></div>
+        <div class="user u1">
+          <span class="p-names">{{ goalkeeper?.player_id.split(" ")[0] }}</span>
+        </div>
       </div>
     </div>
-    <div class="user u2"><span class="p-names">Gershom</span></div>
-    <div class="user u3"><span class="p-names">Fredson</span></div>
-    <div class="user u4"><span class="p-names">Blessing</span></div>
-    <div class="user u5"><span class="p-names">Yassin</span></div>
-    <div class="user u6"><span class="p-names">Kenny</span></div>
-    <div class="user u7"><span class="p-names">Patrick</span></div>
-    <div class="user u8"><span class="p-names">Sage</span></div>
-    <div class="user u9"><span class="p-names">Isaac</span></div>
-    <div class="user u10"><span class="p-names">Divin</span></div>
-    <div class="user u11"><span class="p-names">Liberi</span></div>
+    <div
+      v-for="(player, index) in pitch_players"
+      :key="index"
+      class="user"
+      :class="`u${player.pitch_position}`"
+    >
+      <span class="p-names">{{ player.player_id.split(" ")[0] }}</span>
+    </div>
     <div class="face-of-goal"></div>
   </div>
 </template>
@@ -62,6 +90,7 @@
     border-radius: 50%;
     position: absolute;
     border: 4px solid #fff;
+    cursor: pointer;
   }
 
   .u1 {

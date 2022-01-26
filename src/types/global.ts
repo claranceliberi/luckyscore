@@ -17,6 +17,20 @@ export interface ILink {
   href: string;
 }
 
+export interface IPlayerMatch {
+  match_id: string;
+  player_id: string;
+  red_card: number;
+  yellow_card: number;
+  off_side: number;
+  pitch_position: number;
+  subbed: string;
+  goals: number;
+  assists: number;
+  big_chances: number;
+  successful_dribbles: number;
+}
+
 export interface IMatch {
   match_id: string;
   league_id: string;
