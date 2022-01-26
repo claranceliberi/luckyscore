@@ -51,7 +51,7 @@ export interface IFixtures {
   matches: IMatch[];
 }
 
-export interface ITime {
+export interface ITable {
   created_at: string;
   id: string;
 }
