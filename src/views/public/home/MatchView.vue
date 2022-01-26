@@ -18,7 +18,7 @@
         <div
           class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
         >
-          <FormationsView></FormationsView>
+          <FormationCard />
         </div>
       </div>
       <div
@@ -36,7 +36,7 @@
 <script setup lang="" ts>
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
-  import FormationsView from "@/views/FormationsView.vue";
+  import FormationCard from "@/components/formations/FormationCard.vue";
 </script>
 
 <style scoped></style>
