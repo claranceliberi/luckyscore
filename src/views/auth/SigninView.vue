@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
+  import { onBeforeMount } from "vue";
 
   async function signInWithGithub() {
     const { user, session, error } = await supabase.auth.signIn({
@@ -7,8 +8,29 @@
       provider: "github",
     });
 
-    console.log(user, session, error);
+    console.log("github", user, session, error);
   }
+
+  async function signInWithGoogle() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "google",
+    });
+
+    console.log("google", user, session, error);
+  }
+
+  async function signInWithFacebook() {
+    const { user, session, error } = await supabase.auth.signIn({
+      provider: "facebook",
+    });
+
+    console.log("facebook", user, session, error);
+  }
+  async function signout() {
+    const { error } = await supabase.auth.signOut();
+    console.log("logout", error);
+  }
+  onBeforeMount(signout);
 </script>
 
 <template>
@@ -17,15 +39,13 @@
       <div class="form--head pb-8">
         <h1 class="font-bold text-2xl">Sign In</h1>
         <h3 class="font-semibold py-2">
-          Don’t have an account?
-          <router-link to="/signup" class="text-blue-700"
-            >Create account.</router-link
-          >
+          We are delighted to welcome you back!
         </h3>
       </div>
       <div class="form--socials">
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
+          @click="signInWithGoogle"
         >
           <div class="icon pr-11">
             <svg
@@ -57,6 +77,7 @@
         </button>
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
+          @click="signInWithFacebook"
         >
           <div class="icon pr-11">
             <svg
@@ -75,29 +96,7 @@
           </div>
           <div class="text">Sign in with Facebook</div>
         </button>
-        <button
-          class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-        >
-          <div class="icon pr-11">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M22.5 12C22.5 17.796 17.8012 22.5 12 22.5C6.19875 22.5 1.5 17.796 1.5 12C1.5 6.19875 6.19875 1.5 12 1.5C17.8012 1.5 22.5 6.19875 22.5 12Z"
-                fill="#283544"
-              />
-              <path
-                d="M16.9216 9.34304C16.8643 9.37646 15.5003 10.0819 15.5003 11.6459C15.5646 13.4296 17.2216 14.0551 17.25 14.0551C17.2216 14.0885 16.9998 14.9072 16.343 15.7654C15.8217 16.5047 15.2432 17.25 14.3646 17.25C13.5289 17.25 13.2289 16.7573 12.2646 16.7573C11.229 16.7573 10.936 17.25 10.1431 17.25C9.26458 17.25 8.64315 16.4647 8.09345 15.7324C7.37932 14.7739 6.77233 13.2698 6.7509 11.8256C6.73646 11.0603 6.89392 10.308 7.29361 9.66904C7.85774 8.77699 8.86489 8.17143 9.96473 8.15146C10.8074 8.12498 11.5574 8.6906 12.0717 8.6906C12.5646 8.6906 13.486 8.15146 14.5286 8.15146C14.9786 8.1519 16.1786 8.27822 16.9216 9.34304ZM12.0005 7.99866C11.8505 7.29978 12.2646 6.60089 12.6503 6.15508C13.1432 5.61594 13.9216 5.25 14.5929 5.25C14.6357 5.94889 14.3641 6.63432 13.8787 7.13352C13.4432 7.67266 12.6932 8.07853 12.0005 7.99866Z"
-                fill="white"
-              />
-            </svg>
-          </div>
-          <div class="text">Sign in with Apple Id</div>
-        </button>
+
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
           @click="signInWithGithub"

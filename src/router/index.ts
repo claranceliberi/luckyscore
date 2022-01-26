@@ -58,7 +58,7 @@ const routes = [
   },
   {
     path: "/formations",
-    name: "About",
+    name: "Formations",
     component: FormationsVue,
   },
   {
