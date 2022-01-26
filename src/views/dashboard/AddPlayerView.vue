@@ -6,11 +6,17 @@
   import { reactive, ref } from "vue";
   import { useRoute } from "vue-router";
   import TeamPlayers from "./TeamPlayers.vue";
+  import EditPlayer from "@/components/EditPlayer.vue";
 
   interface Players extends ITable {
     id: string;
     full_name: string;
     team: string;
+  }
+
+  interface SinglePlayer {
+    id: string;
+    names: string;
   }
 
   interface IPlayersData {
@@ -22,6 +28,16 @@
   const players = reactive<IPlayersData>({
     isLoading: true,
     playerNames: [],
+  });
+
+  const showForm = reactive({
+    showAddForm: false,
+    showEditForm: false,
+  });
+
+  const playerInfo = reactive<SinglePlayer>({
+    names: "",
+    id: "",
   });
 
   supabase
@@ -52,7 +68,12 @@
     }
   }
 
-  const showForm = ref(false);
+  function editPlayer(index: number) {
+    const player = players.playerNames[index];
+    playerInfo.names = player.full_name || "";
+    playerInfo.id = player.id;
+    showForm.showEditForm = true;
+  }
 </script>
 
 <template>
@@ -86,7 +107,12 @@
     </button>
     <h1 class="font-medium text-2xl pt-4">{{ router.query.team }}</h1>
     <h3 class="pt-6 pb-4 text-lg">Players</h3>
-    <AddPlayer v-if="players.playerNames.length < 0 || showForm" />
+    <AddPlayer v-if="players.playerNames.length < 0 || showForm.showAddForm" />
+    <EditPlayer
+      v-if="showForm.showEditForm"
+      :player-id="playerInfo.id"
+      :names="playerInfo.names"
+    />
 
     <div v-else class="flex flex-col justify-start p-6 bg-white w-[22rem]">
       <h1 class="font-medium text-lg pb-6">Registered Players</h1>
@@ -101,7 +127,10 @@
 
           <div class="cursor-pointer">
             <div class="flex gap-4 items-center justify-center">
-              <img src="../../assets/icons/edit.svg" />
+              <img
+                src="../../assets/icons/edit.svg"
+                @click="editPlayer(index)"
+              />
               <img
                 src="../../assets/icons/close.svg"
                 @click="deletePlayer(player.id, index)"
@@ -117,7 +146,7 @@
         style="border-radius: 28px"
         type="submit"
         class="bg-transparent border-primary border px-6 mt-1 w-44 h-14 flex justify-center items-center text-primary font-medium"
-        @click="showForm = true"
+        @click="showForm.showAddForm = true"
       >
         Add new player
       </button>
