@@ -10,6 +10,7 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.4.3",
     "@supabase/supabase-js": "^1.29.4",
     "vue": "^3.2.29",
     "vue-router": "^4.0.12",

@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@headlessui/vue': ^1.4.3
   '@supabase/supabase-js': ^1.29.4
   '@typescript-eslint/eslint-plugin': ^5.10.1
   '@typescript-eslint/parser': ^5.10.1
@@ -15,6 +16,7 @@ specifiers:
   postcss: ^8.4.5
   prettier: ^2.5.1
   sass: ^1.49.0
+  solid: link:@heroicons/vue/solid
   tailwindcss: ^3.0.16
   typescript: ^4.5.5
   vite: ^2.7.13
@@ -25,7 +27,9 @@ specifiers:
   vue-tsc: ^0.31.1
 
 dependencies:
+  '@headlessui/vue': 1.4.3_vue@3.2.29
   '@supabase/supabase-js': 1.29.4
+  solid: link:@heroicons/vue/solid
   vue: 3.2.29
   vue-router: 4.0.12_vue@3.2.29
   vue-toastification: 2.0.0-rc.5_vue@3.2.29
@@ -141,6 +145,15 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@headlessui/vue/1.4.3_vue@3.2.29:
+    resolution: {integrity: sha512-cDAd3aP7jH5bO2WO4eSkyQQg0k6Zw8gobl+zL8LGApqix28EtlxultyKH/mVKnbo8Kiq6IDRzwP1HfKOf1QZbQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.2.29
+    dev: false
 
   /@humanwhocodes/config-array/0.5.0:
     resolution: {integrity: sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg==}

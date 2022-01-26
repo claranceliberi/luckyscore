@@ -1,170 +1,103 @@
 <template>
   <p class="header">All formations</p>
+  <div class="flex flex-col gap-5">
+    <div class="w-72">
+      <Listbox v-model="selectedFormation">
+        <div class="relative mt-1">
+          <ListboxButton
+            class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
+          >
+            <span class="block truncate">{{ selectedFormation.name }}</span>
+            <span
+              class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+            >
+              <!-- <SelectorIcon class="w-5 h-5 text-gray-400" aria-hidden="true" /> -->
+            </span>
+          </ListboxButton>
 
-  <div class="forms">
-    <FormationCard :players="players" />
+          <transition
+            leave-active-class="transition duration-100 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <ListboxOptions
+              class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            >
+              <ListboxOption
+                v-for="person in people"
+                v-slot="{ active, selected }"
+                :key="person.name"
+                :value="person"
+                as="template"
+              >
+                <li
+                  :class="[
+                    active ? 'text-amber-900 bg-amber-100' : 'text-gray-900',
+                    'cursor-default select-none relative py-2 pl-10 pr-4',
+                  ]"
+                >
+                  <span
+                    :class="[
+                      selected ? 'font-medium' : 'font-normal',
+                      'block truncate',
+                    ]"
+                    >{{ person.name }}</span
+                  >
+                  <span
+                    v-if="selected"
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+                  >
+                    <!-- <CheckIcon class="w-5 h-5" aria-hidden="true" /> -->
+                  </span>
+                </li>
+              </ListboxOption>
+            </ListboxOptions>
+          </transition>
+        </div>
+      </Listbox>
+    </div>
+    <div class="forms">
+      <FormationCard :formation="selectedFormation.name" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+  import { ref } from "vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
-
-  import { IPlayerMatch } from "@/types/global";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@headlessui/vue";
   import { defineComponent } from "vue";
   export default defineComponent({
     name: "FormationsView",
     components: {
       FormationCard,
+      Listbox,
+      ListboxButton,
+      ListboxOptions,
+      ListboxOption,
+      // CheckIcon,
+      // SelectorIcon,
     },
-    data() {
+
+    setup() {
+      const people = [
+        { name: "4-3-3" },
+        { name: "4-4-2" },
+        { name: "4-2-3-1" },
+        { name: "3-4-3" },
+        { name: "4-2-2-2" },
+        { name: "3-5-2" },
+      ];
+      const selectedFormation = ref(people[0]);
+
       return {
-        players: [
-          {
-            match_id: "1",
-            player_id: "Damour",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 1,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Gershom",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 2,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Yassin",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 3,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Fredson",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 4,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Blessing",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 5,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Kenny",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 6,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Liberi",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 7,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Gervais",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 8,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Isaac",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 9,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Divin",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 10,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Didier",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 11,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-        ] as IPlayerMatch[],
-        loading: false,
-        goalkeeper: {} as IPlayerMatch | undefined,
+        people,
+        selectedFormation,
       };
     },
   });
