@@ -16,7 +16,6 @@ specifiers:
   postcss: ^8.4.5
   prettier: ^2.5.1
   sass: ^1.49.0
-  solid: link:@heroicons/vue/solid
   tailwindcss: ^3.0.16
   typescript: ^4.5.5
   vite: ^2.7.13
@@ -29,7 +28,6 @@ specifiers:
 dependencies:
   '@headlessui/vue': 1.4.3_vue@3.2.29
   '@supabase/supabase-js': 1.29.4
-  solid: link:@heroicons/vue/solid
   vue: 3.2.29
   vue-router: 4.0.12_vue@3.2.29
   vue-toastification: 2.0.0-rc.5_vue@3.2.29
@@ -709,7 +707,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.19.1
-      caniuse-lite: 1.0.30001301
+      caniuse-lite: 1.0.30001302
       fraction.js: 4.1.2
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -752,7 +750,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001301
+      caniuse-lite: 1.0.30001302
       electron-to-chromium: 1.4.53
       escalade: 3.1.1
       node-releases: 2.0.1
@@ -784,8 +782,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /caniuse-lite/1.0.30001301:
-    resolution: {integrity: sha512-csfD/GpHMqgEL3V3uIgosvh+SVIQvCh43SNu9HRbP1lnxkKm1kjDG4f32PP571JplkLjfS+mg2p1gxR7MYrrIA==}
+  /caniuse-lite/1.0.30001302:
+    resolution: {integrity: sha512-YYTMO+tfwvgUN+1ZnRViE53Ma1S/oETg+J2lISsqi/ZTNThj3ZYBOKP2rHwJc37oCsPqAzJ3w2puZHn0xlLPPw==}
     dev: true
 
   /chalk/2.4.2:

@@ -20,6 +20,15 @@
 
   async function checkAuthUser() {
     loading.value = true;
+
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+    if (Object.keys(storedUser).length > 0) {
+      user.value = storedUser as SupabaseAuthUser;
+      loading.value = false;
+      return;
+    }
+
     const authUser = await supabase.auth.user();
 
     if (!authUser && !window.location.hash) {
@@ -30,6 +39,8 @@
     }
 
     user.value = authUser?.user_metadata as SupabaseAuthUser;
+
+    localStorage.setItem("user", JSON.stringify(authUser?.user_metadata));
   }
 
   onBeforeMount(async () => {
