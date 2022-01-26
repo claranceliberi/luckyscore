@@ -50,7 +50,7 @@ const routes = [
         props: true,
       },
       {
-        path: "/dashboard/teams/:teamId/view/add-player",
+        path: "/dashboard/teams/:teamId/add-player",
         name: "addPlayer",
         component: AddPlayerView,
       },

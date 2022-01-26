@@ -24,7 +24,7 @@
 <template>
   <router-link
     :to="{
-      path: `/dashboard/teams/${router.params.id}/view/add-player/`,
+      path: `/dashboard/teams/${router.params.id}/add-player/`,
     }"
   >
     <div class="w-72 rounded-lg h-20 bg-white px-6 py-[14px]">
