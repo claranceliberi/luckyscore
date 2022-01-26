@@ -2,34 +2,19 @@
   <p class="header">All formations</p>
 
   <div class="forms">
-    <ThreeFiveTwo :players="players" />
-    <ThreeFiveThree :players="players" />
-    <FourTwoTwoTwo :players="players" />
-    <FourFourTwo :players="players" />
-    <FourTwoThreeOne :players="players" />
-    <FourThreeThree :players="players" />
+    <FormationCard :players="players" />
   </div>
 </template>
 
 <script lang="ts">
-  import FourTwoTwoTwo from "@/components/formations/FourTwoTwoTwo.vue";
-  import FourFourTwo from "@/components/formations/FourFourTwo.vue";
-  import FourTwoThreeOne from "@/components/formations/FourTwoThreeOne.vue";
-  import FourThreeThree from "@/components/formations/FourThreeThree.vue";
-  import ThreeFiveThree from "@/components/formations/ThreeFourThree.vue";
-  import ThreeFiveTwo from "@/components/formations/ThreeFiveTwo.vue";
+  import FormationCard from "@/components/formations/FormationCard.vue";
 
   import { IPlayerMatch } from "@/types/global";
   import { defineComponent } from "vue";
   export default defineComponent({
     name: "FormationsView",
     components: {
-      FourTwoTwoTwo,
-      FourFourTwo,
-      FourTwoThreeOne,
-      FourThreeThree,
-      ThreeFiveThree,
-      ThreeFiveTwo,
+      FormationCard,
     },
     data() {
       return {
