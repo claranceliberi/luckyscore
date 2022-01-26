@@ -36,7 +36,7 @@
 <script setup lang="" ts>
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
-  import FourFourTwo from "@/components/FourFourTwo.vue";
+  import FourFourTwo from "@/components/formations/FourFourTwo.vue";
 </script>
 
 <style scoped></style>

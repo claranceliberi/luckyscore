@@ -2,18 +2,22 @@
   <p class="header">All formations</p>
 
   <div class="forms">
-    <FourTwoTwoTwo></FourTwoTwoTwo>
-    <FourFourTwo></FourFourTwo>
-    <FourTwoThreeOne></FourTwoThreeOne>
-    <FourThreeThree></FourThreeThree>
+    <ThreeFiveTwo />
+    <ThreeFiveThree />
+    <FourTwoTwoTwo />
+    <FourFourTwo />
+    <FourTwoThreeOne />
+    <FourThreeThree />
   </div>
 </template>
 
 <script setup lang="ts">
-  import FourTwoTwoTwo from "@/components/FourTwoTwoTwo.vue";
-  import FourFourTwo from "@/components/FourFourTwo.vue";
-  import FourTwoThreeOne from "@/components/FourTwoThreeOne.vue";
-  import FourThreeThree from "@/components/FourThreeThree.vue";
+  import FourTwoTwoTwo from "@/components/formations/FourTwoTwoTwo.vue";
+  import FourFourTwo from "@/components/formations/FourFourTwo.vue";
+  import FourTwoThreeOne from "@/components/formations/FourTwoThreeOne.vue";
+  import FourThreeThree from "@/components/formations/FourThreeThree.vue";
+  import ThreeFiveThree from "@/components/formations/ThreeFourThree.vue";
+  import ThreeFiveTwo from "@/components/formations/ThreeFiveTwo.vue";
 </script>
 
 <style scoped>
