@@ -36,3 +36,8 @@ export interface IFixtures {
   name: string;
   matches: IMatch[];
 }
+
+export interface ITime {
+  created_at: string;
+  id: string;
+}

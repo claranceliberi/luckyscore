@@ -15,6 +15,10 @@ import IndexDashboard from "~/views/dashboard/IndexView.vue";
 import DashboardTeams from "~/views/dashboard/TeamsView.vue";
 import DashboardMatch from "~/views/dashboard/MatchesView.vue";
 
+import Auth from "@/views/auth/AuthView.vue";
+import SignIn from "~/views/auth/SigninView.vue";
+import SignUp from "@/views/auth/SignupView.vue";
+
 const routes = [
   {
     path: "/dashboard",
@@ -54,6 +58,15 @@ const routes = [
       { path: "/stats", name: "Stats", component: Stats },
       { path: "/players", name: "Players", component: Players },
       { path: "/match/:id", name: "Match", component: MatchView },
+    ],
+  },
+  {
+    path: "/auth",
+    name: "Auth",
+    component: Auth,
+    children: [
+      { path: "/signin", name: "SignIn", component: SignIn },
+      { path: "/signup", name: "SignUp", component: SignUp },
     ],
   },
 ];
