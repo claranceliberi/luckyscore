@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-  import { ILink } from "~/types/global";
+  import { ILink, SupabaseAuthUser } from "~/types/global";
 
   interface Props {
     links: ILink[];
     rounded?: boolean;
+    user?: SupabaseAuthUser;
   }
   const props = withDefaults(defineProps<Props>(), {
     rounded: false,
+    user: undefined,
   });
 </script>
 
@@ -56,7 +58,16 @@
         </li>
       </ul>
     </div>
-    <div class="spacing w-2 h-2 block"></div>
+    <div class="spacing w-2 h-2 block">
+      <div v-if="props.user" class="auth-user">
+        <p>{{ user?.full_name }}</p>
+        <img
+          class="w-12 h-12 rounded-full"
+          :src="user?.avatar_url"
+          :alt="`${user?.full_name} avatar`"
+        />
+      </div>
+    </div>
   </div>
 </template>
 

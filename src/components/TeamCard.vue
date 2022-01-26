@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { supabase } from "@/lib/supabase";
-  import { ITime } from "@/types/global";
+  import { ITable } from "@/types/global";
   import { ref } from "vue";
 
-  interface Teams extends ITime {
+  interface Teams extends ITable {
     id: string;
     name: string;
     description: string;
@@ -30,9 +30,15 @@
 
   <div
     v-for="team in teams"
-    v-else-if="teams.length > 0 && !isLoading"
+    v-else-if="teams.length > 0"
     :key="team.id"
-    class="flex gap-4 w-72 h-28 bg-white px-8 items-center"
+    class="flex gap-4 w-72 h-28 bg-white px-8 items-center cursor-pointer rounded-lg"
+    @click="
+      $router.push({
+        path: `/dashboard/teams/${team.id}/view`,
+        query: { team: team.name },
+      })
+    "
   >
     <div
       class="rounded-full h-12 w-12 border flex items-center justify-center border-[#DEE2E6]"
@@ -46,5 +52,9 @@
     </div>
   </div>
 
-  <h1 v-else>Something happened</h1>
+  <h1 v-else-if="teams.length === 0 && !isLoading">
+    No teams available at the moment!
+  </h1>
+
+  <h1 v-else>Something wrong happened happened</h1>
 </template>

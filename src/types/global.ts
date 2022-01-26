@@ -17,6 +17,20 @@ export interface ILink {
   href: string;
 }
 
+export interface IPlayerMatch {
+  match_id: string;
+  player_id: string;
+  red_card: number;
+  yellow_card: number;
+  off_side: number;
+  pitch_position: number;
+  subbed: string;
+  goals: number;
+  assists: number;
+  big_chances: number;
+  successful_dribbles: number;
+}
+
 export interface IMatch {
   match_id: string;
   league_id: string;
@@ -37,7 +51,20 @@ export interface IFixtures {
   matches: IMatch[];
 }
 
-export interface ITime {
+export interface ITable {
   created_at: string;
   id: string;
+}
+
+export interface SupabaseAuthUser {
+  avatar_url: string;
+  email: string;
+  email_verified: string;
+  full_name: string;
+  iss: string;
+  nam: string;
+  preferred_username: string;
+  provider_id: string;
+  sub: string;
+  user_name?: string;
 }
