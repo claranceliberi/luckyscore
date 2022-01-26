@@ -7,7 +7,7 @@
       formation: {
         type: String,
         required: true,
-        default: () => "3-4-3",
+        default: () => "4-3-3",
       },
       players: {
         type: Array as () => IPlayerMatch[],
