@@ -32,18 +32,27 @@ export interface IPlayerMatch {
 }
 
 export interface IMatch {
-  match_id: string;
-  league_id: string;
-  league_name: string;
-  match_date: string;
+  id: string;
+  match_day: string;
+  season: string;
+  time: string;
+  in_charge: string;
+  description: string;
   match_status: string;
-  match_time: string;
-  match_hometeam_id: string;
-  match_hometeam_name: string;
-  match_hometeam_score: string;
-  match_awayteam_id: string;
-  match_awayteam_name: string;
-  match_awayteam_score: string;
+  home_team: string;
+  away_team: string;
+  home_shots: BigInteger;
+  away_shots: BigInteger;
+  home_score: BigInteger;
+  away_score: BigInteger;
+  home_lineup: string;
+  away_lineup: string;
+  home_corners: BigInteger;
+  away_corners: BigInteger;
+  home_shots_on_target: BigInteger;
+  away_shots_on_target: BigInteger;
+  home_fouls: BigInteger;
+  away_fouls: BigInteger;
 }
 
 export interface IFixtures {

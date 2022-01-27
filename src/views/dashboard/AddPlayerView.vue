@@ -5,7 +5,7 @@
   import { ITable } from "@/types/global";
   import { reactive, ref } from "vue";
   import { useRoute } from "vue-router";
-  import TeamPlayers from "./TeamPlayers.vue";
+  // import TeamPlayers from "./TeamPlayers.vue";
   import EditPlayer from "@/components/EditPlayer.vue";
 
   interface Players extends ITable {

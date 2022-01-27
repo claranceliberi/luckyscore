@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import MatchDay from "@/components/matchday/MatchesInMatchDay.vue";
+  import { supabase } from "@/lib/supabase";
 
   import { IFixtures } from "@/types/global";
 
@@ -51,64 +52,12 @@
         },
       ],
     },
-    {
-      name: "Matchday 2",
-      matches: [
-        {
-          match_id: "86392",
-          league_id: "302",
-          league_name: "La Liga",
-          match_date: "2021-05-16",
-          match_status: "Pending",
-          match_time: "18:30",
-          match_hometeam_id: "7275",
-          match_hometeam_name: "Deportivo Alavés",
-          match_hometeam_score: "4",
-          match_awayteam_id: "151",
-          match_awayteam_name: "Granada",
-          match_awayteam_score: "2",
-        },
-      ],
-    },
-    {
-      name: "Matchday 3",
-      matches: [
-        {
-          match_id: "86392",
-          league_id: "302",
-          league_name: "La Liga",
-          match_date: "2021-05-16",
-          match_status: "Postponed",
-          match_time: "18:30",
-          match_hometeam_id: "7275",
-          match_hometeam_name: "Deportivo Alavés",
-          match_hometeam_score: "4",
-          match_awayteam_id: "151",
-          match_awayteam_name: "Granada",
-          match_awayteam_score: "2",
-        },
-      ],
-    },
-    {
-      name: "Matchday 4",
-      matches: [
-        {
-          match_id: "86392",
-          league_id: "302",
-          league_name: "La Liga",
-          match_date: "2021-05-16",
-          match_status: "Pending",
-          match_time: "18:30",
-          match_hometeam_id: "7275",
-          match_hometeam_name: "Deportivo Alavés",
-          match_hometeam_score: "4",
-          match_awayteam_id: "151",
-          match_awayteam_name: "Granada",
-          match_awayteam_score: "2",
-        },
-      ],
-    },
   ];
+
+  // onBeforeMount(async () => {
+  //   const { data, error } = await supabase.from("team").select();
+  //   console.log(data);
+  // });
 </script>
 
 <template>
