@@ -4,38 +4,13 @@
 
   const REDIRECT_URL = "https://luckyscore.vercel.app/dashboard";
 
-  async function signInWithGithub() {
+  async function signIn(provider: "google" | "github" | "facebook") {
     const { user, session, error } = await supabase.auth.signIn(
-      {
-        provider: "github",
-      },
-      {
-        redirectTo: REDIRECT_URL,
-      },
+      { provider },
+      { redirectTo: REDIRECT_URL },
     );
   }
 
-  async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        redirectTo: REDIRECT_URL,
-      },
-    );
-  }
-
-  async function signInWithFacebook() {
-    const { user, session, error } = await supabase.auth.signIn(
-      {
-        provider: "facebook",
-      },
-      {
-        redirectTo: REDIRECT_URL,
-      },
-    );
-  }
   async function signout() {
     const { error } = await supabase.auth.signOut();
   }
@@ -54,7 +29,7 @@
       <div class="form--socials">
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithGoogle"
+          @click="signIn('google')"
         >
           <div class="icon pr-11">
             <svg
@@ -86,7 +61,7 @@
         </button>
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithFacebook"
+          @click="signIn('facebook')"
         >
           <div class="icon pr-11">
             <svg
@@ -108,7 +83,7 @@
 
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithGithub"
+          @click="signIn('github')"
         >
           <div class="icon pr-11">
             <svg
