@@ -3,6 +3,7 @@ import TeamsView from "@/views/dashboard/TeamsView.vue";
 import TeamDetailsView from "@/views/dashboard/TeamDetailsView.vue";
 import NewTeamView from "@/views/NewTeamView.vue";
 import AddPlayerView from "@/views/dashboard/AddPlayerView.vue";
+import AddEventsView from "@/views/dashboard/AddEventsView.vue";
 
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
@@ -55,6 +56,11 @@ const routes = [
         path: "/dashboard/teams/:teamId/add-player",
         name: "addPlayer",
         component: AddPlayerView,
+      },
+      {
+        path: "/dashboard/live/:matchId/add-events",
+        name: "addEvents",
+        component: AddEventsView,
       },
     ],
   },
