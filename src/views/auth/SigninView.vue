@@ -2,23 +2,39 @@
   import { supabase } from "@/lib/supabase";
   import { onBeforeMount } from "vue";
 
+  const REDIRECT_URL = "https://luckyscore.vercel.app/dashboard";
+
   async function signInWithGithub() {
-    const { user, session, error } = await supabase.auth.signIn({
-      // provider can be 'github', 'google', 'gitlab', or 'bitbucket'
-      provider: "github",
-    });
+    const { user, session, error } = await supabase.auth.signIn(
+      {
+        provider: "github",
+      },
+      {
+        redirectTo: REDIRECT_URL,
+      },
+    );
   }
 
   async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "google",
-    });
+    const { user, session, error } = await supabase.auth.signIn(
+      {
+        provider: "google",
+      },
+      {
+        redirectTo: REDIRECT_URL,
+      },
+    );
   }
 
   async function signInWithFacebook() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "facebook",
-    });
+    const { user, session, error } = await supabase.auth.signIn(
+      {
+        provider: "facebook",
+      },
+      {
+        redirectTo: REDIRECT_URL,
+      },
+    );
   }
   async function signout() {
     const { error } = await supabase.auth.signOut();
