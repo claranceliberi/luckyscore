@@ -31,6 +31,13 @@ export interface IPlayerMatch {
   successful_dribbles: number;
 }
 
+export interface Teams extends ITable {
+  id: string;
+  name: string;
+  description: string;
+  letter: string;
+}
+
 export interface IMatch {
   match_id: string;
   league_id: string;
