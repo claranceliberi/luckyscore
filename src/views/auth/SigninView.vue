@@ -1,6 +1,9 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
   import { onBeforeMount } from "vue";
+  import { useRoute } from "vue-router";
+
+  const route = useRoute();
 
   const REDIRECT_URL = "https://luckyscore.vercel.app/dashboard";
 
@@ -26,6 +29,14 @@
           We are delighted to welcome you back!
         </h3>
       </div>
+
+      <div class="p-2 bg-red-400 rounded mb-6 text-white">
+        <h2 class="font-bold text-sm">
+          {{ (route.query["error"] as string).split("_").join(" ").toUpperCase() }}
+        </h2>
+        <p class="pt-1">Try signing in again</p>
+      </div>
+
       <div class="form--socials">
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
