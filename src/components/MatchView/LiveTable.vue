@@ -56,7 +56,7 @@
       <div
         v-for="(team, index) in teams"
         :key="team.name"
-        class="my-4 flex md:pr-8"
+        class="my-4 pb-4 flex md:pr-8 border-b-2"
       >
         <div class="flex-1 flex">
           <p class="text-black mx-2">{{ index + 1 }}</p>

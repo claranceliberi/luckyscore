@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script setup lang="" ts>
+<script setup lang="ts">
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
   import LiveTable from "@/components/MatchView/LiveTable.vue";
   import MatchStats from "@/components/MatchView/MatchStats.vue";
