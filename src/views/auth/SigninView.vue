@@ -7,28 +7,21 @@
       // provider can be 'github', 'google', 'gitlab', or 'bitbucket'
       provider: "github",
     });
-
-    console.log("github", user, session, error);
   }
 
   async function signInWithGoogle() {
     const { user, session, error } = await supabase.auth.signIn({
       provider: "google",
     });
-
-    console.log("google", user, session, error);
   }
 
   async function signInWithFacebook() {
     const { user, session, error } = await supabase.auth.signIn({
       provider: "facebook",
     });
-
-    console.log("facebook", user, session, error);
   }
   async function signout() {
     const { error } = await supabase.auth.signOut();
-    console.log("logout", error);
   }
   onBeforeMount(signout);
 </script>

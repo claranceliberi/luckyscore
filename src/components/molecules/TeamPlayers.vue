@@ -11,7 +11,7 @@
 
   supabase
     .from("player")
-    .select("full_name", { count: "planned", head: true })
+    .select("id", { count: "exact", head: true })
     .eq("team", router.params.id)
     .then((res) => {
       if (res) {
