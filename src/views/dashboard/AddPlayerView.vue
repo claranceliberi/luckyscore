@@ -140,7 +140,10 @@
         </div>
       </div>
 
-      <span v-else>loading..</span>
+      <span v-else-if="players.isLoading">loading..</span>
+      <span v-if="players.playerNames.length === 0" class="py-6"
+        >No players found</span
+      >
 
       <button
         style="border-radius: 28px"

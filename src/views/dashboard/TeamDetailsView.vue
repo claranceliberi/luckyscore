@@ -38,6 +38,6 @@
     <h1 class="font-medium text-2xl pb-6 pt-4">{{ teamName }}</h1>
     <h3 class="pt-6 pb-4 text-lg">Players</h3>
 
-    <TeamPlayers :id="($route.params.id as string)" :total="4" />
+    <TeamPlayers />
   </div>
 </template>

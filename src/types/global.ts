@@ -77,3 +77,5 @@ export interface SupabaseAuthUser {
   sub: string;
   user_name?: string;
 }
+
+export const USER_STORAGE_NAME = "lucky_score_auth_user";

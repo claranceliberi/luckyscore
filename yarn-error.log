@@ -1,13 +1,21 @@
 Arguments: 
+<<<<<<< HEAD
   C:\Program Files\nodejs\node.exe C:\Users\Phelix DUSENGIMANA\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
   C:\Users\Phelix DUSENGIMANA\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Phelix DUSENGIMANA\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs;C:\Users\Phelix DUSENGIMANA\AppData\Local\Programs\Python\Python310\Scripts;C:\Users\Phelix DUSENGIMANA\AppData\Local\Programs\Python\Python310;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Users\Phelix DUSENGIMANA\AppData\Local\Microsoft\WindowsApps;C:\Users\Phelix DUSENGIMANA\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2021.3.1\bin;C:\Program Files\JetBrains\PyCharm 2021.3.1\bin;C:\Python34\Scripts;C:\Users\Phelix DUSENGIMANA\AppData\Roaming\npm;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+=======
+  /home/crux/.nvm/versions/node/v16.13.1/bin/node /home/crux/.nvm/versions/node/v16.13.1/bin/yarn --network-timeout 100000
+
+PATH: 
+  /home/crux/.nvm/versions/node/v16.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/src/flutter/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/ntwar/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/JetBrains/IntelliJ IDEA 2021.2.3/bin:/mnt/c/Users/ntwar/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files (x86)/Nmap:/snap/bin
+>>>>>>> 3dc4d38b38f6ac06891cc984812fb26c027db678
 
 Yarn version: 
   1.22.17
 
 Node version: 
+<<<<<<< HEAD
   16.13.2
 
 Platform: 
@@ -15,6 +23,15 @@ Platform:
 
 Trace: 
   Error: ENOENT: no such file or directory, copyfile 'C:\Users\Phelix DUSENGIMANA\AppData\Local\Yarn\Cache\v6\npm-ignore-5.2.0-6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a-integrity\node_modules\ignore\index.d.ts' -> 'C:\Users\Phelix DUSENGIMANA\Documents\Working\luckyscore\node_modules\@typescript-eslint\eslint-plugin\node_modules\ignore\index.d.ts'
+=======
+  16.13.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/crux/.cache/yarn/v6/npm-ignore-5.2.0-6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a-integrity/node_modules/ignore/LICENSE-MIT' -> '/home/crux/projects/mine/luckyscore/node_modules/@typescript-eslint/eslint-plugin/node_modules/ignore/LICENSE-MIT'
+>>>>>>> 3dc4d38b38f6ac06891cc984812fb26c027db678
 
 npm manifest: 
   {
@@ -29,6 +46,10 @@ npm manifest:
       "format": "prettier .  --write"
     },
     "dependencies": {
+<<<<<<< HEAD
+=======
+      "@headlessui/vue": "^1.4.3",
+>>>>>>> 3dc4d38b38f6ac06891cc984812fb26c027db678
       "@supabase/supabase-js": "^1.29.4",
       "vue": "^3.2.29",
       "vue-router": "^4.0.12",
