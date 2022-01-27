@@ -58,11 +58,11 @@
         </li>
       </ul>
     </div>
-    <div class="spacing w-2 h-2 block">
-      <div v-if="props.user" class="auth-user">
+    <div class="spacing">
+      <div v-if="props.user" class="auth-user flex items-center">
         <p>{{ user?.full_name }}</p>
         <img
-          class="w-12 h-12 rounded-full"
+          class="w-12 h-12 rounded-full ml-3 border-2 border-gray-400"
           :src="user?.avatar_url"
           :alt="`${user?.full_name} avatar`"
         />
