@@ -18,7 +18,7 @@
 <template>
   <div class="w-full mt-16 flex justify-center">
     <div
-      class="w-full md:w-3/5 bg-primary flex gap-24 justify-center py-10 rounded"
+      class="w-full md:w-3/5 bg-primary flex gap-6 md:gap-24 justify-center py-10 rounded"
     >
       <div class="flex flex-col items-center gap-4">
         <svg
