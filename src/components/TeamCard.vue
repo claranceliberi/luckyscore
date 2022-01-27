@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { supabase } from "@/lib/supabase";
-  import { ITable, Teams } from "@/types/global";
+  import { Teams } from "@/types/global";
   import { ref } from "vue";
 
   const teams = ref<Teams[]>([]);
