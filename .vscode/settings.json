@@ -5,6 +5,7 @@
     //...
     "vue/require-default-prop": "off"
   },
+  "editor.tabCompletion": "on",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
