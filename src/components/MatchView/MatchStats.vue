@@ -12,6 +12,13 @@
     { title: "Offsides", values: [3, 2] },
     { title: "Corners", values: [5, 7] },
   ];
+  const progressStyles = (value1: number, value2: number) => {
+    let result = (value1 * 100) / (value1 + value2) || 0;
+    result = result === Infinity ? 100 : result;
+    return {
+      width: `${result}%`,
+    };
+  };
 </script>
 
 <template>
@@ -26,10 +33,16 @@
         </div>
         <div class="flex justify-between gap-2 mt-1">
           <div class="h-3 w-1/2 bg-gray-200 rounded-full relative">
-            <div class="absolute h-full w-full bg-primary rounded-full"></div>
+            <div
+              class="absolute h-full w-0 bg-primary rounded-full right-0"
+              :style="progressStyles(stat.values[0], stat.values[1])"
+            ></div>
           </div>
           <div class="h-3 w-1/2 bg-gray-200 rounded-full relative">
-            <div class="absolute h-full w-full bg-primary rounded-full"></div>
+            <div
+              class="absolute h-full w-0 bg-primary rounded-full left-0"
+              :style="progressStyles(stat.values[1], stat.values[0])"
+            ></div>
           </div>
         </div>
       </div>

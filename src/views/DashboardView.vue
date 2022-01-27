@@ -3,11 +3,12 @@
   import { SupabaseAuthUser, USER_STORAGE_NAME } from "@/types/global";
   import { User } from "@supabase/supabase-js";
   import { onBeforeMount, ref } from "vue";
-  import { useRouter } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
   import { ILink } from "~/types/global";
   import NavbarMolecule from "@/components/molecules/NavbarMolecule.vue";
 
   const router = useRouter();
+  const route = useRoute();
 
   const user = ref<SupabaseAuthUser>();
   const loading = ref(false);
@@ -40,9 +41,13 @@
   }
 
   onBeforeMount(async () => {
+    if (route.query.error) {
+      console.error(route.query);
+      router.push({ path: "/signin", query: route.query });
+    }
+
     await checkAuthUser();
 
-    console.log(window.location.hash, "hash");
     window.addEventListener("hashchange", async () => {
       console.log("hashchange");
       await checkAuthUser();

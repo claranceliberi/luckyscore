@@ -1,25 +1,19 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
   import { onBeforeMount } from "vue";
+  import { useRoute } from "vue-router";
 
-  async function signInWithGithub() {
-    const { user, session, error } = await supabase.auth.signIn({
-      // provider can be 'github', 'google', 'gitlab', or 'bitbucket'
-      provider: "github",
-    });
+  const route = useRoute();
+
+  const REDIRECT_URL = "https://luckyscore.vercel.app/dashboard";
+
+  async function signIn(provider: "google" | "github" | "facebook") {
+    const { user, session, error } = await supabase.auth.signIn(
+      { provider },
+      { redirectTo: REDIRECT_URL },
+    );
   }
 
-  async function signInWithGoogle() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "google",
-    });
-  }
-
-  async function signInWithFacebook() {
-    const { user, session, error } = await supabase.auth.signIn({
-      provider: "facebook",
-    });
-  }
   async function signout() {
     const { error } = await supabase.auth.signOut();
   }
@@ -35,10 +29,21 @@
           We are delighted to welcome you back!
         </h3>
       </div>
+
+      <div
+        v-if="route.query.error"
+        class="p-2 bg-red-400 rounded mb-6 text-white"
+      >
+        <h2 class="font-bold text-sm">
+          {{ (route.query["error"] as string).split("_").join(" ").toUpperCase() }}
+        </h2>
+        <p class="pt-1">Try signing in again</p>
+      </div>
+
       <div class="form--socials">
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithGoogle"
+          @click="signIn('google')"
         >
           <div class="icon pr-11">
             <svg
@@ -70,7 +75,7 @@
         </button>
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithFacebook"
+          @click="signIn('facebook')"
         >
           <div class="icon pr-11">
             <svg
@@ -92,7 +97,7 @@
 
         <button
           class="sicial w-full border-2 border-gray-200 rounded-full py-4 pl-8 flex mb-4 hover:bg-gray-50"
-          @click="signInWithGithub"
+          @click="signIn('github')"
         >
           <div class="icon pr-11">
             <svg
