@@ -25,10 +25,12 @@
         <div
           class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
         >
-          <div class="w-full md:w-4/5">
-            <!-- <MatchInfo></MatchInfo>
-          <MatchPrediction></MatchPrediction> -->
+          <div v-if="isFinished" class="w-full md:w-4/5">
             <MatchStats></MatchStats>
+          </div>
+          <div v-else class="w-full md:w-3/5">
+            <MatchInfo></MatchInfo>
+            <MatchPrediction></MatchPrediction>
           </div>
         </div>
       </div>
@@ -43,6 +45,12 @@
   import MatchStats from "@/components/MatchView/MatchStats.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
+  import { useRoute } from "vue-router";
+  import { ref } from "vue";
+
+  const route = useRoute();
+  const id = route.params.id || "";
+  const isFinished = Number(id) % 2 === 0;
 </script>
 
 <style scoped></style>
