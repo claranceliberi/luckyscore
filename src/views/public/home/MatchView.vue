@@ -1,4 +1,5 @@
 <template>
+  <MatchNavbarMolecule v-bind="navbarprops"></MatchNavbarMolecule>
   <div>
     <div class="match__container mb-4">
       <h1 className="header text-2xl font-bold mb-5 mt-10">Line-Ups</h1>
@@ -25,10 +26,12 @@
         <div
           class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
         >
-          <div class="w-full md:w-4/5">
-            <!-- <MatchInfo></MatchInfo>
-          <MatchPrediction></MatchPrediction> -->
+          <div v-if="isFinished" class="w-full md:w-4/5">
             <MatchStats></MatchStats>
+          </div>
+          <div v-else class="w-full md:w-3/5">
+            <MatchInfo></MatchInfo>
+            <MatchPrediction></MatchPrediction>
           </div>
         </div>
       </div>
@@ -43,6 +46,27 @@
   import MatchStats from "@/components/MatchView/MatchStats.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
+  import { useRoute } from "vue-router";
+  import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
+
+  const route = useRoute();
+  const id = route.params.id || "";
+  const isFinished = Number(id) % 2 === 0;
+
+  const navbarprops = isFinished
+    ? {
+        team1: "Welding L3",
+        team2: "Culinary L2",
+        isFinished: true,
+        score: "3-1",
+        date: new Date(2022, 1, 24, 16, 0, 0, 0),
+      }
+    : {
+        team1: "Welding L3",
+        team2: "Culinary L2",
+        isFinished: false,
+        date: new Date(2022, 1, 24, 16, 0, 0, 0),
+      };
 </script>
 
 <style scoped></style>

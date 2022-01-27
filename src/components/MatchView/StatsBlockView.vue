@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { ref } from "vue";
+
   interface PlayerStat {
     player: {
       name: string;
@@ -9,21 +11,19 @@
     };
   }
 
-  const displayStats: Array<PlayerStat> = [
-    { player: { name: "Mugisha Isaac" }, amount: 4, team: { name: "Year 3" } },
-    { player: { name: "Liberi Ntwari" }, amount: 4, team: { name: "Year 3" } },
-    { player: { name: "Olivier" }, amount: 3, team: { name: "Welding L3" } },
-    {
-      player: { name: "Shumbusho Anglebert" },
-      amount: 2,
-      team: { name: "Year 2" },
-    },
-    { player: { name: "Alexandre N" }, amount: 4, team: { name: "FOP L5" } },
-  ];
+  type StatsBlockProps = {
+    displayStats: Array<PlayerStat>;
+  };
+
+  const statsBlockProps = defineProps<StatsBlockProps>();
+  const displayStats = ref(statsBlockProps.displayStats || "");
 </script>
 
 <template>
   <div class="my-10 ml-4">
+    <div v-if="displayStats.length === 0" class="font-bold">
+      No data available
+    </div>
     <div
       v-for="(stat, index) in displayStats"
       :key="stat.player?.name"
