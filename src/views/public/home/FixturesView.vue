@@ -23,14 +23,15 @@
       console.log(res);
       fixtures.matches = res.data || [];
       fixtures.isLoading = false;
+      fixtures.name = "Matchday 1";
     });
 </script>
 
 <template>
-  <div v-if="!fixtures.isLoading && fixtures.matches.length > 0">
-    <div v-for="(fixture, key) in fixtures" :key="key" class="my-6">
-      <MatchDay :name="fixture.name" :matches="fixture" />
-    </div>
+  <div v-if="!fixtures.isLoading && fixtures.matches.length > 0" class="my-6">
+    <!-- <div v-for="(fixture, key) in fixtures" :key="key" class="my-6"> -->
+    <MatchDay :name="fixtures.name" :matches="fixtures.matches" />
+    <!-- </div> -->
   </div>
   <div v-else-if="fixtures.isLoading">
     <h1>Loading...</h1>

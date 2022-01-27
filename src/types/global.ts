@@ -38,7 +38,7 @@ export interface Teams extends ITable {
   letter: string;
 }
 
-export interface IMatch {
+export interface IMatch extends ITable {
   id: string;
   match_day: string;
   season: string;
@@ -46,8 +46,8 @@ export interface IMatch {
   in_charge: string;
   description: string;
   match_status: string;
-  home_team: string;
-  away_team: string;
+  home_team: Teams;
+  away_team: Teams;
   home_shots: number;
   away_shots: number;
   home_score: number;

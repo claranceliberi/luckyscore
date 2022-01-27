@@ -7,8 +7,8 @@
       >
         <router-link :to="'/match/' + match.id" @click="navigate">
           <SingleMatch
-            :home-team="teamInfo.home_team"
-            :away-team="match.away_team"
+            :home-team="match.home_team.name"
+            :away-team="match.away_team.name"
             :home-score="match.home_score"
             :away-score="match.away_score"
             :time="match.time"
@@ -30,12 +30,6 @@
     name?: string;
     matches: IMatch[];
   }
-
-  const teamInfo = reactive<{ name: string; logo_link: string }>({
-    name: "",
-    logo_link: "",
-  });
-
   const props = defineProps<Props>();
 </script>
 
