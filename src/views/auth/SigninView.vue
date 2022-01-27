@@ -30,7 +30,10 @@
         </h3>
       </div>
 
-      <div class="p-2 bg-red-400 rounded mb-6 text-white">
+      <div
+        v-if="route.query.error"
+        class="p-2 bg-red-400 rounded mb-6 text-white"
+      >
         <h2 class="font-bold text-sm">
           {{ (route.query["error"] as string).split("_").join(" ").toUpperCase() }}
         </h2>
