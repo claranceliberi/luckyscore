@@ -7,7 +7,7 @@
       >
         <router-link :to="'/match/' + match.id" @click="navigate">
           <SingleMatch
-            :home-team="match.home_team"
+            :home-team="teamInfo.home_team"
             :away-team="match.away_team"
             :home-score="match.home_score"
             :away-score="match.away_score"
@@ -22,13 +22,20 @@
 
 <script setup lang="ts">
   import SingleMatch from "./SingleMatch.vue";
-  import Vue from "vue";
+  import Vue, { reactive } from "vue";
   import { IMatch } from "@/types/global";
+  import { supabase } from "@/lib/supabase";
 
   interface Props {
     name?: string;
     matches: IMatch[];
   }
+
+  const teamInfo = reactive<{ name: string; logo_link: string }>({
+    name: "",
+    logo_link: "",
+  });
+
   const props = defineProps<Props>();
 </script>
 

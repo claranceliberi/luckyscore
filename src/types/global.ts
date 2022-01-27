@@ -41,21 +41,22 @@ export interface IMatch {
   match_status: string;
   home_team: string;
   away_team: string;
-  home_shots: Number;
-  away_shots: Number;
-  home_score: Number;
-  away_score: Number;
+  home_shots: number;
+  away_shots: number;
+  home_score: number;
+  away_score: number;
   home_lineup: string;
   away_lineup: string;
-  home_corners: Number;
-  away_corners: Number;
-  home_shots_on_target: Number;
-  away_shots_on_target: Number;
-  home_fouls: Number;
-  away_fouls: Number;
+  home_corners: number;
+  away_corners: number;
+  home_shots_on_target: number;
+  away_shots_on_target: number;
+  home_fouls: number;
+  away_fouls: number;
 }
 
 export interface IFixtures {
+  isLoading?: boolean;
   name: string;
   matches: IMatch[];
 }
