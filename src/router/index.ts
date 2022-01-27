@@ -19,6 +19,8 @@ import Auth from "@/views/auth/AuthView.vue";
 import SignIn from "~/views/auth/SigninView.vue";
 import SignUp from "@/views/auth/SignupView.vue";
 
+import NotFound from "@/views/NotFoundView.vue";
+
 const routes = [
   {
     path: "/dashboard",
@@ -69,6 +71,7 @@ const routes = [
       { path: "/signup", name: "SignUp", component: SignUp },
     ],
   },
+  { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
 ];
 
 const router = createRouter({
