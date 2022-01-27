@@ -5,7 +5,7 @@
       <div
         class="border-[#DEE2E6] border rounded py-8 cursor-pointer hover:bg-[#FFFFFF]"
       >
-        <router-link :to="'/match/' + match.id" @click="navigate">
+        <router-link :to="'/match/' + match.id">
           <SingleMatch
             :home-team="match.home_team.name"
             :away-team="match.away_team.name"

@@ -4,8 +4,8 @@
   interface Props {
     homeTeam: string;
     awayTeam: string;
-    homeScore: string;
-    awayScore: string;
+    homeScore: number;
+    awayScore: number;
     time: string;
     matchStatus: string;
   }
