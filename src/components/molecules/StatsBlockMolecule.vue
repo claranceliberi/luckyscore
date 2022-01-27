@@ -21,13 +21,13 @@
 
 <template>
   <div class="my-10 ml-4">
-    <div v-if="displayStats.length === 0" class="font-bold">
+    <div v-if="displayStats.length === 0" class="font-medium">
       No data available
     </div>
     <div
       v-for="(stat, index) in displayStats"
       :key="stat.player?.name"
-      class="flex justify-between my-2 py-2 border-b-2"
+      class="flex justify-between my-2 py-2 border-b-2 text-sm"
     >
       <div class="flex-1">
         <p class="font-semibold">
