@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import StatsBlockView from "@/components/MatchView/StatsBlockView.vue";
-
   interface PlayerStat {
     player: {
       name: string;
@@ -11,7 +9,7 @@
     };
   }
 
-  const goalsStats: Array<PlayerStat> = [
+  const displayStats: Array<PlayerStat> = [
     { player: { name: "Mugisha Isaac" }, amount: 4, team: { name: "Year 3" } },
     { player: { name: "Liberi Ntwari" }, amount: 4, team: { name: "Year 3" } },
     { player: { name: "Olivier" }, amount: 3, team: { name: "Welding L3" } },
@@ -23,13 +21,23 @@
     { player: { name: "Alexandre N" }, amount: 4, team: { name: "FOP L5" } },
   ];
 </script>
+
 <template>
-  <h1 class="mt-10 mb-2 font-bold">Goals</h1>
-  <StatsBlockView :display-stats="goalsStats"></StatsBlockView>
-  <h1 class="mt-4 mb-2 font-bold">Assists</h1>
-  <StatsBlockView :display-stats="goalsStats"></StatsBlockView>
-  <h1 class="mt-4 mb-2 font-bold">Yellow Cards</h1>
-  <StatsBlockView :display-stats="goalsStats"></StatsBlockView>
-  <h1 class="mt-4 mb-2 font-bold">Red Cards</h1>
-  <StatsBlockView :display-stats="goalsStats"></StatsBlockView>
+  <div class="my-10 ml-4">
+    <div
+      v-for="(stat, index) in displayStats"
+      :key="stat.player?.name"
+      class="flex justify-between my-2 py-2 border-b-2"
+    >
+      <div class="flex-1">
+        <p class="font-semibold">
+          <span class="mr-4">{{ index + 1 }}</span> {{ stat.player.name }}
+        </p>
+        <p class="ml-7 my-1 text-gray-500">{{ stat.team?.name }}</p>
+      </div>
+      <div>
+        <p class="font-semibold">{{ stat.amount }}</p>
+      </div>
+    </div>
+  </div>
 </template>
