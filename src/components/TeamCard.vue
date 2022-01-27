@@ -1,14 +1,8 @@
 <script setup lang="ts">
   import { supabase } from "@/lib/supabase";
-  import { ITable } from "@/types/global";
+  import { Teams } from "@/types/global";
   import { ref } from "vue";
 
-  interface Teams extends ITable {
-    id: string;
-    name: string;
-    description: string;
-    letter: string;
-  }
   const teams = ref<Teams[]>([]);
   const isLoading = ref(true);
 
