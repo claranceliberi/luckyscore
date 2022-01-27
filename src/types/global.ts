@@ -38,22 +38,32 @@ export interface Teams extends ITable {
   letter: string;
 }
 
-export interface IMatch {
-  match_id: string;
-  league_id: string;
-  league_name: string;
-  match_date: string;
+export interface IMatch extends ITable {
+  id: string;
+  match_day: string;
+  season: string;
+  time: string;
+  in_charge: string;
+  description: string;
   match_status: string;
-  match_time: string;
-  match_hometeam_id: string;
-  match_hometeam_name: string;
-  match_hometeam_score: string;
-  match_awayteam_id: string;
-  match_awayteam_name: string;
-  match_awayteam_score: string;
+  home_team: Teams;
+  away_team: Teams;
+  home_shots: number;
+  away_shots: number;
+  home_score: number;
+  away_score: number;
+  home_lineup: string;
+  away_lineup: string;
+  home_corners: number;
+  away_corners: number;
+  home_shots_on_target: number;
+  away_shots_on_target: number;
+  home_fouls: number;
+  away_fouls: number;
 }
 
 export interface IFixtures {
+  isLoading?: boolean;
   name: string;
   matches: IMatch[];
 }

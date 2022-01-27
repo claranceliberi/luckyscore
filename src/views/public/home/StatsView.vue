@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import StatsBlockView from "@/components/MatchView/StatsBlockView.vue";
+  import StatsBlockView from "@/components/molecules/StatsBlockMolecule.vue";
 
   interface PlayerStat {
     player: {
