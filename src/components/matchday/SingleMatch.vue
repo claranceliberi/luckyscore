@@ -6,8 +6,7 @@
     awayTeam: string;
     homeScore: string;
     awayScore: string;
-    matchTime: string;
-    matchDate: string;
+    time: string;
     matchStatus: string;
   }
 
@@ -59,12 +58,18 @@
       <div class="flex-initial items-center">
         <div>
           {{
-            new Date(matchDate).toString().split(" ")[2] +
+            new Date(time).toString().split(" ")[2] +
             " " +
-            new Date(matchDate).toString().split(" ")[1]
+            new Date(time).toString().split(" ")[1]
           }}
         </div>
-        <div>{{ matchTime }}</div>
+        <div>
+          {{
+            new Date(time).toString().split(" ")[4].split(":")[0] +
+            ":" +
+            new Date(time).toString().split(" ")[4].split(":")[1]
+          }}
+        </div>
       </div>
     </div>
   </div>

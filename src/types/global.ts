@@ -41,18 +41,18 @@ export interface IMatch {
   match_status: string;
   home_team: string;
   away_team: string;
-  home_shots: BigInteger;
-  away_shots: BigInteger;
-  home_score: BigInteger;
-  away_score: BigInteger;
+  home_shots: Number;
+  away_shots: Number;
+  home_score: Number;
+  away_score: Number;
   home_lineup: string;
   away_lineup: string;
-  home_corners: BigInteger;
-  away_corners: BigInteger;
-  home_shots_on_target: BigInteger;
-  away_shots_on_target: BigInteger;
-  home_fouls: BigInteger;
-  away_fouls: BigInteger;
+  home_corners: Number;
+  away_corners: Number;
+  home_shots_on_target: Number;
+  away_shots_on_target: Number;
+  home_fouls: Number;
+  away_fouls: Number;
 }
 
 export interface IFixtures {
