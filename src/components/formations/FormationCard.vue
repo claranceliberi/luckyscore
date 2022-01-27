@@ -179,30 +179,39 @@
 
 <template>
   <div class="field">
-    <div class="large-goal">
-      <div class="small-goal">
-        <div class="user u1">
-          <span class="p-names">{{ goalkeeper?.player_id.split(" ")[0] }}</span>
+    <div class="inner-field w-full h-full">
+      <div class="trans-field w-full h-full">
+        <div class="large-goal">
+          <div class="small-goal">
+            <div class="user w-6 h-6 md:w-10 md:h-10 u1">
+              <span class="p-names">{{
+                goalkeeper?.player_id.split(" ")[0]
+              }}</span>
+            </div>
+          </div>
         </div>
+        <div
+          v-for="(player, index) in pitch_players"
+          :key="index"
+          class="user w-6 h-6 md:w-10 md:h-10"
+          :class="`u${player.pitch_position}-${formation}`"
+        >
+          <span class="p-names">{{ player.player_id.split(" ")[0] }}</span>
+        </div>
+        <div class="face-of-goal"></div>
       </div>
     </div>
-    <div
-      v-for="(player, index) in pitch_players"
-      :key="index"
-      class="user"
-      :class="`u${player.pitch_position}-${formation}`"
-    >
-      <span class="p-names">{{ player.player_id.split(" ")[0] }}</span>
-    </div>
-    <div class="face-of-goal"></div>
   </div>
 </template>
 
 <style scoped>
+  * {
+    box-sizing: border-box;
+  }
   .face-of-goal {
     width: 20%;
     height: 10%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     position: absolute;
     bottom: 0.2%;
     left: 40%;
@@ -210,26 +219,36 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+  .inner-field {
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    padding-left: 20px;
+  }
+  .trans-field {
+    position: relative;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+  }
   .p-names {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #fff;
     position: relative;
     top: 110%;
   }
   .large-goal {
-    width: 40%;
+    width: 60%;
     height: 20%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     position: absolute;
     top: 0%;
-    left: 30%;
+    left: 21%;
   }
 
   .small-goal {
     width: 50%;
     height: 55%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     position: absolute;
     top: -3%;
     left: 26%;
@@ -237,21 +256,18 @@
   .field {
     height: 580px;
     background: #02b65a;
-    width: 631px;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    position: relative;
+    min-width: 631px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
   }
 
   /* all 3-5-2 formations css */
 
   .user {
-    width: 50px;
-    height: 50px;
     background-color: #c4c4c4;
     border-radius: 50%;
     position: absolute;
-    border: 4px solid #fff;
+    border: 2px solid #fff;
     cursor: pointer;
   }
 

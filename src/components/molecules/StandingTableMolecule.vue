@@ -5,6 +5,7 @@
       <tr>
         <th></th>
         <th></th>
+        <th class="w-2/4"></th>
         <th>P</th>
         <th>W</th>
         <th>D</th>
@@ -23,6 +24,7 @@
       >
         <td>{{ index + 1 }}</td>
         <td>Chelsea {{ index }}</td>
+        <td class="space"></td>
         <td class="text-right">{{ num * 2 }}</td>
         <td class="text-right">{{ num * 3 }}</td>
         <td class="text-right">{{ num * 4 }}</td>
@@ -46,3 +48,10 @@
     },
   };
 </script>
+
+<style lang="css" scoped>
+  .td {
+    font-family: "Satoshi";
+    font-size: 16px;
+  }
+</style>

@@ -4,10 +4,9 @@
   interface Props {
     homeTeam: string;
     awayTeam: string;
-    homeScore: string;
-    awayScore: string;
-    matchTime: string;
-    matchDate: string;
+    homeScore: number;
+    awayScore: number;
+    time: string;
     matchStatus: string;
   }
 
@@ -48,7 +47,7 @@
       </div>
 
       <div
-        v-if="matchStatus === 'Finished'"
+        v-if="matchStatus.toLowerCase() === 'finished'"
         class="flex-row w-10 bg-[#502274] text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
@@ -59,12 +58,18 @@
       <div class="flex-initial items-center">
         <div>
           {{
-            new Date(matchDate).toString().split(" ")[2] +
+            new Date(time).toString().split(" ")[2] +
             " " +
-            new Date(matchDate).toString().split(" ")[1]
+            new Date(time).toString().split(" ")[1]
           }}
         </div>
-        <div>{{ matchTime }}</div>
+        <div>
+          {{
+            new Date(time).toString().split(" ")[4].split(":")[0] +
+            ":" +
+            new Date(time).toString().split(" ")[4].split(":")[1]
+          }}
+        </div>
       </div>
     </div>
   </div>
