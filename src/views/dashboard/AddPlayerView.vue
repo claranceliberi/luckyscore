@@ -52,20 +52,24 @@
     });
 
   async function deletePlayer(playerId: string) {
-    const { status, error } = await supabase
+    supabase
       .from("player")
       .delete()
-      .match({ id: playerId });
-    if (status) {
-      const newPlayerNames = players.playerNames.filter(
-        (player) => player.id !== playerId,
-      );
+      .match({ id: playerId })
+      .then((res) => {
+        if (res.status === 200) {
+          const newPlayerNames = players.playerNames.filter(
+            (player) => player.id !== playerId,
+          );
 
-      players.playerNames = newPlayerNames;
-      toast.success("Player deleted");
-    } else {
-      toast.error(error?.message || "");
-    }
+          players.playerNames = newPlayerNames;
+          toast.success("Player deleted");
+        } else if (res.error?.code === "23503") {
+          toast.error("Player has been assigned to a match");
+        } else {
+          toast.error("Error deleting player");
+        }
+      });
   }
 
   function editPlayer(index: number) {
