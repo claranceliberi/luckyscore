@@ -59,6 +59,7 @@
       singleResults.goal_against += awayStats.home_score;
       if (awayStats.away_score > awayStats.home_score) {
         singleResults.points += 3;
+        singleResults.wins += 1;
       } else if (awayStats.away_score === awayStats.home_score) {
         singleResults.points += 1;
       } else {

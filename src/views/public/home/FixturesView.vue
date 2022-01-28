@@ -20,6 +20,8 @@
     `,
     )
     .then((res) => {
+      console.log(res.data);
+
       fixtures.matches = res.data || [];
       fixtures.isLoading = false;
       fixtures.name = "Matchday 1";
