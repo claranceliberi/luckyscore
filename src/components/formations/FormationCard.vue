@@ -1,235 +1,134 @@
-<script lang="ts">
+<script setup lang="ts">
   import { IPlayerMatch } from "@/types/global";
-  import { defineComponent } from "vue";
-  export default defineComponent({
-    name: "FormationCard",
-    props: {
-      formation: {
-        type: String,
-        required: true,
-        default: () => "4-3-3",
-      },
-      players: {
-        type: Array as () => IPlayerMatch[],
-        required: false,
-        default: () => [
-          {
-            match_id: "1",
-            player_id: "Damour",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 1,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Gershom",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 2,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Yassin",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 3,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Fredson",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 4,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Blessing",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 5,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Kenny",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 6,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Liberi",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 7,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Gervais",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 8,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Isaac",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 9,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Divin",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 10,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-          {
-            match_id: "1",
-            player_id: "Didier",
-            red_card: 0,
-            yellow_card: 2,
-            off_side: 3,
-            pitch_position: 11,
-            subbed: "Not subbed",
-            goals: 3,
-            assists: 1,
-            big_chances: 2,
-            successful_dribbles: 3,
-          },
-        ],
-      },
-    },
-    data() {
-      return {
-        pitch_players: [] as IPlayerMatch[],
-        loading: false,
-        goalkeeper: {} as IPlayerMatch | undefined,
-      };
-    },
-    created() {
-      this.goalkeeper = this.players.find(
-        (player) => player.pitch_position === 1,
-      );
-      this.pitch_players = this.players.filter(
-        (player) => player.pitch_position !== 1,
-      );
-    },
+  import { supabase } from "@/lib/supabase";
+  import { useRoute } from "vue-router";
+  import { ref, reactive } from "vue";
+
+  type FormationProps = {
+    formation: string;
+    matchId: string;
+    team: string;
+  };
+
+  const props = defineProps<FormationProps>();
+  const team = reactive({
+    players: [] as IPlayerMatch[],
+    goalkeeper: {} as IPlayerMatch | undefined,
   });
+
+  const isLoading = ref(true);
+  supabase
+    .from<IPlayerMatch>("player_match")
+    .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
+    .eq("match", props.matchId + "")
+    .then((res) => {
+      if (res) {
+        team.goalkeeper = res.data?.find(
+          (player: IPlayerMatch) => player.pitch_position === 1,
+        );
+        team.players =
+          res.data?.filter(
+            (player: IPlayerMatch) => player.pitch_position !== 1,
+          ) || [];
+        isLoading.value = false;
+      }
+    });
 </script>
 
 <template>
-  <div class="field">
-    <div class="large-goal">
-      <div class="small-goal">
-        <div class="user u1">
-          <span class="p-names">{{ goalkeeper?.player_id.split(" ")[0] }}</span>
+  <div
+    v-if="!isLoading && team.players.length >= 10 && team.goalkeeper != null"
+    class="field w-full"
+  >
+    <div class="inner-field w-full h-full">
+      <div class="trans-field w-full h-full">
+        <div class="large-goal">
+          <div class="small-goal">
+            <div class="user w-6 h-6 md:w-10 md:h-10 u1">
+              <span class="p-names">{{
+                team.goalkeeper?.player.full_name
+              }}</span>
+            </div>
+          </div>
         </div>
+        <div
+          v-for="(player, index) in team.players"
+          :key="index"
+          class="user w-6 h-6 md:w-10 md:h-10"
+          :class="`u${player.pitch_position}-${props.formation}`"
+        >
+          <span class="p-names">{{ player.player.full_name }}</span>
+        </div>
+        <div class="face-of-goal"></div>
       </div>
     </div>
-    <div
-      v-for="(player, index) in pitch_players"
-      :key="index"
-      class="user"
-      :class="`u${player.pitch_position}-${formation}`"
-    >
-      <span class="p-names">{{ player.player_id.split(" ")[0] }}</span>
+  </div>
+  <div v-if="isLoading">
+    <p>Getting team's lineup</p>
+  </div>
+  <div
+    v-if="!isLoading && (!team.goalkeeper || team.players.length < 10)"
+    class="w-full flex item-center justify-center"
+  >
+    <div>
+      <h1 class="font-medium text-red-600">
+        Lineup can not be generated because of the following:
+      </h1>
+      <p v-if="!isLoading && !team.goalkeeper" class="text-red-500">
+        Lineup does not have goalkeeper.
+      </p>
+      <p v-if="team.players.length < 10" class="text-red-500">
+        Pitch players number is less than ten.
+      </p>
     </div>
-    <div class="face-of-goal"></div>
   </div>
 </template>
 
 <style scoped>
+  * {
+    box-sizing: border-box;
+  }
   .face-of-goal {
-    width: 20%;
-    height: 10%;
-    border: 3px solid #fff;
+    width: 30%;
+    height: 11%;
+    border: 2px solid #fff;
     position: absolute;
     bottom: 0.2%;
-    left: 40%;
+    left: 36%;
     border-radius: 50% / 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+  .inner-field {
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    padding-left: 20px;
+  }
+  .trans-field {
+    position: relative;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+  }
   .p-names {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #fff;
     position: relative;
     top: 110%;
   }
   .large-goal {
-    width: 40%;
+    width: 60%;
     height: 20%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     position: absolute;
     top: 0%;
-    left: 30%;
+    left: 21%;
   }
 
   .small-goal {
     width: 50%;
     height: 55%;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     position: absolute;
     top: -3%;
     left: 26%;
@@ -237,21 +136,17 @@
   .field {
     height: 580px;
     background: #02b65a;
-    width: 631px;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    position: relative;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
   }
 
   /* all 3-5-2 formations css */
 
   .user {
-    width: 50px;
-    height: 50px;
     background-color: #c4c4c4;
     border-radius: 50%;
     position: absolute;
-    border: 4px solid #fff;
+    border: 2px solid #fff;
     cursor: pointer;
   }
 
@@ -301,12 +196,12 @@
   }
 
   .u11-3-5-2 {
-    bottom: 18%;
+    bottom: 16%;
     right: 20%;
   }
 
   .u9-3-5-2 {
-    bottom: 18%;
+    bottom: 16%;
     left: 20%;
   }
 
@@ -341,7 +236,7 @@
   }
 
   .u7-4-3-3 {
-    bottom: 18%;
+    bottom: 16%;
     left: 10%;
   }
 
@@ -351,12 +246,12 @@
   }
 
   .u11-4-3-3 {
-    bottom: 18%;
+    bottom: 16%;
     right: 10%;
   }
 
   .u9-4-3-3 {
-    bottom: 18%;
+    bottom: 16%;
     left: 47%;
   }
 
@@ -453,12 +348,12 @@
   }
 
   .u11-4-4-2 {
-    bottom: 18%;
+    bottom: 16%;
     left: 58%;
   }
 
   .u9-4-4-2 {
-    bottom: 18%;
+    bottom: 16%;
     right: 58%;
   }
 
@@ -504,12 +399,12 @@
   }
 
   .u11-4-2-2-2 {
-    bottom: 18%;
+    bottom: 16%;
     right: 15%;
   }
 
   .u9-4-2-2-2 {
-    bottom: 18%;
+    bottom: 16%;
     left: 15%;
   }
 
@@ -544,7 +439,7 @@
   }
 
   .u7-3-4-3 {
-    bottom: 18%;
+    bottom: 16%;
     left: 15%;
   }
 
@@ -554,12 +449,12 @@
   }
 
   .u11-3-4-3 {
-    bottom: 18%;
+    bottom: 16%;
     right: 15%;
   }
 
   .u9-3-4-3 {
-    bottom: 18%;
+    bottom: 16%;
     left: 47%;
   }
 </style>

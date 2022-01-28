@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
-  import { SupabaseAuthUser, USER_STORAGE_NAME } from "@/types/global";
-  import { User } from "@supabase/supabase-js";
+  import { SupabaseAuthUser } from "@/types/global";
   import { onBeforeMount, ref } from "vue";
   import { useRoute, useRouter } from "vue-router";
   import { ILink } from "~/types/global";
@@ -23,16 +22,11 @@
     loading.value = true;
 
     const authUser = await supabase.auth.user();
-    console.log(
-      "authUser",
-      authUser,
-      !!authUser,
-      !!window.location.hash,
-      !authUser && !window.location.hash,
-    );
+
     if (!authUser && !window.location.hash) {
       console.error("no user");
-      router.push("/signin");
+      // router.push("/signin");
+      loading.value = false;
     } else {
       loading.value = false;
     }
@@ -49,7 +43,6 @@
     await checkAuthUser();
 
     window.addEventListener("hashchange", async () => {
-      console.log("hashchange");
       await checkAuthUser();
     });
   });

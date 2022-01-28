@@ -1,17 +1,17 @@
 {
   "vetur.validation.template": false,
-
   "rules": {
     //...
     "vue/require-default-prop": "off"
   },
+  "editor.tabCompletion": "on",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // "[vue]": {
+  //   "editor.defaultFormatter": "johnsoncodehk.volar"
+  // },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

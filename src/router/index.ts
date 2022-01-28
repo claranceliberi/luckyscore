@@ -1,27 +1,26 @@
-import FormationsVue from "@/views/FormationsView.vue";
-import TeamsView from "@/views/dashboard/TeamsView.vue";
-import TeamDetailsView from "@/views/dashboard/TeamDetailsView.vue";
-import NewTeamView from "@/views/NewTeamView.vue";
+import Auth from "@/views/auth/AuthView.vue";
+import SignUp from "@/views/auth/SignupView.vue";
+import AddEventsView from "@/views/dashboard/AddEventsView.vue";
 import AddPlayerView from "@/views/dashboard/AddPlayerView.vue";
-
-import { createWebHistory, createRouter } from "vue-router";
-import Home from "~/views/public/HomeView.vue";
+import TeamDetailsView from "@/views/dashboard/TeamDetailsView.vue";
+import FormationsVue from "@/views/FormationsView.vue";
+import NewTeamView from "@/views/NewTeamView.vue";
+import NotFound from "@/views/NotFoundView.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import SignIn from "~/views/auth/SigninView.vue";
+import IndexDashboard from "~/views/dashboard/IndexView.vue";
+import MatchesView from "~/views/dashboard/MatchesView.vue";
+import NewMatch from "~/views/dashboard/NewMatch.vue";
+import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
+import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
+import DashboardTeams from "~/views/dashboard/TeamsView.vue";
+import Dashboard from "~/views/DashboardView.vue";
+import Fixtures from "~/views/public/home/FixturesView.vue";
 import MatchView from "~/views/public/home/MatchView.vue";
+import Players from "~/views/public/home/PlayersView.vue";
 import Stats from "~/views/public/home/StatsView.vue";
 import Table from "~/views/public/home/TableView.vue";
-import Players from "~/views/public/home/PlayersView.vue";
-import Fixtures from "~/views/public/home/FixturesView.vue";
-
-import Dashboard from "~/views/DashboardView.vue";
-import IndexDashboard from "~/views/dashboard/IndexView.vue";
-import DashboardTeams from "~/views/dashboard/TeamsView.vue";
-import DashboardMatch from "~/views/dashboard/MatchesView.vue";
-
-import Auth from "@/views/auth/AuthView.vue";
-import SignIn from "~/views/auth/SigninView.vue";
-import SignUp from "@/views/auth/SignupView.vue";
-
-import NotFound from "@/views/NotFoundView.vue";
+import Home from "~/views/public/HomeView.vue";
 
 const routes = [
   {
@@ -38,7 +37,12 @@ const routes = [
       {
         path: "/dashboard/matches",
         name: "DashboardMatches",
-        component: DashboardMatch,
+        component: AdminMatchFixturesView,
+      },
+      {
+        path: "/dashboard/matches/new",
+        name: "NewDashboardMatch",
+        component: NewMatch,
       },
       {
         path: "/dashboard/teams/new",
@@ -56,6 +60,11 @@ const routes = [
         name: "addPlayer",
         component: AddPlayerView,
       },
+      {
+        path: "/dashboard/live/:matchId/add-events",
+        name: "addEvents",
+        component: AddEventsView,
+      },
     ],
   },
   {
@@ -72,6 +81,7 @@ const routes = [
       { path: "/table", name: "Table", component: Table },
       { path: "/stats", name: "Stats", component: Stats },
       { path: "/players", name: "Players", component: Players },
+      { path: "/matches", name: "Matches", component: MatchesView },
       { path: "/match/:id", name: "Match", component: MatchView },
     ],
   },

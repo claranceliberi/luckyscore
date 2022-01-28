@@ -5,9 +5,13 @@
     date: Date;
     score: string;
     isFinished: boolean;
+    live: boolean;
+    dashboard?: boolean;
   }
   const matchNavbarprops = withDefaults(defineProps<Props>(), {
     isFinished: false,
+    live: false,
+    dashboard: false,
     score: "0-0",
     date: undefined,
     team1: "",
@@ -16,9 +20,15 @@
 </script>
 
 <template>
-  <div class="w-full mt-16 flex justify-center">
+  <div
+    :class="`w-full ${
+      matchNavbarprops.dashboard ? 'mt-8' : 'mt-16'
+    } flex justify-center`"
+  >
     <div
-      class="w-full md:w-3/5 bg-primary flex gap-6 md:gap-24 justify-center py-10 rounded"
+      :class="`w-full ${
+        matchNavbarprops.dashboard ? '' : 'md:w-3/5'
+      } bg-primary flex gap-6 md:gap-24 justify-center py-10 rounded`"
     >
       <div class="flex flex-col items-center gap-4">
         <svg
@@ -38,14 +48,16 @@
       <div class="flex flex-col items-center gap-1 text-lg text-white">
         <h1>
           {{
-            matchNavbarprops.isFinished
+            matchNavbarprops.isFinished || matchNavbarprops.live
               ? matchNavbarprops.score
               : matchNavbarprops.date?.toLocaleDateString()
           }}
         </h1>
         <p class="text-gray-400">
           {{
-            matchNavbarprops.isFinished
+            matchNavbarprops.live
+              ? "Live"
+              : matchNavbarprops.isFinished
               ? "Full Time"
               : matchNavbarprops.date?.toLocaleTimeString()
           }}

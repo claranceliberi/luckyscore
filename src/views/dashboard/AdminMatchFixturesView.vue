@@ -20,22 +20,28 @@
     `,
     )
     .then((res) => {
-      console.log(res.data);
-
       fixtures.matches = res.data || [];
       fixtures.isLoading = false;
-      fixtures.name = "Matchday 1";
     });
 </script>
 
 <template>
   <div v-if="!fixtures.isLoading && fixtures.matches.length > 0" class="my-6">
-    <!-- <div v-for="(fixture, key) in fixtures" :key="key" class="my-6"> -->
-    <MatchDay url="/match/" :name="fixtures.name" :matches="fixtures.matches" />
-    <!-- </div> -->
+    <div class="my-6 flex justify-between">
+      <h1 class="text-2xl font-bold">Matches</h1>
+      <router-link to="/dashboard/matches/new">
+        <button
+          style="border-radius: 28px"
+          class="bg-primary px-6 py-4 w-auto h-14 rounded-3xl text-white"
+        >
+          Add new match
+        </button>
+      </router-link>
+    </div>
+    <MatchDay url="/dashboard/matches/" name="" :matches="fixtures.matches" />
   </div>
   <div v-else-if="fixtures.isLoading">
-    <h1>Loading fixtures...</h1>
+    <h1>Loading...</h1>
   </div>
 
   <div v-else>

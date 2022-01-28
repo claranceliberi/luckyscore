@@ -1,14 +1,14 @@
 <script setup lang="ts">
+  import { IMatchprogress } from "@/types/global";
   import Vue from "vue";
 
   interface Props {
     homeTeam: string;
     awayTeam: string;
-    homeScore: string;
-    awayScore: string;
-    matchTime: string;
-    matchDate: string;
-    matchStatus: string;
+    homeScore: number;
+    awayScore: number;
+    time: string;
+    matchStatus: IMatchprogress;
   }
 
   const props = defineProps<Props>();
@@ -48,8 +48,8 @@
       </div>
 
       <div
-        v-if="matchStatus === 'Finished'"
-        class="flex-row w-10 bg-[#502274] text-white rounded text-center px-2 py-2"
+        v-if="matchStatus === 'finished'"
+        class="flex-row w-10 bg-primary text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
         <div class="mt-3">{{ awayScore }}</div>
@@ -59,12 +59,18 @@
       <div class="flex-initial items-center">
         <div>
           {{
-            new Date(matchDate).toString().split(" ")[2] +
+            new Date(time)?.toString().split(" ")[2] +
             " " +
-            new Date(matchDate).toString().split(" ")[1]
+            new Date(time)?.toString().split(" ")[1]
           }}
         </div>
-        <div>{{ matchTime }}</div>
+        <div>
+          {{
+            new Date(time)?.toString().split(" ")[4].split(":")[0] +
+            ":" +
+            new Date(time)?.toString().split(" ")[4].split(":")[1]
+          }}
+        </div>
       </div>
     </div>
   </div>

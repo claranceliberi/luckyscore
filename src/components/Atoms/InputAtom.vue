@@ -2,8 +2,9 @@
   <div class="flex flex-col gap-2 pb-4">
     <label class="font-medium text-sm">{{ props.title }}</label>
     <input
+      :required="props.required"
       :value="modelValue"
-      :placeholder="props.placeholder"
+      :placeholder="props.placeholder || ''"
       class="py-2 px-5 w-72 border-primary border-2 rounded focus:outline-none"
       :class="{
         '': !props.readonly,
@@ -20,12 +21,13 @@
 <script lang="ts" setup>
   interface Props {
     type?: string;
-    placeholder?: string;
+    placeholder: string;
     modelValue?: string;
     readonly?: boolean;
     bg?: "secondary" | "main";
     error?: string;
     title: string;
+    required?: boolean;
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -36,6 +38,7 @@
     error: "",
     full: false,
     bg: "main",
+    required: true,
   });
 
   const emit = defineEmits<{ (e: "update:modelValue", id: string): void }>();
