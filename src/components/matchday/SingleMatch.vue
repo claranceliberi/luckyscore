@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IMatchprogress } from "@/types/global";
   import Vue from "vue";
 
   interface Props {
@@ -7,7 +8,7 @@
     homeScore: number;
     awayScore: number;
     time: string;
-    matchStatus: string;
+    matchStatus: IMatchprogress;
   }
 
   const props = defineProps<Props>();
@@ -47,8 +48,8 @@
       </div>
 
       <div
-        v-if="matchStatus.toLowerCase() === 'finished'"
-        class="flex-row w-10 bg-[#502274] text-white rounded text-center px-2 py-2"
+        v-if="matchStatus === 'finished'"
+        class="flex-row w-10 bg-primary text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
         <div class="mt-3">{{ awayScore }}</div>
