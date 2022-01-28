@@ -16,13 +16,13 @@
     <!-- first step -->
     <div v-if="step === 1">
       <div class="flex justify-between gap-6 pt-6">
-        <InputAtom v-model="data.match_day" title="Match day" type="number" />
-        <InputAtom v-model="data.time" title="Time" type="datetime-local" />
+        <InputAtom v-model="match.match_day" title="Match day" type="number" />
+        <InputAtom v-model="match.time" title="Time" type="datetime-local" />
       </div>
       <div class="pb-4">
         <label class="font-medium text-base mb-2">Description</label>
         <textarea
-          v-model="data.description"
+          v-model="match.description"
           class="py-2 px-5 w-full h-20 border-primary border-2 rounded focus:outline-none"
         />
       </div>
@@ -31,7 +31,7 @@
         <div>
           <p class="pb-2 font-medium">Home-team</p>
           <SelectAtom
-            v-model="data.home_team"
+            v-model="match.home_team"
             title="Home team"
             placeholder="Select team"
             :options="teams"
@@ -40,7 +40,7 @@
         <div>
           <p class="pb-2 font-medium">Away-team</p>
           <SelectAtom
-            v-model="data.home_team"
+            v-model="match.home_team"
             title="away team"
             placeholder="Select team"
             :options="teams"
@@ -51,7 +51,7 @@
         <div>
           <p class="pb-2 font-medium">Home-team formation:</p>
           <SelectAtom
-            v-model="data.home_formation"
+            v-model="match.home_formation"
             title="Home team formation"
             placeholder="Select"
             :options="formations"
@@ -60,7 +60,7 @@
         <div>
           <p class="pb-2">Away-team formation:</p>
           <SelectAtom
-            v-model="data.away_formation"
+            v-model="match.away_formation"
             title="Away team formation"
             placeholder="Select"
             :options="formations"
@@ -146,7 +146,7 @@
     { value: "3-5-2", label: "3-5-2" },
   ];
 
-  const data = reactive({
+  const match = reactive({
     time: "",
     season: "",
     description: "",
@@ -166,6 +166,11 @@
     if (step.value < 3) {
       step.value++;
     } else {
+      const { data: newMatch } = await supabase.from("match").insert(match);
+      console.log("====================================");
+      console.log(newMatch);
+      console.log("====================================");
+
       const homeTeamData = homeTeamLinup.map((p) => {
         ({
           match: "",

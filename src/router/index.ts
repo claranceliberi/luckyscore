@@ -45,7 +45,7 @@ const routes = [
       },
       {
         path: "/dashboard/matches/new",
-        name: "DashboardMatches",
+        name: "NewDashboardMatch",
         component: NewMatch,
       },
       {
