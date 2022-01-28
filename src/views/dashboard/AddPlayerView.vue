@@ -11,7 +11,7 @@
   interface Players extends ITable {
     id: string;
     full_name: string;
-    team: string;
+    team_id: string;
   }
 
   interface SinglePlayer {
@@ -42,8 +42,8 @@
 
   supabase
     .from<Players>("player")
-    .select("full_name,id,team")
-    .eq("team", router.params.teamId as string)
+    .select("full_name,id,team_id")
+    .eq("team_id", router.params.teamId as string)
     .then((res) => {
       if (res) {
         players.playerNames = res.data || [];
@@ -51,21 +51,25 @@
       }
     });
 
-  async function deletePlayer(playerId: string, index: number) {
-    const { status, error } = await supabase
+  async function deletePlayer(playerId: string) {
+    supabase
       .from("player")
       .delete()
-      .match({ id: playerId });
-    if (status) {
-      const newPlayerNames = players.playerNames.filter(
-        (player) => player.id !== playerId,
-      );
+      .match({ id: playerId })
+      .then((res) => {
+        if (res.status === 200) {
+          const newPlayerNames = players.playerNames.filter(
+            (player) => player.id !== playerId,
+          );
 
-      players.playerNames = newPlayerNames;
-      toast.success("Player deleted");
-    } else {
-      toast.error(error?.message || "");
-    }
+          players.playerNames = newPlayerNames;
+          toast.success("Player deleted");
+        } else if (res.error?.code === "23503") {
+          toast.error("Player has been assigned to a match");
+        } else {
+          toast.error("Error deleting player");
+        }
+      });
   }
 
   function editPlayer(index: number) {
@@ -126,7 +130,9 @@
           :key="player.id"
           class="flex justify-between items-center pb-6"
         >
-          <span class="font-medium text-sm">1. {{ player.full_name }}</span>
+          <span class="font-medium text-sm"
+            >{{ index + 1 + "." }} {{ player.full_name }}</span
+          >
 
           <div class="cursor-pointer">
             <div class="flex gap-4 items-center justify-center">
@@ -136,7 +142,7 @@
               />
               <img
                 src="../../assets/icons/close.svg"
-                @click="deletePlayer(player.id, index)"
+                @click="deletePlayer(player.id)"
               />
             </div>
           </div>

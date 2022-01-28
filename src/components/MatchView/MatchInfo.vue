@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  const matchInfoProps = withDefaults(defineProps<{ date: Date }>(), {});
+  console.log(matchInfoProps);
+</script>
 
 <template>
   <div class="bg-white shadow-sm p-4">
@@ -7,7 +10,7 @@
     <p>Interclass Football League</p>
 
     <h1 class="font-black mt-4 mb-2">Kick Off</h1>
-    <p>24/02/2022</p>
+    <p>{{ new Date(matchInfoProps.date).toLocaleDateString() }}</p>
 
     <h1 class="font-black mt-4 mb-2">Stadium</h1>
     <p class="text-appgrey">Ntvet-Rca Pitch</p>
