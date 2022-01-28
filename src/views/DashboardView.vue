@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
-  import { SupabaseAuthUser, USER_STORAGE_NAME } from "@/types/global";
-  import { User } from "@supabase/supabase-js";
+  import { SupabaseAuthUser } from "@/types/global";
   import { onBeforeMount, ref } from "vue";
   import { useRoute, useRouter } from "vue-router";
   import { ILink } from "~/types/global";
@@ -40,11 +39,11 @@
       router.push({ path: "/signin", query: route.query });
     }
 
-    // await checkAuthUser();
+    await checkAuthUser();
 
-    // window.addEventListener("hashchange", async () => {
-    //   await checkAuthUser();
-    // });
+    window.addEventListener("hashchange", async () => {
+      await checkAuthUser();
+    });
   });
 </script>
 
