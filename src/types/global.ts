@@ -24,7 +24,7 @@ export interface IPlayer extends ITable {
   team: Teams;
 }
 export interface IPlayerMatch extends ITable {
-  match_id: string;
+  match: string;
   player: IPlayer;
   player_id: string;
   red_card: number;
