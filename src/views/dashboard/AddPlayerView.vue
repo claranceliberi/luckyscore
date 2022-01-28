@@ -106,14 +106,17 @@
     </button>
     <h1 class="font-medium text-2xl pt-4">{{ router.query.team }}</h1>
     <h3 class="pt-6 pb-4 text-lg">Players</h3>
-    <AddPlayer v-if="players.playerNames.length < 0 || showForm.showAddForm" />
+    <AddPlayer v-if="showForm.showAddForm" />
     <EditPlayer
       v-if="showForm.showEditForm"
       :player-id="playerInfo.id"
       :names="playerInfo.names"
     />
 
-    <div v-else class="flex flex-col justify-start p-6 bg-white w-[22rem]">
+    <div
+      v-if="!showForm.showAddForm && !showForm.showEditForm"
+      class="flex flex-col justify-start p-6 bg-white w-[22rem]"
+    >
       <h1 class="font-medium text-lg pb-6">Registered Players</h1>
 
       <div v-if="!players.isLoading">
@@ -140,7 +143,9 @@
       </div>
 
       <span v-else-if="players.isLoading">loading..</span>
-      <span v-if="players.playerNames.length === 0" class="py-6"
+      <span
+        v-if="players.playerNames.length === 0 && !players.isLoading"
+        class="py-6"
         >No players found</span
       >
 
