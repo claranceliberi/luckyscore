@@ -7,7 +7,7 @@
 
   supabase
     .from<IMatch>("match")
-    .select("*")
+    .select("id,match_status")
     .eq("id", teamId)
     .then((res) => {
       if (res) {

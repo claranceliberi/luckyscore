@@ -23,13 +23,7 @@
     loading.value = true;
 
     const authUser = await supabase.auth.user();
-    console.log(
-      "authUser",
-      authUser,
-      !!authUser,
-      !!window.location.hash,
-      !authUser && !window.location.hash,
-    );
+
     if (!authUser && !window.location.hash) {
       console.error("no user");
       router.push("/signin");
@@ -46,12 +40,11 @@
       router.push({ path: "/signin", query: route.query });
     }
 
-    await checkAuthUser();
+    // await checkAuthUser();
 
-    window.addEventListener("hashchange", async () => {
-      console.log("hashchange");
-      await checkAuthUser();
-    });
+    // window.addEventListener("hashchange", async () => {
+    //   await checkAuthUser();
+    // });
   });
 </script>
 

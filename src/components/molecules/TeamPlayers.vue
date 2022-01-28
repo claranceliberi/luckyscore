@@ -12,7 +12,7 @@
   supabase
     .from("player")
     .select("id", { count: "exact", head: true })
-    .eq("team", router.params.id)
+    .eq("team_id", router.params.id)
     .then((res) => {
       if (res) {
         totalPlayers.total = res.count || 0;
