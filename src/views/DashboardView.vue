@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { supabase } from "@/lib/supabase";
-  import { SupabaseAuthUser, USER_STORAGE_NAME } from "@/types/global";
-  import { User } from "@supabase/supabase-js";
+  import { SupabaseAuthUser } from "@/types/global";
   import { onBeforeMount, ref } from "vue";
   import { useRoute, useRouter } from "vue-router";
   import { ILink } from "~/types/global";
@@ -31,8 +30,9 @@
       !authUser && !window.location.hash,
     );
     if (!authUser && !window.location.hash) {
-      console.error("no user");
-      router.push("/signin");
+      // console.error("no user");
+      // router.push("/signin");
+      loading.value = false;
     } else {
       loading.value = false;
     }
