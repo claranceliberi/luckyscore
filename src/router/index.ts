@@ -9,6 +9,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
 import MatchView from "~/views/public/home/MatchView.vue";
 import MatchesView from "~/views/dashboard/MatchesView.vue";
+import NewMatch from "~/views/dashboard/NewMatch.vue";
 import Stats from "~/views/public/home/StatsView.vue";
 import Table from "~/views/public/home/TableView.vue";
 import Players from "~/views/public/home/PlayersView.vue";
@@ -40,6 +41,11 @@ const routes = [
         path: "/dashboard/matches",
         name: "DashboardMatches",
         component: MatchesView,
+      },
+      {
+        path: "/dashboard/matches/new",
+        name: "DashboardMatches",
+        component: NewMatch,
       },
       {
         path: "/dashboard/teams/new",
