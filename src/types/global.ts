@@ -83,7 +83,6 @@ export interface IMatch extends ITable {
 }
 
 export interface IFixtures {
-  isLoading?: boolean;
   name: string;
   matches: IMatch[];
 }

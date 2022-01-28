@@ -1,16 +1,13 @@
 <script setup lang="ts">
   import MatchDay from "@/components/matchday/MatchesInMatchDay.vue";
   import { supabase } from "@/lib/supabase";
-
   import { IFixtures, IMatch } from "@/types/global";
   import { reactive } from "vue";
-
   const fixtures = reactive<IFixtures>({
     isLoading: true,
     name: "",
     matches: [],
   });
-
   supabase
     .from("match")
     .select(
@@ -21,7 +18,6 @@
     )
     .then((res) => {
       console.log(res.data);
-
       fixtures.matches = res.data || [];
       fixtures.isLoading = false;
       fixtures.name = "Matchday 1";
