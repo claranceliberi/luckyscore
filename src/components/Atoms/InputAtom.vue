@@ -21,7 +21,7 @@
 <script lang="ts" setup>
   interface Props {
     type?: string;
-    placeholder?: string;
+    placeholder: string;
     modelValue?: string;
     readonly?: boolean;
     bg?: "secondary" | "main";

@@ -67,6 +67,10 @@ export interface ICreateMatch {
   id: string;
 }
 
+export interface ITableStatistics extends ITable, Teams {
+  home_match: Array<IMatch>;
+  away_match: Array<IMatch>;
+}
 export interface IMatch extends ITable {
   id: string;
   match_day: string;
@@ -89,6 +93,7 @@ export interface IMatch extends ITable {
   away_shots_on_target: number;
   home_fouls: number;
   away_fouls: number;
+  result_status: string;
 }
 
 export interface IFixtures {

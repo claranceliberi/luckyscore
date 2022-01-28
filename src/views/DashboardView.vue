@@ -41,11 +41,11 @@
       router.push({ path: "/signin", query: route.query });
     }
 
-    // await checkAuthUser();
+    await checkAuthUser();
 
-    // window.addEventListener("hashchange", async () => {
-    //   await checkAuthUser();
-    // });
+    window.addEventListener("hashchange", async () => {
+      await checkAuthUser();
+    });
   });
 </script>
 
