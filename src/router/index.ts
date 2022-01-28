@@ -37,7 +37,7 @@ const routes = [
       {
         path: "/dashboard/matches",
         name: "DashboardMatches",
-        component: MatchesView,
+        component: AdminMatchFixturesView,
       },
       {
         path: "/dashboard/matches/new",

@@ -16,8 +16,18 @@
     <!-- first step -->
     <div v-if="step === 1">
       <div class="flex justify-between gap-6 pt-6">
-        <InputAtom v-model="match.match_day" title="Match day" type="number" />
-        <InputAtom v-model="match.time" title="Time" type="datetime-local" />
+        <InputAtom
+          v-model="match.match_day"
+          title="Match day"
+          type="number"
+          placeholder=""
+        />
+        <InputAtom
+          v-model="match.time"
+          title="Time"
+          type="datetime-local"
+          placeholder=""
+        />
       </div>
       <div class="pb-4">
         <label class="font-medium text-base mb-2">Description</label>
@@ -161,8 +171,6 @@
     label: t.name,
     value: t.id,
   }));
-
-  console.log(teamsOptions);
 
   const match = reactive<ICreateMatch>({
     time: "",

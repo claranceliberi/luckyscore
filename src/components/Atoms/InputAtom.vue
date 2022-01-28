@@ -4,7 +4,7 @@
     <input
       :required="props.required"
       :value="modelValue"
-      :placeholder="props.placeholder"
+      :placeholder="props.placeholder || ''"
       class="py-2 px-5 w-72 border-primary border-2 rounded focus:outline-none"
       :class="{
         '': !props.readonly,
