@@ -24,9 +24,8 @@
     const authUser = await supabase.auth.user();
 
     if (!authUser && !window.location.hash) {
-      // console.error("no user");
-      // router.push("/signin");
-      loading.value = false;
+      console.error("no user");
+      router.push("/signin");
     } else {
       loading.value = false;
     }
