@@ -15,24 +15,57 @@
     </div>
     <!-- first step -->
     <div v-if="step === 1">
-      <div class="flex justify-between gap-6 py-6">
-        <InputAtom v-model="data.date" title="Date" type="date" />
-        <InputAtom v-model="data.time" title="Time" type="time" />
+      <div class="flex justify-between gap-6 pt-6">
+        <InputAtom v-model="data.match_day" title="Match day" type="number" />
+        <InputAtom v-model="data.time" title="Time" type="datetime-local" />
+      </div>
+      <div class="pb-4">
+        <label class="font-medium text-base mb-2">Description</label>
+        <textarea
+          v-model="data.description"
+          class="py-2 px-5 w-full h-20 border-primary border-2 rounded focus:outline-none"
+        />
       </div>
 
-      <div class="flex justify-between gap-6">
-        <SelectAtom
-          v-model="data.homeTeam"
-          title="Home team"
-          placeholder="Select team"
-          :options="teams"
-        />
-        <SelectAtom
-          v-model="data.homeTeam"
-          title="away team"
-          placeholder="Select team"
-          :options="teams"
-        />
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <p class="pb-2 font-medium">Home-team</p>
+          <SelectAtom
+            v-model="data.home_team"
+            title="Home team"
+            placeholder="Select team"
+            :options="teams"
+          />
+        </div>
+        <div>
+          <p class="pb-2 font-medium">Away-team</p>
+          <SelectAtom
+            v-model="data.home_team"
+            title="away team"
+            placeholder="Select team"
+            :options="teams"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6 pt-5">
+        <div>
+          <p class="pb-2 font-medium">Home-team formation:</p>
+          <SelectAtom
+            v-model="data.home_formation"
+            title="Home team formation"
+            placeholder="Select"
+            :options="formations"
+          />
+        </div>
+        <div>
+          <p class="pb-2">Away-team formation:</p>
+          <SelectAtom
+            v-model="data.away_formation"
+            title="Away team formation"
+            placeholder="Select"
+            :options="formations"
+          />
+        </div>
       </div>
     </div>
     <!-- second step -->
@@ -99,13 +132,29 @@
 
   import SelectAtom from "@/components/Atoms/SelectAtom.vue";
   import InputAtom from "@/components/Atoms/InputAtom.vue";
+  import { supabase } from "@/lib/supabase";
+  import { toast } from "@/plugins/toaster/vue-toast";
+  import router from "@/router";
+  import { MatchFormation } from "@/types/global";
+
+  const formations = [
+    { value: "4-3-3", label: "4-3-3" },
+    { value: "4-4-2", label: "4-4-2" },
+    { value: "4-2-3-1", label: "4-2-3-1" },
+    { value: "3-4-3", label: "3-4-3" },
+    { value: "4-2-2-2", label: "4-2-2-2" },
+    { value: "3-5-2", label: "3-5-2" },
+  ];
 
   const data = reactive({
-    date: "",
     time: "",
-    homeTeam: "",
-    awayTeam: "",
-    formation: "",
+    season: "",
+    description: "",
+    match_day: "1",
+    home_team: "",
+    away_team: "",
+    away_formation: "",
+    home_formation: "",
   });
 
   const homeTeamLinup: string[] = reactive([]);
@@ -116,6 +165,48 @@
   async function handleNext() {
     if (step.value < 3) {
       step.value++;
+    } else {
+      const homeTeamData = homeTeamLinup.map((p) => {
+        ({
+          match: "",
+          player_id: p,
+          red_card: 0,
+          yellow_card: 0,
+          off_side: 0,
+          pitch_position: 0,
+          subbed: null,
+          goals: 0,
+          assists: 0,
+          big_chances: 0,
+          successful_dribbles: 0,
+        });
+      });
+
+      const awayTeamData = awayTeamLinup.map((p) => {
+        ({
+          match: "",
+          player_id: p,
+          red_card: 0,
+          yellow_card: 0,
+          off_side: 0,
+          pitch_position: 0,
+          subbed: null,
+          goals: 0,
+          assists: 0,
+          big_chances: 0,
+          successful_dribbles: 0,
+        });
+      });
+
+      const { data, error } = await supabase
+        .from("player_match")
+        .insert([...homeTeamData, ...awayTeamData]);
+
+      if (data) {
+        router.back();
+        toast.success("Match was successfully created");
+      }
+      if (error) toast.error(error?.message);
     }
   }
 
