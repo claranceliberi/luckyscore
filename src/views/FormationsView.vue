@@ -7,7 +7,7 @@
           <ListboxButton
             class="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
           >
-            <span class="block truncate">{{ selectedFormation.name }}</span>
+            <span class="block truncate">{{ selectedFormation }}</span>
             <span
               class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
             >
@@ -24,10 +24,10 @@
               class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             >
               <ListboxOption
-                v-for="person in people"
+                v-for="form in formations"
                 v-slot="{ active, selected }"
-                :key="person.name"
-                :value="person"
+                :key="form"
+                :value="form"
                 as="template"
               >
                 <li
@@ -41,7 +41,7 @@
                       selected ? 'font-medium' : 'font-normal',
                       'block truncate',
                     ]"
-                    >{{ person.name }}</span
+                    >{{ form }}</span
                   >
                   <span
                     v-if="selected"
@@ -57,12 +57,18 @@
       </Listbox>
     </div>
     <div class="forms">
-      <FormationCard :formation="selectedFormation.name" />
+      <div class="card">
+        <FormationCard
+          :formation="selectedFormation"
+          :match-id="matchId"
+          :team="team"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
   import { ref } from "vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
   import {
@@ -71,36 +77,11 @@
     ListboxOptions,
     ListboxOption,
   } from "@headlessui/vue";
-  import { defineComponent } from "vue";
-  export default defineComponent({
-    name: "FormationsView",
-    components: {
-      FormationCard,
-      Listbox,
-      ListboxButton,
-      ListboxOptions,
-      ListboxOption,
-      // CheckIcon,
-      // SelectorIcon,
-    },
 
-    setup() {
-      const people = [
-        { name: "4-3-3" },
-        { name: "4-4-2" },
-        { name: "4-2-3-1" },
-        { name: "3-4-3" },
-        { name: "4-2-2-2" },
-        { name: "3-5-2" },
-      ];
-      const selectedFormation = ref(people[0]);
-
-      return {
-        people,
-        selectedFormation,
-      };
-    },
-  });
+  const formations = ["4-3-3", "4-4-2", "4-2-3-1", "3-4-3", "4-2-2-2", "3-5-2"];
+  const matchId = "d0e59e83-30c3-43d9-b032-b311f66295e8";
+  const selectedFormation = ref("3-5-2");
+  const team = "3d2e2bee-503a-4ce0-93bc-4223ce84417c";
 </script>
 
 <style scoped>
@@ -111,6 +92,10 @@
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
+  }
+
+  .card {
+    width: 631px;
   }
 
   .header {

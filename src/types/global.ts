@@ -17,6 +17,14 @@ export interface ILink {
   href: string;
 }
 
+export type IMatchprogress =
+  | "not_started"
+  | "first_half"
+  | "half_time"
+  | "second_half"
+  | "penalty_shootout"
+  | "finished";
+
 export interface IPlayer extends ITable {
   description: string;
   full_name: string;
@@ -24,7 +32,7 @@ export interface IPlayer extends ITable {
   team: Teams;
 }
 export interface IPlayerMatch extends ITable {
-  match_id: string;
+  match: string;
   player: IPlayer;
   player_id: string;
   red_card: number;
@@ -56,7 +64,7 @@ export interface IMatch extends ITable {
   time: string;
   in_charge: string;
   description: string;
-  match_status: string;
+  match_status: IMatchprogress;
   home_team: Teams;
   away_team: Teams;
   home_shots: number;
