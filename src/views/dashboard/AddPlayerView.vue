@@ -51,7 +51,7 @@
       }
     });
 
-  async function deletePlayer(playerId: string, index: number) {
+  async function deletePlayer(playerId: string) {
     const { status, error } = await supabase
       .from("player")
       .delete()
@@ -138,7 +138,7 @@
               />
               <img
                 src="../../assets/icons/close.svg"
-                @click="deletePlayer(player.id, index)"
+                @click="deletePlayer(player.id)"
               />
             </div>
           </div>
