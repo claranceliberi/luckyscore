@@ -126,7 +126,9 @@
           :key="player.id"
           class="flex justify-between items-center pb-6"
         >
-          <span class="font-medium text-sm">1. {{ player.full_name }}</span>
+          <span class="font-medium text-sm"
+            >{{ index + 1 + "." }} {{ player.full_name }}</span
+          >
 
           <div class="cursor-pointer">
             <div class="flex gap-4 items-center justify-center">
