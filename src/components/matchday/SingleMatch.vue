@@ -47,7 +47,7 @@
       </div>
 
       <div
-        v-if="matchStatus.toLowerCase() === 'finished'"
+        v-if="matchStatus?.toLowerCase() === 'finished'"
         class="flex-row w-10 bg-[#502274] text-white rounded text-center px-2 py-2"
       >
         <div>{{ homeScore }}</div>
