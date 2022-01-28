@@ -97,10 +97,10 @@
         <th></th>
         <th></th>
         <th class="w-2/4"></th>
-        <th>P</th>
-        <th>W</th>
-        <th>D</th>
-        <th>L</th>
+        <th>P&emsp;</th>
+        <th>W&emsp;</th>
+        <th>D&emsp;</th>
+        <th>L&emsp;</th>
         <th>GF</th>
         <th>GA</th>
         <th>GD</th>
@@ -116,10 +116,10 @@
         <td>{{ index + 1 }}</td>
         <td>{{ teamStats.team_name }}</td>
         <td class="space"></td>
-        <td class="text-right">{{ teamStats.match_played }}</td>
-        <td class="text-right">{{ teamStats.wins }}</td>
-        <td class="text-right">{{ teamStats.draws }}</td>
-        <td class="text-right">{{ teamStats.loss }}</td>
+        <td class="text-right">{{ teamStats.match_played }}&emsp;</td>
+        <td class="text-right">{{ teamStats.wins }}&emsp;</td>
+        <td class="text-right">{{ teamStats.draws }}&emsp;</td>
+        <td class="text-right">{{ teamStats.loss }}&emsp;</td>
         <td class="text-right">{{ teamStats.goal_forward }}</td>
         <td class="text-right">{{ teamStats.goal_against }}</td>
         <td class="text-right">{{ teamStats.goal_difference }}</td>
