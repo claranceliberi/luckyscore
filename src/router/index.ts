@@ -10,6 +10,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "~/views/auth/SigninView.vue";
 import IndexDashboard from "~/views/dashboard/IndexView.vue";
 import MatchesView from "~/views/dashboard/MatchesView.vue";
+import NewMatch from "~/views/dashboard/NewMatch.vue";
+import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
+import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
 import DashboardTeams from "~/views/dashboard/TeamsView.vue";
 import Dashboard from "~/views/DashboardView.vue";
 import Fixtures from "~/views/public/home/FixturesView.vue";
@@ -34,7 +37,12 @@ const routes = [
       {
         path: "/dashboard/matches",
         name: "DashboardMatches",
-        component: MatchesView,
+        component: AdminMatchFixturesView,
+      },
+      {
+        path: "/dashboard/matches/new",
+        name: "NewDashboardMatch",
+        component: NewMatch,
       },
       {
         path: "/dashboard/teams/new",

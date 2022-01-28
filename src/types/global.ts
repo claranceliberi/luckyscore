@@ -31,9 +31,8 @@ export interface IPlayer extends ITable {
   id: string;
   team: Teams;
 }
-export interface IPlayerMatch extends ITable {
+export interface PlayerMatchCreate {
   match: string;
-  player: IPlayer;
   player_id: string;
   red_card: number;
   yellow_card: number;
@@ -45,12 +44,27 @@ export interface IPlayerMatch extends ITable {
   big_chances: number;
   successful_dribbles: number;
 }
+export interface IPlayerMatch extends ITable, PlayerMatchCreate {
+  player: IPlayer;
+}
 
 export interface Teams extends ITable {
   id: string;
   name: string;
   description: string;
   letter: string;
+}
+
+export interface ICreateMatch {
+  time: string;
+  season: string;
+  description: string;
+  match_day: string;
+  home_team: string;
+  away_team: string;
+  away_formation: string;
+  home_formation: string;
+  id: string;
 }
 
 export interface ITableStatistics extends ITable, Teams {
@@ -106,3 +120,15 @@ export interface SupabaseAuthUser {
 }
 
 export const USER_STORAGE_NAME = "lucky_score_auth_user";
+
+export type MatchFormation =
+  | "4-3-3"
+  | "4-4-2"
+  | "4-2-3-1"
+  | "3-4-3"
+  | "4-2-2-2"
+  | "3-5-2";
+
+// export type FormationType = {
+//   [index in MatchFormation]: string;
+// };
