@@ -23,8 +23,6 @@
 
   const allResults: ITeamStat[] = reactive<ITeamStat[]>([]);
 
-  console.log(standingTableProps.allStats);
-
   standingTableProps.allStats.forEach((singleTeam) => {
     const singleResults: ITeamStat = {
       team_id: "",
