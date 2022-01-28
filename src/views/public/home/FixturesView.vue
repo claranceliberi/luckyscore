@@ -34,7 +34,7 @@
     <!-- </div> -->
   </div>
   <div v-else-if="fixtures.isLoading">
-    <h1>Loading...</h1>
+    <h1>Loading fixtures...</h1>
   </div>
 
   <div v-else>

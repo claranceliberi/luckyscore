@@ -100,5 +100,5 @@
     <h1 class="mt-4 mb-2 font-bold">Red Cards</h1>
     <StatsBlockView :display-stats="redCardsStats"></StatsBlockView>
   </template>
-  <p v-else class="mt-10 mb-2">Loading Stats.....</p>
+  <p v-else class="mt-2 mb-2">Loading Stats.....</p>
 </template>

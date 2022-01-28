@@ -1,3 +1,96 @@
+<script setup lang="ts">
+  import { ITableStatistics } from "@/types/global";
+  import { reactive, ref } from "vue";
+
+  interface ITeamStat {
+    team_id: string;
+    team_name: string;
+    points: number;
+    wins: number;
+    draws: number;
+    loss: number;
+    goal_forward: number;
+    goal_against: number;
+    goal_difference: number;
+    match_played: number;
+  }
+
+  type allTeamStatistics = {
+    allStats: Array<ITableStatistics>;
+  };
+
+  const standingTableProps = defineProps<allTeamStatistics>();
+
+  const allResults: ITeamStat[] = reactive<ITeamStat[]>([]);
+
+  console.log(standingTableProps.allStats);
+
+  standingTableProps.allStats.forEach((singleTeam) => {
+    const singleResults: ITeamStat = {
+      team_id: "",
+      team_name: "",
+      points: 0,
+      wins: 0,
+      draws: 0,
+      loss: 0,
+      goal_forward: 0,
+      goal_against: 0,
+      goal_difference: 0,
+      match_played: 0,
+    };
+
+    singleResults.team_id = singleTeam.id;
+    singleResults.team_name = singleTeam.name;
+
+    singleTeam.home_match?.forEach((homeStats) => {
+      singleResults.goal_forward += homeStats.home_score;
+      singleResults.goal_against += homeStats.away_score;
+      if (homeStats.home_score > homeStats.away_score) {
+        singleResults.points += 3;
+        singleResults.wins += 1;
+      } else if (homeStats.home_score === homeStats.away_score) {
+        singleResults.points += 1;
+        singleResults.draws += 1;
+      } else {
+        singleResults.loss += 1;
+      }
+    });
+
+    singleTeam.away_match?.forEach((awayStats) => {
+      singleResults.goal_forward += awayStats.away_score;
+      singleResults.goal_against += awayStats.home_score;
+      if (awayStats.away_score > awayStats.home_score) {
+        singleResults.points += 3;
+      } else if (awayStats.away_score === awayStats.home_score) {
+        singleResults.points += 1;
+      } else {
+        singleResults.loss += 1;
+      }
+    });
+
+    singleResults.goal_difference =
+      singleResults.goal_forward - singleResults.goal_against;
+
+    singleResults.match_played =
+      singleResults.loss + singleResults.wins + singleResults.draws;
+
+    console.log(singleResults);
+
+    allResults.push(singleResults);
+  });
+
+  const displayStats = ref(
+    allResults.sort((a, b) => {
+      if (a.points > b.points) {
+        return -1;
+      } else if (a.points == b.points) {
+        return a.goal_difference > b.goal_difference ? -1 : 1;
+      }
+      return 1;
+    }) || "",
+  );
+</script>
+
 <template>
   <h1 class="font-medium md:py-5">Standings</h1>
   <table class="table-auto w-full mb-10">
@@ -18,36 +111,25 @@
     </thead>
     <tbody class="font-medium text-sm">
       <tr
-        v-for="(num, index) in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+        v-for="(teamStats, index) in displayStats"
         :key="index"
         class="h-12 border-b"
       >
         <td>{{ index + 1 }}</td>
-        <td>Chelsea {{ index }}</td>
+        <td>{{ teamStats.team_name }}</td>
         <td class="space"></td>
-        <td class="text-right">{{ num * 2 }}</td>
-        <td class="text-right">{{ num * 3 }}</td>
-        <td class="text-right">{{ num * 4 }}</td>
-        <td class="text-right">-{{ num * 5 }}</td>
-        <td class="text-right">{{ num * 6 }}</td>
-        <td class="text-right">{{ num * 7 }}</td>
-        <td class="text-right">{{ num * 8 }}</td>
-        <td class="text-right">{{ num * 9 }}</td>
+        <td class="text-right">{{ teamStats.match_played }}</td>
+        <td class="text-right">{{ teamStats.wins }}</td>
+        <td class="text-right">{{ teamStats.draws }}</td>
+        <td class="text-right">{{ teamStats.loss }}</td>
+        <td class="text-right">{{ teamStats.goal_forward }}</td>
+        <td class="text-right">{{ teamStats.goal_against }}</td>
+        <td class="text-right">{{ teamStats.goal_difference }}</td>
+        <td class="text-right">{{ teamStats.points }}</td>
       </tr>
     </tbody>
   </table>
 </template>
-<script lang="ts">
-  export default {
-    name: "StandingTableMolecule",
-    props: {
-      standings: {
-        type: Array,
-        required: true,
-      },
-    },
-  };
-</script>
 
 <style lang="css" scoped>
   .td {
