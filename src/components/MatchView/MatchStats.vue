@@ -3,15 +3,12 @@
     title: string;
     values: Array<number>;
   }
-  const stats: Array<Stat> = [
-    { title: "Total Shots", values: [9, 12] },
-    { title: "Shots on target", values: [3, 6] },
-    { title: "Fouls", values: [2, 2] },
-    { title: "Yellow cards", values: [0, 1] },
-    { title: "Red cards", values: [0, 0] },
-    { title: "Offsides", values: [3, 2] },
-    { title: "Corners", values: [5, 7] },
-  ];
+
+  const matchStatsProps = withDefaults(
+    defineProps<{ stats: Array<Stat> }>(),
+    {},
+  );
+
   const progressStyles = (value1: number, value2: number) => {
     let result = (value1 * 100) / (value1 + value2) || 0;
     result = result === Infinity ? 100 : result;
@@ -25,7 +22,7 @@
   <div class="bg-white shadow-sm p-4">
     <h1 class="font-black mt-4 mb-8">Match Stats</h1>
     <div>
-      <div v-for="stat in stats" :key="stat.title" class="my-5">
+      <div v-for="stat in matchStatsProps.stats" :key="stat.title" class="my-5">
         <div class="flex justify-between items-center">
           <p class="text-black font-semibold">{{ stat.values[0] }}</p>
           <p class="text-black font-semibold">{{ stat.title }}</p>

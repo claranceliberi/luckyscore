@@ -6,7 +6,7 @@
     score: string;
     isFinished: boolean;
     live: boolean;
-    dashboard: boolean;
+    dashboard?: boolean;
   }
   const matchNavbarprops = withDefaults(defineProps<Props>(), {
     isFinished: false,

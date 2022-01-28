@@ -1,43 +1,71 @@
 <template>
-  <MatchNavbarMolecule v-bind="navbarprops"></MatchNavbarMolecule>
-  <div>
-    <div class="match__container mb-4">
-      <h1 className="header text-2xl font-bold mb-5 mt-10">Line-Ups</h1>
-      <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-4">
-        <div class="w-full md:w-1/2">
-          <div class="teams__header flex">
-            <div
-              class="active cursor-pointer text-primary w-1/2 pb-4 border-b-2 border-primary"
-            >
-              <p class="text-center">Welding L3</p>
+  <div v-if="state.isLoading" class="my-10">Loading...</div>
+  <div v-else-if="!state.isError && state.navbarprops?.team1">
+    <MatchNavbarMolecule v-bind="state.navbarprops"></MatchNavbarMolecule>
+    <div>
+      <div class="match__container mb-4">
+        <h1 className="header text-2xl font-bold mb-5 mt-10">Line-Ups</h1>
+        <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-4">
+          <div class="w-full md:w-1/2">
+            <div class="teams__header flex">
+              <div
+                :class="`active cursor-pointer ${
+                  state.homeSelected ? 'text-primary' : 'text-appgrey'
+                } w-1/2 pb-4 border-b-2 ${
+                  state.homeSelected ? 'border-primary' : 'border-gray-200'
+                }`"
+                @click="state.homeSelected = true"
+              >
+                <p class="text-center">
+                  {{ state.navbarprops.team1 }}
+                </p>
+              </div>
+              <div
+                :class="`w-1/2 cursor-pointer pb-4 ${
+                  !state.homeSelected ? 'text-primary' : 'text-appgrey'
+                } border-b-2 ${
+                  !state.homeSelected ? 'border-primary' : 'border-gray-200'
+                }`"
+                @click="state.homeSelected = false"
+              >
+                <p>{{ state.navbarprops.team2 }}</p>
+              </div>
             </div>
             <div
-              class="w-1/2 cursor-pointer pb-4 text-appgrey border-b-2 border-gray-200"
+              class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
             >
-              <p>Culinary L2</p>
+              <FormationCard
+                :formation="
+                  state.homeSelected
+                    ? state.allDetails?.value?.home_formation
+                    : state.allDetails?.value?.away_formation
+                "
+                :team="
+                  state.homeSelected
+                    ? state.allDetails?.value?.home_team?.id
+                    : state.allDetails?.value?.away_team?.id
+                "
+                :match-id="state.allDetails?.value?.id"
+              />
             </div>
           </div>
           <div
-            class="forms flex justify-around items-center flex-wrap gap-5 mt-4 w-full"
+            class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
           >
-            <FormationCard :formation="formation" :match-id="id" :team="team" />
-          </div>
-        </div>
-        <div
-          class="w-full md:w-1/2 flex flex-col md:flex-row justify-center gap-8 md:gap-0 pt-0 md:pt-20"
-        >
-          <div v-if="isFinished" class="w-full md:w-4/5">
-            <MatchStats></MatchStats>
-          </div>
-          <div v-else class="w-full md:w-3/5">
-            <MatchInfo></MatchInfo>
-            <MatchPrediction></MatchPrediction>
+            <div v-if="state.isFinished" class="w-full md:w-4/5">
+              <MatchStats :stats="state.stats"></MatchStats>
+            </div>
+            <div v-else class="w-full md:w-3/5">
+              <MatchInfo :date="state.navbarprops.date"></MatchInfo>
+              <MatchPrediction></MatchPrediction>
+            </div>
           </div>
         </div>
       </div>
+      <LiveTable></LiveTable>
     </div>
-    <LiveTable></LiveTable>
   </div>
+  <div v-else class="my-10">Match not found</div>
 </template>
 
 <script setup lang="ts">
@@ -48,27 +76,125 @@
   import FormationCard from "@/components/formations/FormationCard.vue";
   import { useRoute } from "vue-router";
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
+  import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
+  import { onMounted, reactive } from "vue";
+
+  const state = reactive<{
+    isLoading: boolean;
+    navbarprops?: any;
+    isFinished?: boolean;
+    isError?: boolean;
+    stats?: any;
+    allDetails?: any;
+    homeSelected?: boolean;
+  }>({
+    isLoading: true,
+    isError: false,
+    homeSelected: true,
+  });
 
   const route = useRoute();
-  const formation = "4-3-3";
-  const team = "3d2e2bee-503a-4ce0-93bc-4223ce84417c";
-  const id = route.params.id + "";
-  const isFinished = Number(id) % 2 === 0;
+  const id = route.params.id || "";
 
-  const navbarprops = isFinished
-    ? {
-        team1: "Welding L3",
-        team2: "Culinary L2",
-        isFinished: true,
-        score: "3-1",
-        date: new Date(2022, 1, 24, 16, 0, 0, 0),
-      }
-    : {
-        team1: "Welding L3",
-        team2: "Culinary L2",
-        isFinished: false,
-        date: new Date(2022, 1, 24, 16, 0, 0, 0),
-      };
+  onMounted(async () => {
+    await fetchMatchDetails(id.toString())
+      .catch(() => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+      .then(() => {
+        const tempisLive = (allDetails.value as any).match_status === "live";
+        const tempisFinished =
+          (allDetails.value as any).match_status === "finished";
+
+        const tempnavbarprops =
+          tempisFinished || tempisLive
+            ? {
+                team1: (allDetails.value as any).home_team?.name,
+                team2: (allDetails.value as any).away_team?.name,
+                isFinished: tempisFinished || tempisLive,
+                score: `${(allDetails.value as any).home_score}-${
+                  (allDetails.value as any).away_score
+                }`,
+                date: new Date((allDetails as any).value?.time),
+                live: tempisLive,
+              }
+            : {
+                team1: (allDetails.value as any).home_team?.name,
+                team2: (allDetails.value as any).away_team?.name,
+                score: `${(allDetails.value as any).home_score}-${
+                  (allDetails.value as any).away_score
+                }`,
+                isFinished: tempisFinished || tempisLive,
+                date: new Date((allDetails as any).value?.time),
+                live: tempisLive,
+              };
+
+        //stats
+
+        interface Stat {
+          title: string;
+          values: Array<number>;
+        }
+        const tempstats: Array<Stat> = [
+          {
+            title: "Total Shots",
+            values: [
+              (allDetails.value as any).home_shots || 0,
+              (allDetails.value as any).away_shots || 0,
+            ],
+          },
+          {
+            title: "Shots on target",
+            values: [
+              (allDetails.value as any).home_shots_on_target || 0,
+              (allDetails.value as any).away_shots_on_target | 0,
+            ],
+          },
+          {
+            title: "Fouls",
+            values: [
+              (allDetails.value as any).home_fouls || 0,
+              (allDetails.value as any).away_fouls || 0,
+            ],
+          },
+          {
+            title: "Yellow cards",
+            values: [
+              (allDetails.value as any).home_yellow_cards || 0,
+              (allDetails.value as any).away_yellow_cards || 0,
+            ],
+          },
+          {
+            title: "Red cards",
+            values: [
+              (allDetails.value as any).home_red_cards || 0,
+              (allDetails.value as any).away_red_cards || 0,
+            ],
+          },
+          {
+            title: "Offsides",
+            values: [
+              (allDetails.value as any).home_offsides || 0,
+              (allDetails.value as any).away_offsides || 0,
+            ],
+          },
+          {
+            title: "Corners",
+            values: [
+              (allDetails.value as any).home_corners || 0,
+              (allDetails.value as any).away_corners || 0,
+            ],
+          },
+        ];
+        state.isLoading = false;
+        state.isFinished = tempisFinished;
+        state.navbarprops = tempnavbarprops;
+        state.stats = tempstats;
+        state.allDetails = allDetails;
+        state.isError = false;
+      });
+  });
 </script>
 
 <style scoped></style>
