@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { reactive, ref } from "vue";
 
   interface PlayerStat {
     player: {
+      id: string;
       name: string;
     };
     amount: number;
@@ -16,7 +17,27 @@
   };
 
   const statsBlockProps = defineProps<StatsBlockProps>();
-  const displayStats = ref(statsBlockProps.displayStats || "");
+
+  const hash = Object.create(null);
+  const results: Array<any> = reactive([]);
+
+  function combineStats() {
+    statsBlockProps.displayStats.forEach(function (o) {
+      if (!hash[o.player.id]) {
+        hash[o.player.id] = { ...o, amount: 0 };
+        results.push(hash[o.player.id]);
+      }
+      hash[o.player.id].amount += o.amount;
+    });
+  }
+
+  combineStats();
+  const displayStats = ref(
+    results
+      .sort((a, b) => (a.amount < b.amount ? 1 : -1))
+      .filter((stat) => stat.amount > 0)
+      .splice(0, 7) || "",
+  );
 </script>
 
 <template>
@@ -26,7 +47,7 @@
     </div>
     <div
       v-for="(stat, index) in displayStats"
-      :key="stat.player?.name"
+      :key="stat.player?.id"
       class="flex justify-between my-2 py-2 border-b-2 text-sm"
     >
       <div class="flex-1">

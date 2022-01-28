@@ -40,6 +40,12 @@
                     ? state.allDetails?.value?.home_formation
                     : state.allDetails?.value?.away_formation
                 "
+                :team="
+                  state.homeSelected
+                    ? state.allDetails?.value?.home_team?.id
+                    : state.allDetails?.value?.away_team?.id
+                "
+                :match-id="state.allDetails?.value?.id"
               />
             </div>
           </div>

@@ -12,8 +12,8 @@ async function fetchMatchDetails(id: string) {
       .from("match")
       .select(
         `*, 
-     away_team:away_team(name),
-     home_team:home_team(name)`,
+     away_team:away_team(id,name),
+     home_team:home_team(id,name)`,
       )
       .eq("id", id)
       .single();

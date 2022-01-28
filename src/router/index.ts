@@ -1,5 +1,4 @@
 import FormationsVue from "@/views/FormationsView.vue";
-import TeamsView from "@/views/dashboard/TeamsView.vue";
 import TeamDetailsView from "@/views/dashboard/TeamDetailsView.vue";
 import NewTeamView from "@/views/NewTeamView.vue";
 import AddPlayerView from "@/views/dashboard/AddPlayerView.vue";
@@ -9,6 +8,8 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "~/views/public/HomeView.vue";
 import MatchView from "~/views/public/home/MatchView.vue";
 import MatchesView from "~/views/dashboard/MatchesView.vue";
+import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
+import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
 import Stats from "~/views/public/home/StatsView.vue";
 import Table from "~/views/public/home/TableView.vue";
 import Players from "~/views/public/home/PlayersView.vue";
@@ -37,11 +38,6 @@ const routes = [
         component: DashboardTeams,
       },
       {
-        path: "/dashboard/matches",
-        name: "DashboardMatches",
-        component: MatchesView,
-      },
-      {
         path: "/dashboard/teams/new",
         name: "newTeam",
         component: NewTeamView,
@@ -50,12 +46,21 @@ const routes = [
         path: "/dashboard/teams/:id/view",
         name: "viewTeam",
         component: TeamDetailsView,
-        props: true,
       },
       {
         path: "/dashboard/teams/:teamId/add-player",
         name: "addPlayer",
         component: AddPlayerView,
+      },
+      {
+        path: "/dashboard/matches",
+        name: "DashboardMatches",
+        component: AdminMatchFixturesView,
+      },
+      {
+        path: "/dashboard/matches/:id",
+        name: "DashboardMatchDetails",
+        component: MatchDetailsView,
       },
       {
         path: "/dashboard/live/:matchId/add-events",
