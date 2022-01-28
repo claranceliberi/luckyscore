@@ -18,9 +18,9 @@
             </div>
           </div>
           <div
-            class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
+            class="forms flex justify-around items-center flex-wrap gap-5 mt-4 w-full"
           >
-            <FormationCard />
+            <FormationCard :formation="formation" :match-id="id" :team="team" />
           </div>
         </div>
         <div
@@ -50,7 +50,9 @@
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
 
   const route = useRoute();
-  const id = route.params.id || "";
+  const formation = "4-3-3";
+  const team = "3d2e2bee-503a-4ce0-93bc-4223ce84417c";
+  const id = route.params.id + "";
   const isFinished = Number(id) % 2 === 0;
 
   const navbarprops = isFinished

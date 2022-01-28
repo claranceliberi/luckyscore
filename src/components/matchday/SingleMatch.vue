@@ -59,16 +59,16 @@
       <div class="flex-initial items-center">
         <div>
           {{
-            new Date(time).toString().split(" ")[2] +
+            new Date(time)?.toString().split(" ")[2] +
             " " +
-            new Date(time).toString().split(" ")[1]
+            new Date(time)?.toString().split(" ")[1]
           }}
         </div>
         <div>
           {{
-            new Date(time).toString().split(" ")[4].split(":")[0] +
+            new Date(time)?.toString().split(" ")[4].split(":")[0] +
             ":" +
-            new Date(time).toString().split(" ")[4].split(":")[1]
+            new Date(time)?.toString().split(" ")[4].split(":")[1]
           }}
         </div>
       </div>

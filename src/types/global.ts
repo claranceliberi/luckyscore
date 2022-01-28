@@ -25,8 +25,15 @@ export type IMatchprogress =
   | "penalty_shootout"
   | "finished";
 
-export interface IPlayerMatch {
-  match_id: string;
+export interface IPlayer extends ITable {
+  description: string;
+  full_name: string;
+  id: string;
+  team: Teams;
+}
+export interface IPlayerMatch extends ITable {
+  match: string;
+  player: IPlayer;
   player_id: string;
   red_card: number;
   yellow_card: number;
@@ -53,7 +60,7 @@ export interface IMatch extends ITable {
   time: string;
   in_charge: string;
   description: string;
-  match_status: string;
+  match_status: IMatchprogress;
   home_team: Teams;
   away_team: Teams;
   home_shots: number;
