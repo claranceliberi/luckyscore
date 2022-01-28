@@ -17,8 +17,15 @@ export interface ILink {
   href: string;
 }
 
+export interface IPlayer {
+  id: string;
+  full_name: string;
+  team_id: string;
+  team: Teams;
+}
+
 export interface IPlayerMatch {
-  match_id: string;
+  match: string;
   player_id: string;
   red_card: number;
   yellow_card: number;
@@ -29,6 +36,7 @@ export interface IPlayerMatch {
   assists: number;
   big_chances: number;
   successful_dribbles: number;
+  player: IPlayer;
 }
 
 export interface Teams extends ITable {
