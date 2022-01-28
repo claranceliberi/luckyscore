@@ -11,7 +11,7 @@
   interface Players extends ITable {
     id: string;
     full_name: string;
-    team: string;
+    team_id: string;
   }
 
   interface SinglePlayer {
@@ -42,8 +42,8 @@
 
   supabase
     .from<Players>("player")
-    .select("full_name,id,team")
-    .eq("team", router.params.teamId as string)
+    .select("full_name,id,team_id")
+    .eq("team_id", router.params.teamId as string)
     .then((res) => {
       if (res) {
         players.playerNames = res.data || [];

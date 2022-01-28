@@ -17,7 +17,7 @@
         </button>
       </router-link>
     </div>
-    <div class="flex gap-6">
+    <div class="flex gap-6 flex-wrap">
       <TeamCardVue />
     </div>
   </div>

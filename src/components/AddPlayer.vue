@@ -15,7 +15,7 @@
   async function onSubmit() {
     const { data, error } = await supabase.from("player").insert({
       full_name: full_name.value,
-      team: id,
+      team_id: id,
     });
 
     if (data) {
