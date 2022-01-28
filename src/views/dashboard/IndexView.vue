@@ -32,9 +32,14 @@
     <div v-if="loading">Loading</div>
 
     <ul
-      class="flex space-x-4 border-2 cursor-pointer gap-12 text-2xl bg-white w-max py-5 px-12 rounded-md"
+      class="flex border-2 cursor-pointer gap-12 text-2xl bg-white w-max py-5 px-12 rounded-md"
     >
-      <li v-for="item in matchDays" :key="item" @click="activeMatchDay = item">
+      <li
+        v-for="item in matchDays"
+        :key="item"
+        :class="`${item === activeMatchDay ? 'bg-gray-100 px-4' : ''}`"
+        @click="activeMatchDay = item"
+      >
         {{ item }}
       </li>
     </ul>
