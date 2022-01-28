@@ -13,16 +13,21 @@
   const id = teamId.params.teamId || "";
 
   async function onSubmit() {
-    const { data, error } = await supabase.from("player").insert({
-      full_name: full_name.value,
-      team_id: id,
-    });
+    if (full_name.value === "") {
+      toast.error("Please enter a name");
+      return;
+    } else {
+      const { data, error } = await supabase.from("player").insert({
+        full_name: full_name.value,
+        team_id: id,
+      });
 
-    if (data) {
-      router.push(`/dashboard/teams/${id}/view`);
-      toast.success("Player added to team");
+      if (data) {
+        router.push(`/dashboard/teams/${id}/view`);
+        toast.success("Player added to team");
+      }
+      if (error) toast.error(error?.message);
     }
-    if (error) toast.error(error?.message);
   }
 </script>
 

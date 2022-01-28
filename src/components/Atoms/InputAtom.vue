@@ -2,6 +2,7 @@
   <div class="flex flex-col gap-2 pb-4">
     <label class="font-medium text-sm">{{ props.title }}</label>
     <input
+      required
       :value="modelValue"
       :placeholder="props.placeholder"
       class="py-2 px-5 w-72 border-primary border-2 rounded focus:outline-none"
@@ -20,7 +21,7 @@
 <script lang="ts" setup>
   interface Props {
     type?: string;
-    placeholder?: string;
+    placeholder: string;
     modelValue?: string;
     readonly?: boolean;
     bg?: "secondary" | "main";
