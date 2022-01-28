@@ -55,6 +55,18 @@ export interface Teams extends ITable {
   letter: string;
 }
 
+export interface ICreateMatch {
+  time: string;
+  season: string;
+  description: string;
+  match_day: string;
+  home_team: string;
+  away_team: string;
+  away_formation: string;
+  home_formation: string;
+  id: string;
+}
+
 export interface IMatch extends ITable {
   id: string;
   match_day: string;

@@ -34,7 +34,7 @@
             v-model="match.home_team"
             title="Home team"
             placeholder="Select team"
-            :options="teams"
+            :options="teamsOptions"
           />
         </div>
         <div>
@@ -43,7 +43,7 @@
             v-model="match.home_team"
             title="away team"
             placeholder="Select team"
-            :options="teams"
+            :options="teamsOptions"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@
             v-model="homeTeamLinup[pos]"
             title="Home team"
             placeholder="Select team"
-            :options="teams"
+            :options="teamsOptions"
           />
         </div>
       </div>
@@ -107,7 +107,7 @@
             v-model="homeTeamLinup[pos]"
             title="Home team"
             placeholder="Select team"
-            :options="teams"
+            :options="teamsOptions"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@
   import { supabase } from "@/lib/supabase";
   import { toast } from "@/plugins/toaster/vue-toast";
   import router from "@/router";
-  import { MatchFormation } from "@/types/global";
+  import { ICreateMatch, IMatch, MatchFormation, Teams } from "@/types/global";
 
   const formations = [
     { value: "4-3-3", label: "4-3-3" },
@@ -146,7 +146,25 @@
     { value: "3-5-2", label: "3-5-2" },
   ];
 
-  const match = reactive({
+  const teamsData = ref<Teams[]>([]);
+
+  supabase
+    .from<Teams>("team")
+    .select("*")
+    .then((res) => {
+      if (res) {
+        teamsData.value = res.data || [];
+      }
+    });
+
+  let teamsOptions = teamsData.value.map((t) => ({
+    label: t.name,
+    value: t.id,
+  }));
+
+  console.log(teamsOptions);
+
+  const match = reactive<ICreateMatch>({
     time: "",
     season: "",
     description: "",
@@ -155,6 +173,7 @@
     away_team: "",
     away_formation: "",
     home_formation: "",
+    id: "",
   });
 
   const homeTeamLinup: string[] = reactive([]);
@@ -166,14 +185,16 @@
     if (step.value < 3) {
       step.value++;
     } else {
-      const { data: newMatch } = await supabase.from("match").insert(match);
+      const { data: newMatch } = await supabase
+        .from<ICreateMatch>("match")
+        .insert(match);
       console.log("====================================");
       console.log(newMatch);
       console.log("====================================");
 
       const homeTeamData = homeTeamLinup.map((p) => {
         ({
-          match: "",
+          match: newMatch && newMatch[0].id,
           player_id: p,
           red_card: 0,
           yellow_card: 0,
@@ -189,7 +210,7 @@
 
       const awayTeamData = awayTeamLinup.map((p) => {
         ({
-          match: "",
+          match: newMatch && newMatch[0].id,
           player_id: p,
           red_card: 0,
           yellow_card: 0,
@@ -214,8 +235,6 @@
       if (error) toast.error(error?.message);
     }
   }
-
-  const teams = [{ label: "Year 3", value: "51678" }];
 </script>
 
 <style scoped></style>
