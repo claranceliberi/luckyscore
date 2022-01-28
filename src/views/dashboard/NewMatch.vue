@@ -145,7 +145,13 @@
   import { supabase } from "@/lib/supabase";
   import { toast } from "@/plugins/toaster/vue-toast";
   import router from "@/router";
-  import { ICreateMatch, IMatch, MatchFormation, Teams } from "@/types/global";
+  import {
+    ICreateMatch,
+    IMatch,
+    MatchFormation,
+    SelectType,
+    Teams,
+  } from "@/types/global";
 
   const formations = [
     { value: "4-3-3", label: "4-3-3" },
@@ -157,6 +163,7 @@
   ];
 
   const teamsData = ref<Teams[]>([]);
+  const teamsOptions = ref<SelectType[]>([]);
 
   supabase
     .from<Teams>("team")
@@ -164,13 +171,14 @@
     .then((res) => {
       if (res) {
         teamsData.value = res.data || [];
+        res.data?.map((t) =>
+          teamsOptions.value.push({
+            label: t.name,
+            value: t.id,
+          }),
+        );
       }
     });
-
-  let teamsOptions = teamsData.value.map((t) => ({
-    label: t.name,
-    value: t.id,
-  }));
 
   const match = reactive<ICreateMatch>({
     time: "",

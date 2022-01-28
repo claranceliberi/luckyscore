@@ -1,7 +1,7 @@
 <template>
   <div v-if="state.isLoading" class="my-10">Loading...</div>
-  <div v-else-if="!state.isError && state.navbarprops?.team1">
-    <MatchNavbarMolecule v-bind="state.navbarprops"></MatchNavbarMolecule>
+  <div v-else-if="!state.isError && allDetails?.home.name">
+    <MatchNavbarMolecule :match="allDetails"></MatchNavbarMolecule>
     <div>
       <div class="match__container mb-4">
         <h1 className="header text-2xl font-bold mb-5 mt-10">Line-Ups</h1>
@@ -17,7 +17,7 @@
                 @click="state.homeSelected = true"
               >
                 <p class="text-center">
-                  {{ state.navbarprops.team1 }}
+                  {{ allDetails?.home.name }}
                 </p>
               </div>
               <div
@@ -28,7 +28,7 @@
                 }`"
                 @click="state.homeSelected = false"
               >
-                <p>{{ state.navbarprops.team2 }}</p>
+                <p>{{ allDetails?.away.name }}</p>
               </div>
             </div>
             <div
@@ -56,7 +56,9 @@
               <MatchStats :stats="state.stats"></MatchStats>
             </div>
             <div v-else class="w-full md:w-3/5">
-              <MatchInfo :date="state.navbarprops.date"></MatchInfo>
+              <MatchInfo
+                :date="new Date(allDetails?.to_be_played_at || '')"
+              ></MatchInfo>
               <MatchPrediction></MatchPrediction>
             </div>
           </div>
@@ -81,7 +83,6 @@
 
   const state = reactive<{
     isLoading: boolean;
-    navbarprops?: any;
     isFinished?: boolean;
     isError?: boolean;
     stats?: any;
@@ -106,29 +107,6 @@
         const tempisLive = (allDetails.value as any).match_status === "live";
         const tempisFinished =
           (allDetails.value as any).match_status === "finished";
-
-        const tempnavbarprops =
-          tempisFinished || tempisLive
-            ? {
-                team1: (allDetails.value as any).home_team?.name,
-                team2: (allDetails.value as any).away_team?.name,
-                isFinished: tempisFinished || tempisLive,
-                score: `${(allDetails.value as any).home_score}-${
-                  (allDetails.value as any).away_score
-                }`,
-                date: new Date((allDetails as any).value?.time),
-                live: tempisLive,
-              }
-            : {
-                team1: (allDetails.value as any).home_team?.name,
-                team2: (allDetails.value as any).away_team?.name,
-                score: `${(allDetails.value as any).home_score}-${
-                  (allDetails.value as any).away_score
-                }`,
-                isFinished: tempisFinished || tempisLive,
-                date: new Date((allDetails as any).value?.time),
-                live: tempisLive,
-              };
 
         //stats
 
@@ -189,7 +167,6 @@
         ];
         state.isLoading = false;
         state.isFinished = tempisFinished;
-        state.navbarprops = tempnavbarprops;
         state.stats = tempstats;
         state.allDetails = allDetails;
         state.isError = false;
