@@ -38,7 +38,11 @@
         </button>
       </router-link>
     </div>
-    <MatchDay url="/dashboard/matches/" name="" :matches="fixtures.matches" />
+    <MatchDay
+      url="/dashboard/live/:matchId/add-events"
+      name=""
+      :matches="fixtures.matches"
+    />
   </div>
   <div v-else-if="fixtures.isLoading">
     <h1>Loading...</h1>

@@ -1,14 +1,17 @@
 <script setup lang="ts">
   import { supabase } from "@/lib/supabase";
   import { IMatch } from "@/types/global";
-  import { ref, watch, watchEffect } from "vue";
+  import { onBeforeMount, ref, watch, watchEffect } from "vue";
 
   const matchDays = [1, 2, 3, 4, 5, 6];
   const activeMatchDay = ref(1);
   const matches = ref();
   const loading = ref(false);
 
-  watchEffect(async () => {
+  async function fetchMatches(matchDay: number) {
+    loading.value = true;
+    activeMatchDay.value = matchDay;
+
     const { data } = await supabase
       .from<IMatch>("match")
       .select(
@@ -18,10 +21,13 @@
       `,
       )
 
-      .eq("match_day", activeMatchDay.value);
+      .eq("match_day", matchDay);
 
     matches.value = data;
-  });
+    loading.value = false;
+  }
+
+  onBeforeMount(() => fetchMatches(activeMatchDay.value));
 </script>
 
 <template>
@@ -29,17 +35,28 @@
     <h3 class="font-bold py-10 text-3xl">Dashboard</h3>
     <p class="text-xl py-3">Matches</p>
 
-    <div v-if="loading">Loading</div>
-
     <ul
-      class="flex space-x-4 border-2 cursor-pointer gap-12 text-2xl bg-white w-max py-5 px-12 rounded-md"
+      class="flex border-2 cursor-pointer gap-10 text-2xl bg-white w-max py-5 px-12 rounded-md"
     >
-      <li v-for="item in matchDays" :key="item" @click="activeMatchDay = item">
+      <li
+        v-for="item in matchDays"
+        :key="item"
+        class="transition duration-300 ease-in-out"
+        :class="`${
+          item === activeMatchDay ? 'bg-gray-100 px-4 rounded-lg' : ''
+        }`"
+        @click="() => fetchMatches(item)"
+      >
         {{ item }}
       </li>
     </ul>
-
-    <div class="flex gap-4">
+    <div v-if="loading">
+      <p class="mt-4">Loading..</p>
+    </div>
+    <div v-else-if="matches.length < 1">
+      <p class="mt-4">No matches found on match day {{ activeMatchDay }} .</p>
+    </div>
+    <div v-else class="flex gap-4">
       <div
         v-for="match in matches"
         :key="match.id"

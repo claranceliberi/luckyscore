@@ -57,5 +57,7 @@
       <router-view />
     </div>
   </div>
-  <div v-else>Authenticating</div>
+  <div v-else class="w-full h-full flex items-center justify-center">
+    <div>Authenticating...</div>
+  </div>
 </template>

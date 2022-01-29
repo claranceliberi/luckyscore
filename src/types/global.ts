@@ -56,7 +56,7 @@ export interface Teams extends ITable {
 }
 
 export interface ICreateMatch {
-  time: string;
+  to_be_played_at: string;
   season: string;
   description: string;
   match_day: string;
@@ -64,7 +64,7 @@ export interface ICreateMatch {
   away_team: string;
   away_formation: string;
   home_formation: string;
-  id: string;
+  time: string;
 }
 
 export interface ITableStatistics extends ITable, Teams {
@@ -78,7 +78,7 @@ export interface IMatch extends ITable {
   time: string;
   in_charge: string;
   description: string;
-  match_status: IMatchprogress;
+  match_status: MatchStatusEnum;
   home_team: Teams;
   away_team: Teams;
   home_shots: number;
@@ -94,6 +94,16 @@ export interface IMatch extends ITable {
   home_fouls: number;
   away_fouls: number;
   result_status: string;
+  first_half_started_at: string;
+  first_half_ended_at: string;
+  second_half_started_at: string;
+  second_half_ended_at: string;
+  to_be_played_at: string;
+}
+
+export interface IMatchTeamJoin extends IMatch {
+  away: Teams;
+  home: Teams;
 }
 
 export interface IFixtures {
@@ -132,3 +142,15 @@ export type MatchFormation =
 // export type FormationType = {
 //   [index in MatchFormation]: string;
 // };
+
+export type SelectType = { label: string; value: string };
+
+export enum MatchStatusEnum {
+  NO_LINEUP = "NO_LINEUP",
+  NO_STARTED = "NO_STARTED",
+  FIRST_HALF_ONGOING = "FIRST_HALF_ONGOING",
+  HALF_TIME = "HALF_TIME",
+  SECOND_HALF_ONGOING = "SECOND_HALF_ONGOING",
+  PENALTY_SHOOTOUT = "PENALTY_SHOOTOUT",
+  FULL_TIME = "FULL_TIME",
+}

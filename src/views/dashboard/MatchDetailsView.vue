@@ -1,20 +1,20 @@
 <script setup lang="ts">
   import { supabase } from "@/lib/supabase";
-  import { IMatch, IMatchprogress } from "@/types/global";
+  import { IMatch, IMatchprogress, MatchStatusEnum } from "@/types/global";
   import { reactive } from "vue";
   import { useRoute } from "vue-router";
 
   type IProps = {
     isLoading: boolean;
     id: string;
-    status: IMatchprogress;
+    status: MatchStatusEnum;
   };
 
   const teamId = (useRoute().params.id as string) || "";
   const matchInfo = reactive<IProps>({
     isLoading: true,
     id: "",
-    status: "not_started",
+    status: MatchStatusEnum.NO_STARTED,
   });
 
   supabase
@@ -40,11 +40,13 @@
             {{ matchInfo.status.replace("_", " ") }}
           </h3>
           <span class="text-appgrey text-sm font-medium">{{
-            matchInfo.status === "not_started" ? "Not Started" : "Started"
+            matchInfo.status === MatchStatusEnum.NO_STARTED
+              ? "Not Started"
+              : "Started"
           }}</span>
         </div>
         <button
-          v-if="matchInfo.status === 'not_started'"
+          v-if="matchInfo.status === MatchStatusEnum.NO_STARTED"
           style="border-radius: 28px"
           class="w-28 bg-primary px-6 py-4 h-[3rem] flex justify-center items-center rounded-3xl text-white"
         >
