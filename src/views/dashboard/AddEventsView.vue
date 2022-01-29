@@ -53,7 +53,7 @@
       SECOND_HALF_ONGOING: "Are you sure you want to start second half ?",
       FULL_TIME: "Are you sure you want to end the match",
     };
-
+    const matchId = route.params.matchId as string;
     const c = (status: MatchStatusEnum) => confirm(messages[status.toString()]);
 
     switch (status) {
@@ -245,15 +245,18 @@
           </div>
         </div>
 
-        <AddEventForm v-if="isExactLive"></AddEventForm>
-        <div v-else>waiting for match to start/restart</div>
+        <AddEventForm
+          v-if="isExactLive"
+          :match="route.params.matchId"
+        ></AddEventForm>
+        <div v-else>Waiting for match to start/restart</div>
       </div>
       <div v-else>
         <div class="mt-10">We need to take some rest..., The match is over</div>
       </div>
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 flex flex-col items-center">
-      <MatchEvents :events-data="eventsData"></MatchEvents>
+      <MatchEvents :match="route.params.matchId"></MatchEvents>
       <div class="flex-1"></div>
     </div>
   </div>

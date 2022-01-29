@@ -108,6 +108,19 @@ export interface IMatchTeamJoin extends IMatch {
   home: Teams;
 }
 
+export interface Events extends ITable {
+  id: string;
+  player_id: string;
+  team_id: string;
+  assist: string;
+  type: string;
+  match_id: string;
+  player: IPlayer;
+  assist_player: IPlayer;
+  team: Teams;
+  match: IMatch;
+}
+
 export interface IFixtures {
   name: string;
   matches: IMatch[];

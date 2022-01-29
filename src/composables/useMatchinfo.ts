@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import router from "@/router";
 import { IMatchTeamJoin } from "@/types/global";
-import { PostgrestResponse } from "@supabase/supabase-js";
 import { ref } from "vue";
 
 const allDetails = ref<IMatchTeamJoin | null>(null);
