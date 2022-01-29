@@ -109,7 +109,6 @@ export interface IMatchTeamJoin extends IMatch {
 }
 
 export interface IFixtures {
-  isLoading?: boolean;
   name: string;
   matches: IMatch[];
 }

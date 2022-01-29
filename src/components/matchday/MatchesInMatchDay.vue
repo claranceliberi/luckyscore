@@ -28,7 +28,7 @@
 
   interface Props {
     name?: string;
-    matches: IMatch[];
+    matches: IMatch[] | any;
     url: string;
   }
   const props = defineProps<Props>();

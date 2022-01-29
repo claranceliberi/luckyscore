@@ -62,6 +62,7 @@
         singleResults.wins += 1;
       } else if (awayStats.away_score === awayStats.home_score) {
         singleResults.points += 1;
+        singleResults.draws += 1;
       } else {
         singleResults.loss += 1;
       }
