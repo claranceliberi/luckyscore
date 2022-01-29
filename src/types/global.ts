@@ -56,7 +56,7 @@ export interface Teams extends ITable {
 }
 
 export interface ICreateMatch {
-  time: string;
+  to_be_played_at: string;
   season: string;
   description: string;
   match_day: string;
@@ -64,7 +64,7 @@ export interface ICreateMatch {
   away_team: string;
   away_formation: string;
   home_formation: string;
-  id: string;
+  time: string;
 }
 
 export interface ITableStatistics extends ITable, Teams {
