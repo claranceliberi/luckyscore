@@ -1,33 +1,44 @@
 <script lang="ts" setup>
+  import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
+  import { computed } from "vue";
+
   interface Props {
-    team1: string;
-    team2: string;
-    date: Date;
-    score: string;
-    isFinished: boolean;
-    live: boolean;
-    dashboard?: boolean;
+    dashboard: boolean;
+    match: IMatchTeamJoin | null;
   }
-  const matchNavbarprops = withDefaults(defineProps<Props>(), {
-    isFinished: false,
-    live: false,
+  const props = withDefaults(defineProps<Props>(), {
     dashboard: false,
-    score: "0-0",
-    date: undefined,
-    team1: "",
-    team2: "",
+  });
+
+  const scoreBoard = computed(() => {
+    if (props.match)
+      return {
+        homeTeam: props.match.home.name,
+        awayTeam: props.match.away.name,
+        scores: `${props.match.home_score} -  ${props.match.away_score}`,
+        shouldShowScores:
+          props.match.match_status == MatchStatusEnum.FULL_TIME ||
+          props.match.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
+          props.match.match_status == MatchStatusEnum.SECOND_HALF_ONGOING ||
+          props.match.match_status == MatchStatusEnum.HALF_TIME,
+        isLive:
+          props.match.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
+          props.match.match_status == MatchStatusEnum.SECOND_HALF_ONGOING,
+        isHalfTime: props.match.match_status == MatchStatusEnum.HALF_TIME,
+        isFullTime: props.match.match_status == MatchStatusEnum.FULL_TIME,
+        date: new Date(props.match.to_be_played_at).toLocaleDateString(),
+      };
+    return null;
   });
 </script>
 
 <template>
   <div
-    :class="`w-full ${
-      matchNavbarprops.dashboard ? 'mt-8' : 'mt-16'
-    } flex justify-center`"
+    :class="`w-full ${props.dashboard ? 'mt-8' : 'mt-16'} flex justify-center`"
   >
     <div
       :class="`w-full ${
-        matchNavbarprops.dashboard ? '' : 'md:w-3/5'
+        props.dashboard ? '' : 'md:w-3/5'
       } bg-primary flex gap-6 md:gap-24 justify-center py-10 rounded`"
     >
       <div class="flex flex-col items-center gap-4">
@@ -43,23 +54,23 @@
             fill="white"
           />
         </svg>
-        <p class="text-white text-lg">{{ matchNavbarprops.team1 }}</p>
+        <p class="text-white text-lg">{{ scoreBoard?.homeTeam }}</p>
       </div>
       <div class="flex flex-col items-center gap-1 text-lg text-white">
         <h1>
           {{
-            matchNavbarprops.isFinished || matchNavbarprops.live
-              ? matchNavbarprops.score
-              : matchNavbarprops.date?.toLocaleDateString()
+            scoreBoard?.shouldShowScores ? scoreBoard.scores : scoreBoard?.date
           }}
         </h1>
         <p class="text-gray-400">
           {{
-            matchNavbarprops.live
+            scoreBoard?.isLive
               ? "Live"
-              : matchNavbarprops.isFinished
-              ? "Full Time"
-              : matchNavbarprops.date?.toLocaleTimeString()
+              : scoreBoard?.isHalfTime
+              ? "HT"
+              : scoreBoard?.isFullTime
+              ? "FT"
+              : scoreBoard?.date
           }}
         </p>
       </div>
@@ -76,7 +87,7 @@
             fill="white"
           />
         </svg>
-        <p class="text-white text-lg">{{ matchNavbarprops.team2 }}</p>
+        <p class="text-white text-lg">{{ scoreBoard?.awayTeam }}</p>
       </div>
     </div>
   </div>
