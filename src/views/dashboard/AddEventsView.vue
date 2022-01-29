@@ -5,19 +5,21 @@
   import AddEventForm from "@/components/AddEventForm.vue";
   import { IMatch, IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
   import { supabase } from "@/lib/supabase";
-  import { ref, computed } from "vue";
+  import { ref, computed, onBeforeMount } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
 
   const router = useRoute();
 
   const match = ref<PostgrestResponse<IMatchTeamJoin>>();
+  const loading = ref(true);
 
-  const reqMatch = await supabase
-    .from<IMatchTeamJoin>("match")
-    .select("*,away:away_team ( * ),home:home_team ( * )")
-    .eq("id", router.params.matchId as string);
-
-  match.value = reqMatch;
+  onBeforeMount(async () => {
+    match.value = await supabase
+      .from<IMatchTeamJoin>("match")
+      .select("*,away:away_team ( * ),home:home_team ( * )")
+      .eq("id", router.params.matchId as string);
+    loading.value = false;
+  });
 
   function changeMatchStatus(status: MatchStatusEnum) {
     const messages: Record<string, string> = {
@@ -63,9 +65,10 @@
 </script>
 
 <template>
-  hello
-  {{ match }}
-  <!-- <div class="flex flex-col md:flex-row mt-10">
+  <div v-if="loading">
+    <div class="mt-5">Feeding your screen some wonderfull stats..</div>
+  </div>
+  <div v-else class="flex flex-col md:flex-row mt-10">
     <div class="w-full md:w-1/2 lg:w-2/3">
       <div
         class="bg-white rounded-full w-10 h-10 flex items-center justify-center cursor-pointer mb-4"
@@ -164,5 +167,5 @@
       <MatchEvents :events-data="eventsData"></MatchEvents>
       <div class="flex-1"></div>
     </div>
-  </div> -->
+  </div>
 </template>
