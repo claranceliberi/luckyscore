@@ -2,9 +2,10 @@
   import { supabase } from "@/lib/supabase";
   import { toast } from "@/plugins/toaster/vue-toast";
   import router from "@/router";
-  import { ICreateMatch, IMatchTeamJoin } from "@/types/global";
-  import { onBeforeMount, reactive, ref } from "vue";
+  import { ICreateMatch, IMatchTeamJoin, IPlayer } from "@/types/global";
+  import { computed, onBeforeMount, reactive, ref } from "vue";
   import { useRoute } from "vue-router";
+  import SelectAtom from "@/components/Atoms/SelectAtom.vue";
 
   const route = useRoute();
 
@@ -29,6 +30,29 @@
 
   const homeTeamLinup: string[] = reactive([]);
   const awayTeamLinup: string[] = reactive([]);
+  const homePlayers = ref<IPlayer[]>([]);
+  const awayPlayers = ref<IPlayer[]>([]);
+  const selectedHomePlayers = ref<
+    { match: string; pitch_position: string; player_id: string }[]
+  >([]);
+
+  const selectedAwayPlayers = ref<
+    { match: string; pitch_position: string; player_id: string }[]
+  >([]);
+
+  const homeToBeSelected = computed(() =>
+    homePlayers.value?.filter(
+      (p) =>
+        !selectedHomePlayers.value.map((sp) => sp.player_id).includes(p.id),
+    ),
+  );
+
+  const awayToBeSelected = computed(() =>
+    awayPlayers.value?.filter(
+      (p) =>
+        !selectedAwayPlayers.value.map((sp) => sp.player_id).includes(p.id),
+    ),
+  );
 
   const step = ref(1);
   const match = ref<IMatchTeamJoin | null>(null);
@@ -94,12 +118,62 @@
     }
   }
 
+  function selectHomePlayer(id: string, position: number) {
+    selectedHomePlayers.value.push({
+      match: route.params.matchId as string,
+      player_id: id,
+      pitch_position: position.toString(),
+    });
+
+    console.log(selectedHomePlayers.value.some((pl) => (pl.player_id = id)));
+  }
+
+  function getSelectedPlayer(pos: number, allies: "AWAY" | "HOME") {
+    if (allies === "HOME") {
+      const hmp = homePlayers.value.filter(
+        (hp) =>
+          hp.id ===
+          selectedHomePlayers.value.filter(
+            (sp) => (sp.pitch_position = pos.toString()),
+          )[0].player_id,
+      )[0];
+      return { label: hmp.full_name, value: hmp.id };
+    } else {
+      const amp = awayPlayers.value.filter(
+        (ap) =>
+          ap.id ===
+          selectedAwayPlayers.value.filter(
+            (sp) => (sp.pitch_position = pos.toString()),
+          )[0].player_id,
+      )[0];
+      return { label: amp.full_name, value: amp.id };
+    }
+  }
+
   onBeforeMount(async () => {
-    const { data } = await supabase
-      .from<IMatchTeamJoin>("match")
-      .select("*,away:away_team ( * ),home:home_team ( * )")
-      .eq("id", route.params.matchId as string);
-    if (data) match.value = data[0];
+    if (!match.value) {
+      const { data } = await supabase
+        .from<IMatchTeamJoin>("match")
+        .select("*,away:away_team ( * ),home:home_team ( * )")
+        .eq("id", route.params.matchId as string);
+      if (data) match.value = data[0];
+    }
+
+    if (homePlayers.value.length < 1) {
+      const { data: homeDbPlayers } = await supabase
+        .from<IPlayer>("player")
+        .select("*")
+        .eq("team_id", match.value?.home.id);
+      if (homeDbPlayers) homePlayers.value = homeDbPlayers;
+    }
+
+    if (awayPlayers.value.length < 1) {
+      const { data: awayDbPlayers } = await supabase
+        .from<IPlayer>("player")
+        .select("*")
+        .eq("team_id", match.value?.away.id);
+      if (awayDbPlayers) awayPlayers.value = awayDbPlayers;
+    }
     loading.value = false;
   });
 </script>
@@ -109,14 +183,18 @@
   <div class="bg-white rounded-lg p-8 w-full sm:w-3/4 md:w-2/3 xl:w-1/2">
     <div class="flex justify-between">
       <h4 class="text-base font-bold">
-        {{ step == 1 ? "Home team Lineup" : "Away team Lineup" }}
+        {{
+          step == 1
+            ? `${match?.home.name} Lineup`
+            : `${match?.home.name}  Lineup`
+        }}
       </h4>
-      <h4 class="text-base font-bold">{{ step }} outof 3</h4>
+      <h4 class="text-base font-bold">{{ step }} outof 2</h4>
     </div>
     <!-- first step -->
     <div v-if="step === 1" class="pt-10">
       <div>
-        <p class="pb-2 font-medium">Home-team formation:</p>
+        <p class="pb-2 font-medium">{{ match?.home.name }} formation:</p>
         <SelectAtom
           v-model="matchFormationData.home_formation"
           title="Home team formation"
@@ -136,19 +214,40 @@
 
         <div class="col-span-3">
           <p class="pb-2">Player:</p>
-          <!-- <SelectAtom
-          v-model="homeTeamLinup[pos]"
-          title="Home team"
-          placeholder="Select team"
-          :options="teamsOptions"
-        /> -->
+          <SelectAtom
+            title="Home team"
+            placeholder="Select Player"
+            :options="
+              homeToBeSelected?.map((p) => ({
+                label: p.full_name,
+                value: p.id,
+              }))
+            "
+            :model-value="{
+              label: homePlayers.find(
+                (hp) =>
+                  hp.id ===
+                  selectedHomePlayers.find(
+                    (shp) => shp.pitch_position === pos + '',
+                  )?.player_id,
+              )?.full_name,
+              value: homePlayers.find(
+                (hp) =>
+                  hp.id ===
+                  selectedHomePlayers.find(
+                    (shp) => shp.pitch_position === pos + '',
+                  )?.player_id,
+              )?.id,
+            }"
+            @update:model-value="(id) => selectHomePlayer(id, pos)"
+          />
         </div>
       </div>
     </div>
     <!-- second step -->
     <div v-if="step === 2" class="pt-10">
       <div>
-        <p class="pb-2">Away-team formation:</p>
+        <p class="pb-2">{{ match?.away.name }} formation:</p>
         <SelectAtom
           v-model="matchFormationData.away_formation"
           title="Away team formation"

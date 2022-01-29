@@ -1,16 +1,18 @@
 <script setup lang="ts">
-  import { useRoute } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
   import MatchNavbarMolecule from "../../components/molecules/MatchNavbarMolecule.vue";
   import MatchEvents from "@/components/MatchEvents.vue";
   import AddEventForm from "@/components/AddEventForm.vue";
-  import { IMatch, IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
+  import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { ref, computed, onBeforeMount } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
 
-  const router = useRoute();
+  const route = useRoute();
+  const router = useRouter();
 
   const match = ref<IMatchTeamJoin | null>(null);
+
   const loading = ref(true);
   const isLive = computed(() => {
     if (match.value)
@@ -27,8 +29,9 @@
     const { data } = await supabase
       .from<IMatchTeamJoin>("match")
       .select("*,away:away_team ( * ),home:home_team ( * )")
-      .eq("id", router.params.matchId as string);
+      .eq("id", route.params.matchId as string);
     if (data) match.value = data[0];
+
     loading.value = false;
   });
 
@@ -45,7 +48,8 @@
 
     switch (status) {
       case MatchStatusEnum.NO_LINEUP:
-        if (c(MatchStatusEnum.NO_LINEUP)) console.log("we want to make lineup");
+        if (c(MatchStatusEnum.NO_LINEUP))
+          router.push(`/dashboard/matches/${route.params.matchId}/formation`);
         break;
       case MatchStatusEnum.FIRST_HALF_ONGOING:
         if (c(MatchStatusEnum.FIRST_HALF_ONGOING))
