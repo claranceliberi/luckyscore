@@ -10,14 +10,25 @@
 
   const router = useRoute();
 
-  const match = ref<PostgrestResponse<IMatchTeamJoin>>();
+  const match = ref<IMatchTeamJoin | null>(null);
   const loading = ref(true);
+  const isLive = computed(() => {
+    if (match.value)
+      return (
+        match.value.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
+        match.value.match_status == MatchStatusEnum.HALF_TIME ||
+        match.value.match_status == MatchStatusEnum.SECOND_HALF_ONGOING
+      );
+
+    return false;
+  });
 
   onBeforeMount(async () => {
-    match.value = await supabase
+    const { data } = await supabase
       .from<IMatchTeamJoin>("match")
       .select("*,away:away_team ( * ),home:home_team ( * )")
       .eq("id", router.params.matchId as string);
+    if (data) match.value = data[0];
     loading.value = false;
   });
 
@@ -68,6 +79,9 @@
   <div v-if="loading">
     <div class="mt-5">Feeding your screen some wonderfull stats..</div>
   </div>
+  <div v-else-if="!match">
+    <div>Something wrong happened!</div>
+  </div>
   <div v-else class="flex flex-col md:flex-row mt-10">
     <div class="w-full md:w-1/2 lg:w-2/3">
       <div
@@ -101,30 +115,35 @@
       <div class="flex items-center justify-between">
         <h1 class="font-bold text-lg">Live Match</h1>
         <button
+          v-if="match.match_status == MatchStatusEnum.NO_LINEUP"
           class="bg-primary hover:bg-opacity-90 text-white px-6 py-3 rounded-full"
           @click="() => changeMatchStatus(MatchStatusEnum.NO_LINEUP)"
         >
           SELECT LINEUP
         </button>
         <button
+          v-if="match.match_status == MatchStatusEnum.NO_STARTED"
           class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full"
           @click="() => changeMatchStatus(MatchStatusEnum.FIRST_HALF_ONGOING)"
         >
           START
         </button>
         <button
+          v-if="match.match_status == MatchStatusEnum.FIRST_HALF_ONGOING"
           class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-full"
           @click="() => changeMatchStatus(MatchStatusEnum.HALF_TIME)"
         >
           END FIRST HALF
         </button>
         <button
+          v-if="match.match_status == MatchStatusEnum.HALF_TIME"
           class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full"
           @click="() => changeMatchStatus(MatchStatusEnum.SECOND_HALF_ONGOING)"
         >
           START SECOND HALF
         </button>
         <button
+          v-if="match.match_status == MatchStatusEnum.SECOND_HALF_ONGOING"
           class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-full"
           @click="() => changeMatchStatus(MatchStatusEnum.FULL_TIME)"
         >
@@ -133,35 +152,36 @@
       </div>
 
       <MatchNavbarMolecule
-        v-if="match?.data && match?.data.length > 0"
-        :match="match?.data[0]"
+        v-if="match"
+        :match="match"
         :dashboard="true"
       ></MatchNavbarMolecule>
 
-      <h1 class="font-bold text-lg mt-12">Match events</h1>
+      <div v-if="isLive">
+        <h1 class="font-bold text-lg mt-12">Match events</h1>
 
-      <div class="teams__header flex mt-4">
-        <div
-          class="active cursor-pointer text-primary w-1/2 pb-4 border-b-2 border-primary"
-        >
-          <p class="text-center">
-            {{
-              match?.data && match?.data.length > 0 && match?.data[0].home.name
-            }}
-          </p>
+        <div class="teams__header flex mt-4">
+          <div
+            class="active cursor-pointer text-primary w-1/2 pb-4 border-b-2 border-primary"
+          >
+            <p class="text-center">
+              {{ match?.home.name }}
+            </p>
+          </div>
+          <div
+            class="w-1/2 cursor-pointer pb-4 text-appgrey border-b-2 border-gray-200"
+          >
+            <p>
+              {{ match?.away.name }}
+            </p>
+          </div>
         </div>
-        <div
-          class="w-1/2 cursor-pointer pb-4 text-appgrey border-b-2 border-gray-200"
-        >
-          <p>
-            {{
-              match?.data && match?.data.length > 0 && match?.data[0].away.name
-            }}
-          </p>
-        </div>
+
+        <AddEventForm></AddEventForm>
       </div>
-
-      <AddEventForm></AddEventForm>
+      <div v-else>
+        <div class="mt-10">We need to take some rest..., The match is over</div>
+      </div>
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 flex flex-col items-center">
       <MatchEvents :events-data="eventsData"></MatchEvents>
