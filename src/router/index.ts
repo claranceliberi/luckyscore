@@ -13,7 +13,7 @@ import MatchesView from "~/views/dashboard/MatchesView.vue";
 import NewMatch from "~/views/dashboard/NewMatch.vue";
 import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
 import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
-import FormationsView from "~/views/dashboard/FormationsView.vue";
+import FormationsView from "@/views/dashboard/AddFormationsView.vue";
 import DashboardTeams from "~/views/dashboard/TeamsView.vue";
 import Dashboard from "~/views/DashboardView.vue";
 import Fixtures from "~/views/public/home/FixturesView.vue";

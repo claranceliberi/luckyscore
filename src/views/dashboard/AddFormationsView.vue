@@ -2,7 +2,12 @@
   import { supabase } from "@/lib/supabase";
   import { toast } from "@/plugins/toaster/vue-toast";
   import router from "@/router";
-  import { ICreateMatch, IMatchTeamJoin, IPlayer } from "@/types/global";
+  import {
+    ICreateMatch,
+    IMatchTeamJoin,
+    IPlayer,
+    MatchStatusEnum,
+  } from "@/types/global";
   import { computed, onBeforeMount, reactive, ref } from "vue";
   import { useRoute } from "vue-router";
   import SelectAtom from "@/components/Atoms/SelectAtom.vue";
@@ -67,6 +72,7 @@
         .update({
           home_formation: matchFormationData.home_formation,
           away_formation: matchFormationData.away_formation,
+          match_status: MatchStatusEnum.NO_STARTED,
         })
         .match({ id: route.params.matchId });
 
@@ -108,7 +114,7 @@
 
       const { data, error } = await supabase
         .from("player_match")
-        .insert([...homeTeamData, ...awayTeamData]);
+        .insert([...selectedHomePlayers.value, ...selectedAwayPlayers.value]);
 
       if (data) {
         router.back();
@@ -124,30 +130,14 @@
       player_id: id,
       pitch_position: position.toString(),
     });
-
-    console.log(selectedHomePlayers.value.some((pl) => (pl.player_id = id)));
   }
 
-  function getSelectedPlayer(pos: number, allies: "AWAY" | "HOME") {
-    if (allies === "HOME") {
-      const hmp = homePlayers.value.filter(
-        (hp) =>
-          hp.id ===
-          selectedHomePlayers.value.filter(
-            (sp) => (sp.pitch_position = pos.toString()),
-          )[0].player_id,
-      )[0];
-      return { label: hmp.full_name, value: hmp.id };
-    } else {
-      const amp = awayPlayers.value.filter(
-        (ap) =>
-          ap.id ===
-          selectedAwayPlayers.value.filter(
-            (sp) => (sp.pitch_position = pos.toString()),
-          )[0].player_id,
-      )[0];
-      return { label: amp.full_name, value: amp.id };
-    }
+  function selectAwayPlayer(id: string, position: number) {
+    selectedHomePlayers.value.push({
+      match: route.params.matchId as string,
+      player_id: id,
+      pitch_position: position.toString(),
+    });
   }
 
   onBeforeMount(async () => {
@@ -223,22 +213,6 @@
                 value: p.id,
               }))
             "
-            :model-value="{
-              label: homePlayers.find(
-                (hp) =>
-                  hp.id ===
-                  selectedHomePlayers.find(
-                    (shp) => shp.pitch_position === pos + '',
-                  )?.player_id,
-              )?.full_name,
-              value: homePlayers.find(
-                (hp) =>
-                  hp.id ===
-                  selectedHomePlayers.find(
-                    (shp) => shp.pitch_position === pos + '',
-                  )?.player_id,
-              )?.id,
-            }"
             @update:model-value="(id) => selectHomePlayer(id, pos)"
           />
         </div>
@@ -249,8 +223,8 @@
       <div>
         <p class="pb-2">{{ match?.away.name }} formation:</p>
         <SelectAtom
-          v-model="matchFormationData.away_formation"
-          title="Away team formation"
+          v-model="matchFormationData.home_formation"
+          title="Home team formation"
           placeholder="Select"
           :options="formations"
         />
@@ -266,12 +240,17 @@
 
         <div class="col-span-3">
           <p class="pb-2">Player:</p>
-          <!-- <SelectAtom
-          v-model="homeTeamLinup[pos]"
-          title="Home team"
-          placeholder="Select team"
-          :options="teamsOptions"
-        /> -->
+          <SelectAtom
+            title="Home team"
+            placeholder="Select Player"
+            :options="
+              awayToBeSelected?.map((p) => ({
+                label: p.full_name,
+                value: p.id,
+              }))
+            "
+            @update:model-value="(id) => selectAwayPlayer(id, pos)"
+          />
         </div>
       </div>
     </div>
