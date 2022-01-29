@@ -29,7 +29,9 @@ export interface IPlayer extends ITable {
   description: string;
   full_name: string;
   id: string;
-  team: Teams;
+  team?: Teams;
+  created_at: string;
+  team_id: string;
 }
 export interface PlayerMatchCreate {
   match: string;
