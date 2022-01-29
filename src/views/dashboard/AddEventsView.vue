@@ -7,6 +7,7 @@
   import { supabase } from "@/lib/supabase";
   import { ref, computed, onBeforeMount } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
+  import { toast } from "@/plugins/toaster/vue-toast";
 
   const route = useRoute();
   const router = useRouter();
@@ -25,6 +26,15 @@
     return false;
   });
 
+  const isExactLive = computed(() => {
+    if (match.value)
+      return (
+        match.value.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
+        match.value.match_status == MatchStatusEnum.SECOND_HALF_ONGOING
+      );
+
+    return false;
+  });
   onBeforeMount(async () => {
     const { data } = await supabase
       .from<IMatchTeamJoin>("match")
@@ -35,7 +45,7 @@
     loading.value = false;
   });
 
-  function changeMatchStatus(status: MatchStatusEnum) {
+  async function changeMatchStatus(status: MatchStatusEnum) {
     const messages: Record<string, string> = {
       NO_LINEUP: "Are you sure you want to set up match ?",
       FIRST_HALF_ONGOING: "Are you sure you want to start the match ?",
@@ -52,19 +62,73 @@
           router.push(`/dashboard/matches/${route.params.matchId}/formation`);
         break;
       case MatchStatusEnum.FIRST_HALF_ONGOING:
-        if (c(MatchStatusEnum.FIRST_HALF_ONGOING))
-          console.log("we want to start match");
+        if (c(MatchStatusEnum.FIRST_HALF_ONGOING)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.FIRST_HALF_ONGOING,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Match started");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.FIRST_HALF_ONGOING;
+          }
+        }
         break;
       case MatchStatusEnum.HALF_TIME:
-        if (c(MatchStatusEnum.HALF_TIME))
-          console.log("we want to end first half ");
+        if (c(MatchStatusEnum.HALF_TIME)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.HALF_TIME,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Half In");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.HALF_TIME;
+          }
+        }
+
         break;
       case MatchStatusEnum.SECOND_HALF_ONGOING:
-        if (c(MatchStatusEnum.SECOND_HALF_ONGOING))
-          console.log("we want to start second half ");
+        if (c(MatchStatusEnum.SECOND_HALF_ONGOING)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.SECOND_HALF_ONGOING,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Second half ongoing");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.SECOND_HALF_ONGOING;
+          }
+        }
         break;
       case MatchStatusEnum.FULL_TIME:
-        if (c(MatchStatusEnum.FULL_TIME)) console.log("we want to end match ");
+        if (c(MatchStatusEnum.FULL_TIME)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.FULL_TIME,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Match has ended succesfully");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.FULL_TIME;
+          }
+        }
         break;
       default:
         alert("Incorect Choice made");
@@ -181,7 +245,8 @@
           </div>
         </div>
 
-        <AddEventForm></AddEventForm>
+        <AddEventForm v-if="isExactLive"></AddEventForm>
+        <div v-else>waiting for match to start/restart</div>
       </div>
       <div v-else>
         <div class="mt-10">We need to take some rest..., The match is over</div>

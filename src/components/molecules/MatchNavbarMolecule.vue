@@ -70,7 +70,7 @@
               ? "HT"
               : scoreBoard?.isFullTime
               ? "FT"
-              : scoreBoard?.date
+              : ""
           }}
         </p>
       </div>
