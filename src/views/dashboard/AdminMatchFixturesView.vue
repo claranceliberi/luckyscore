@@ -3,10 +3,10 @@
   import { supabase } from "@/lib/supabase";
 
   import { IFixtures, IMatch } from "@/types/global";
-  import { reactive } from "vue";
+  import { reactive, ref } from "vue";
+  const isLoading = ref(true);
 
   const fixtures = reactive<IFixtures>({
-    isLoading: true,
     name: "",
     matches: [],
   });
@@ -21,12 +21,12 @@
     )
     .then((res) => {
       fixtures.matches = res.data || [];
-      fixtures.isLoading = false;
+      isLoading.value = false;
     });
 </script>
 
 <template>
-  <div v-if="!fixtures.isLoading && fixtures.matches.length > 0" class="my-6">
+  <div v-if="!isLoading && fixtures.matches.length > 0" class="my-6">
     <div class="my-6 flex justify-between">
       <h1 class="text-2xl font-bold">Matches</h1>
       <router-link to="/dashboard/matches/new">
@@ -44,7 +44,7 @@
       :matches="fixtures.matches"
     />
   </div>
-  <div v-else-if="fixtures.isLoading">
+  <div v-else-if="isLoading">
     <h1>Loading...</h1>
   </div>
 

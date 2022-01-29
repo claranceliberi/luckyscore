@@ -5,7 +5,7 @@
       <div
         class="border-[#DEE2E6] border rounded py-8 cursor-pointer hover:bg-[#FFFFFF]"
       >
-        <router-link :to="'/match/' + match.id">
+        <router-link :to="props.url.replace(/:[\w]+/gi, match.id)">
           <SingleMatch
             :home-team="match.home_team.name"
             :away-team="match.away_team.name"
@@ -27,8 +27,8 @@
   import { supabase } from "@/lib/supabase";
 
   interface Props {
-    name: string;
-    matches: IMatch[];
+    name?: string;
+    matches: IMatch[] | any;
     url: string;
   }
   const props = defineProps<Props>();

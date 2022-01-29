@@ -42,7 +42,11 @@
       :key="key"
       class="my-6"
     >
-      <MatchDay url="/match/" :name="'Matchday ' + key" :matches="value" />
+      <MatchDay
+        url="/match/:matchId"
+        :name="'Matchday ' + key"
+        :matches="value"
+      />
     </div>
   </div>
   <div v-else-if="isLoading">
