@@ -83,6 +83,7 @@
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
   import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
   import { onMounted, reactive } from "vue";
+  import { MatchStatusEnum } from "@/types/global";
 
   const state = reactive<{
     isLoading: boolean;
@@ -109,7 +110,7 @@
       .then(() => {
         const tempisLive = (allDetails.value as any).match_status === "live";
         const tempisFinished =
-          (allDetails.value as any).match_status === "finished";
+          (allDetails.value as any).match_status === MatchStatusEnum.FULL_TIME;
 
         //stats
 
@@ -175,7 +176,6 @@
         state.isError = false;
       });
   });
-  console.log(allDetails.value);
 </script>
 
 <style scoped></style>
