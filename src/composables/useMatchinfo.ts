@@ -41,60 +41,60 @@ async function fetchMatchDetails(id: string) {
     ).length;
 
     // get shots
-    let home_shots = events?.filter(
+    const home_shots = events?.filter(
       (e) => e.type === IEventType.SHOT && e.team_id === match?.home.id,
     ).length;
-    let away_shots = events?.filter(
+    const away_shots = events?.filter(
       (e) => e.type === IEventType.SHOT && e.team_id === match?.away.id,
     ).length;
 
     // get shots ON Target
-    let home_shots_on_target = events?.filter(
+    const home_shots_on_target = events?.filter(
       (e) =>
         e.type === IEventType.SHOT_ON_TARGET && e.team_id === match?.home.id,
     ).length;
-    let away_shots_on_target = events?.filter(
+    const away_shots_on_target = events?.filter(
       (e) =>
         e.type === IEventType.SHOT_ON_TARGET && e.team_id === match?.away.id,
     ).length;
 
     // get Fouls
-    let home_fouls = events?.filter(
+    const home_fouls = events?.filter(
       (e) => e.type === IEventType.FOUL && e.team_id === match?.home.id,
     ).length;
-    let away_fouls = events?.filter(
+    const away_fouls = events?.filter(
       (e) => e.type === IEventType.FOUL && e.team_id === match?.away.id,
     ).length;
 
     // get Yellow Cards
-    let home_yellow_cards = events?.filter(
+    const home_yellow_cards = events?.filter(
       (e) => e.type === IEventType.YELLOW_CARD && e.team_id === match?.home.id,
     ).length;
-    let away_yellow_cards = events?.filter(
+    const away_yellow_cards = events?.filter(
       (e) => e.type === IEventType.YELLOW_CARD && e.team_id === match?.away.id,
     ).length;
 
     // get Red Cards
-    let home_red_cards = events?.filter(
+    const home_red_cards = events?.filter(
       (e) => e.type === IEventType.RED_cARD && e.team_id === match?.home.id,
     ).length;
-    let away_red_cards = events?.filter(
+    const away_red_cards = events?.filter(
       (e) => e.type === IEventType.RED_cARD && e.team_id === match?.away.id,
     ).length;
 
     // get Offsides
-    let home_offsides = events?.filter(
+    const home_offsides = events?.filter(
       (e) => e.type === IEventType.OFFSIDE && e.team_id === match?.home.id,
     ).length;
-    let away_offsides = events?.filter(
+    const away_offsides = events?.filter(
       (e) => e.type === IEventType.OFFSIDE && e.team_id === match?.away.id,
     ).length;
 
     // get Corners
-    let home_corners = events?.filter(
+    const home_corners = events?.filter(
       (e) => e.type === IEventType.CORNER && e.team_id === match?.home.id,
     ).length;
-    let away_corners = events?.filter(
+    const away_corners = events?.filter(
       (e) => e.type === IEventType.CORNER && e.team_id === match?.away.id,
     ).length;
 
