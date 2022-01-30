@@ -4,6 +4,7 @@ import { IMatchTeamJoin, Events, IEventType } from "@/types/global";
 import { ref } from "vue";
 
 const allDetails = ref<IMatchTeamJoin | null>(null);
+const allEvents = ref<Events[] | null>(null);
 
 /**
  * Retrieve match info by its id
@@ -21,7 +22,8 @@ async function fetchMatchDetails(id: string) {
       .select(
         "*,team:team_id ( * ),player:player_id ( * ),assist:assist_id ( * )",
       )
-      .eq("match_id", id);
+      .eq("match_id", id)
+      .order("created_at", { ascending: false });
 
     if (error1) {
       console.log("error", error1);
@@ -117,6 +119,7 @@ async function fetchMatchDetails(id: string) {
 
     // store response to allDetails
     allDetails.value = match;
+    allEvents.value = events;
     console.log("got match!", match);
     console.log("got events!", events);
   } catch (err) {
@@ -124,4 +127,4 @@ async function fetchMatchDetails(id: string) {
   }
 }
 
-export { allDetails, fetchMatchDetails };
+export { allDetails, allEvents, fetchMatchDetails };

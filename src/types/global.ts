@@ -132,6 +132,7 @@ export interface Events extends ITable {
   team_id: string;
   assist: string;
   type: string;
+  commentary: string;
   match_id: string;
   player: IPlayer;
   assist_player: IPlayer;

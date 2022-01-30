@@ -67,7 +67,7 @@
           </div>
         </div>
       </div>
-      <LiveTable></LiveTable>
+      <LiveEvents :events="allEvents || []"></LiveEvents>
     </div>
   </div>
   <div v-else class="my-10">Match not found</div>
@@ -75,13 +75,17 @@
 
 <script setup lang="ts">
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
-  import LiveTable from "@/components/MatchView/LiveTable.vue";
+  import LiveEvents from "@/components/MatchView/LiveEvents.vue";
   import MatchStats from "@/components/MatchView/MatchStats.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
   import { useRoute } from "vue-router";
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
-  import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
+  import {
+    fetchMatchDetails,
+    allDetails,
+    allEvents,
+  } from "@/composables/useMatchinfo";
   import { onMounted, onUnmounted, reactive } from "vue";
   import { MatchStatusEnum } from "@/types/global";
   import { RealtimeSubscription } from "@supabase/supabase-js";
