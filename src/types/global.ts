@@ -26,7 +26,7 @@ export type IMatchprogress =
   | "finished";
 
 export enum IEventType {
-  Goal = "Goal",
+  GOAL = "Goal",
   SHOT = "Shot",
   SHOT_ON_TARGET = "Shot on target",
   FOUL = "Foul",

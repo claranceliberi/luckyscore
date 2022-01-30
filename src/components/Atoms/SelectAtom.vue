@@ -36,7 +36,6 @@
 
   function input(e: Event) {
     const val = (e.target as HTMLInputElement).value;
-    console.log(selectProps.modelValue);
     if (val === selectProps.placeholder) emit("update:modelValue", null);
     else emit("update:modelValue", val);
   }

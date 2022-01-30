@@ -53,7 +53,6 @@
     .then((res) => {
       data.home_team = res.data ? res?.data.home : null;
       data.away_team = res.data ? res?.data.away : null;
-      console.log(data.home_team);
     });
   supabase
     .from<IPlayerMatch>("player_match")
@@ -75,11 +74,10 @@
     data.type = type;
   }
   async function addEvent() {
-    console.log(data);
     const player = data.allData.find(
       (player: IPlayerMatch) => player.player_id === data.done_by,
     );
-    if (data.type === IEventType.Goal) {
+    if (data.type === IEventType.GOAL) {
       await generateCommentary(
         data.home_team?.name +
           " FC VS " +
