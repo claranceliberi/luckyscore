@@ -4,6 +4,7 @@ import { IMatchTeamJoin, Events, IEventType } from "@/types/global";
 import { ref } from "vue";
 
 const allDetails = ref<IMatchTeamJoin | null>(null);
+const allEvents = ref<Events[] | null>(null);
 
 /**
  * Retrieve match info by its id
@@ -21,7 +22,8 @@ async function fetchMatchDetails(id: string) {
       .select(
         "*,team:team_id ( * ),player:player_id ( * ),assist:assist_id ( * )",
       )
-      .eq("match_id", id);
+      .eq("match_id", id)
+      .order("created_at", { ascending: false });
 
     if (error1) {
       console.log("error", error1);
@@ -34,10 +36,10 @@ async function fetchMatchDetails(id: string) {
 
     // get goals
     const home_score = events?.filter(
-      (e) => e.type === IEventType.Goal && e.team_id === match?.home.id,
+      (e) => e.type === IEventType.GOAL && e.team_id === match?.home.id,
     ).length;
     const away_score = events?.filter(
-      (e) => e.type === IEventType.Goal && e.team_id === match?.away.id,
+      (e) => e.type === IEventType.GOAL && e.team_id === match?.away.id,
     ).length;
 
     // get shots
@@ -76,10 +78,10 @@ async function fetchMatchDetails(id: string) {
 
     // get Red Cards
     const home_red_cards = events?.filter(
-      (e) => e.type === IEventType.RED_cARD && e.team_id === match?.home.id,
+      (e) => e.type === IEventType.RED_CARD && e.team_id === match?.home.id,
     ).length;
     const away_red_cards = events?.filter(
-      (e) => e.type === IEventType.RED_cARD && e.team_id === match?.away.id,
+      (e) => e.type === IEventType.RED_CARD && e.team_id === match?.away.id,
     ).length;
 
     // get Offsides
@@ -117,6 +119,7 @@ async function fetchMatchDetails(id: string) {
 
     // store response to allDetails
     allDetails.value = match;
+    allEvents.value = events;
     console.log("got match!", match);
     console.log("got events!", events);
   } catch (err) {
@@ -124,4 +127,4 @@ async function fetchMatchDetails(id: string) {
   }
 }
 
-export { allDetails, fetchMatchDetails };
+export { allDetails, allEvents, fetchMatchDetails };

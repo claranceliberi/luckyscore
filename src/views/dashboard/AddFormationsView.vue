@@ -11,6 +11,7 @@
   import { computed, onBeforeMount, reactive, ref } from "vue";
   import { useRoute } from "vue-router";
   import SelectAtom from "@/components/Atoms/SelectAtom.vue";
+  import { n } from "@/lib/helpers";
 
   const route = useRoute();
 
@@ -33,37 +34,42 @@
     home_formation: "",
   });
 
-  const homeTeamLinup: string[] = reactive([]);
-  const awayTeamLinup: string[] = reactive([]);
   const homePlayers = ref<IPlayer[]>([]);
   const awayPlayers = ref<IPlayer[]>([]);
-  const selectedHomePlayers = ref<
-    { match: string; pitch_position: string; player_id: string }[]
-  >([]);
 
-  const selectedAwayPlayers = ref<
-    { match: string; pitch_position: string; player_id: string }[]
-  >([]);
-
-  const homeToBeSelected = computed(() =>
-    homePlayers.value?.filter(
-      (p) =>
-        !selectedHomePlayers.value.map((sp) => sp.player_id).includes(p.id),
-    ),
-  );
-
-  const awayToBeSelected = computed(() =>
-    awayPlayers.value?.filter(
-      (p) =>
-        !selectedAwayPlayers.value.map((sp) => sp.player_id).includes(p.id),
-    ),
-  );
+  const awayPlayersLineup = reactive<Record<number, string>>({});
+  const homePlayersLineup = reactive<Record<number, string>>({});
 
   const step = ref(1);
   const match = ref<IMatchTeamJoin | null>(null);
   const loading = ref(true);
 
   async function handleNext() {
+    if (step.value === 1) {
+      if (
+        !matchFormationData.home_formation ||
+        matchFormationData.home_formation.length < 1
+      ) {
+        toast.error("Home team formation must be selected");
+        return;
+      } else if (getLineups("HOME").length < 11) {
+        toast.error("Home team must have 11 players");
+        return;
+      }
+    }
+    if (step.value === 2) {
+      if (
+        !matchFormationData.away_formation ||
+        matchFormationData.away_formation.length < 1
+      ) {
+        toast.error("Away team formation must be selected");
+        return;
+      } else if (getLineups("AWAY").length < 11) {
+        toast.error("Away team must have 11 players");
+        return;
+      }
+    }
+
     if (step.value < 2) {
       step.value++;
     } else {
@@ -80,41 +86,9 @@
 
       if (updateError) toast.error(updateError?.message);
 
-      const homeTeamData = homeTeamLinup.map((p) => {
-        ({
-          match: route.params.matchId,
-          player_id: p,
-          red_card: 0,
-          yellow_card: 0,
-          off_side: 0,
-          pitch_position: 0,
-          subbed: null,
-          goals: 0,
-          assists: 0,
-          big_chances: 0,
-          successful_dribbles: 0,
-        });
-      });
-
-      const awayTeamData = awayTeamLinup.map((p) => {
-        ({
-          match: route.params.matchId,
-          player_id: p,
-          red_card: 0,
-          yellow_card: 0,
-          off_side: 0,
-          pitch_position: 0,
-          subbed: null,
-          goals: 0,
-          assists: 0,
-          big_chances: 0,
-          successful_dribbles: 0,
-        });
-      });
-
       const { data, error } = await supabase
         .from("player_match")
-        .insert([...selectedHomePlayers.value, ...selectedAwayPlayers.value]);
+        .insert([...getLineups("HOME"), ...getLineups("AWAY")]);
 
       if (data) {
         router.back();
@@ -124,20 +98,25 @@
     }
   }
 
-  function selectHomePlayer(id: string, position: number) {
-    selectedHomePlayers.value.push({
-      match: route.params.matchId as string,
-      player_id: id,
-      pitch_position: position.toString(),
-    });
-  }
+  function getLineups(allie: "HOME" | "AWAY") {
+    if (allie === "HOME")
+      return Object.keys(homePlayersLineup).map(
+        (pos) =>
+          homePlayersLineup[n(pos)] && {
+            match: route.params.matchId,
+            pitch_position: pos,
+            player_id: homePlayersLineup[n(pos)],
+          },
+      );
 
-  function selectAwayPlayer(id: string, position: number) {
-    selectedHomePlayers.value.push({
-      match: route.params.matchId as string,
-      player_id: id,
-      pitch_position: position.toString(),
-    });
+    return Object.keys(homePlayersLineup).map(
+      (pos) =>
+        homePlayersLineup[n(pos)] && {
+          match: route.params.matchId,
+          pitch_position: pos,
+          player_id: homePlayersLineup[n(pos)],
+        },
+    );
   }
 
   onBeforeMount(async () => {
@@ -194,7 +173,7 @@
       </div>
 
       <div
-        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 10, 11]"
+        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
         :key="pos"
         class="grid grid-cols-5"
       >
@@ -205,15 +184,16 @@
         <div class="col-span-3">
           <p class="pb-2">Player:</p>
           <SelectAtom
+            v-model="homePlayersLineup[pos]"
             title="Home team"
             placeholder="Select Player"
             :options="
-              homeToBeSelected?.map((p) => ({
+              homePlayers?.map((p) => ({
                 label: p.full_name,
                 value: p.id,
+                selected: Object.values(homePlayersLineup).includes(p.id),
               }))
             "
-            @update:model-value="(id) => selectHomePlayer(id, pos)"
           />
         </div>
       </div>
@@ -223,14 +203,14 @@
       <div>
         <p class="pb-2">{{ match?.away.name }} formation:</p>
         <SelectAtom
-          v-model="matchFormationData.home_formation"
+          v-model="matchFormationData.away_formation"
           title="Home team formation"
           placeholder="Select"
           :options="formations"
         />
       </div>
       <div
-        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 10, 11]"
+        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
         :key="pos"
         class="grid grid-cols-5"
       >
@@ -241,15 +221,16 @@
         <div class="col-span-3">
           <p class="pb-2">Player:</p>
           <SelectAtom
+            v-model="awayPlayersLineup[pos]"
             title="Home team"
             placeholder="Select Player"
             :options="
-              awayToBeSelected?.map((p) => ({
+              awayPlayers?.map((p) => ({
                 label: p.full_name,
                 value: p.id,
+                selected: Object.values(awayPlayersLineup).includes(p.id),
               }))
             "
-            @update:model-value="(id) => selectAwayPlayer(id, pos)"
           />
         </div>
       </div>

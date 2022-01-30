@@ -47,7 +47,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
       });
@@ -60,7 +60,7 @@
             name: singlePlayer.assist_player.full_name,
           },
           team: {
-            name: singlePlayer.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
       });
@@ -72,7 +72,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
       });
@@ -85,7 +85,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
       });

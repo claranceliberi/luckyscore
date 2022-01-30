@@ -26,13 +26,13 @@ export type IMatchprogress =
   | "finished";
 
 export enum IEventType {
-  Goal = "Goal",
+  GOAL = "Goal",
   SHOT = "Shot",
   SHOT_ON_TARGET = "Shot on target",
   FOUL = "Foul",
   CORNER = "Corner",
   YELLOW_CARD = "Yellow card",
-  RED_cARD = "Red card",
+  RED_CARD = "Red card",
   OFFSIDE = "Offside",
 }
 
@@ -146,6 +146,7 @@ export interface Events extends ITable {
   team_id: string;
   assist_id: string;
   type: string;
+  commentary: string;
   match_id: string;
   player: IPlayer;
   assist_player: IPlayer;
