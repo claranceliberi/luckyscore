@@ -15,7 +15,7 @@
     players: [] as IPlayerMatch[],
     goalkeeper: {} as IPlayerMatch | undefined,
   });
-
+  console.log(props);
   const isLoading = ref(true);
   supabase
     .from<IPlayerMatch>("player_match")
@@ -28,7 +28,9 @@
         );
         team.players =
           res.data?.filter(
-            (player: IPlayerMatch) => player.pitch_position !== 1,
+            (player: IPlayerMatch) =>
+              player.pitch_position !== 1 &&
+              player.player.team_id == props.team,
           ) || [];
         isLoading.value = false;
       }
@@ -46,7 +48,7 @@
           <div class="small-goal">
             <div class="user w-6 h-6 md:w-10 md:h-10 u1">
               <span class="p-names">{{
-                team.goalkeeper?.player.full_name
+                team.goalkeeper?.player.full_name.split(" ")[0]
               }}</span>
             </div>
           </div>
@@ -57,7 +59,9 @@
           class="user w-6 h-6 md:w-10 md:h-10"
           :class="`u${player.pitch_position}-${props.formation}`"
         >
-          <span class="p-names">{{ player.player.full_name }}</span>
+          <span class="p-names">{{
+            player.player.full_name.split(" ")[0]
+          }}</span>
         </div>
         <div class="face-of-goal"></div>
       </div>

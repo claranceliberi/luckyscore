@@ -1,6 +1,5 @@
 <script setup lang="ts">
   const matchInfoProps = withDefaults(defineProps<{ date: Date }>(), {});
-  console.log(matchInfoProps);
 </script>
 
 <template>

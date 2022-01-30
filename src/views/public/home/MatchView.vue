@@ -32,20 +32,23 @@
               </div>
             </div>
             <div
+              v-if="state.homeSelected"
               class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
             >
               <FormationCard
-                :formation="
-                  state.homeSelected
-                    ? state.allDetails?.value?.home_formation
-                    : state.allDetails?.value?.away_formation
-                "
-                :team="
-                  state.homeSelected
-                    ? state.allDetails?.value?.home_team?.id
-                    : state.allDetails?.value?.away_team?.id
-                "
-                :match-id="state.allDetails?.value?.id"
+                :formation="allDetails?.home_formation"
+                :team="allDetails?.home?.id"
+                :match-id="allDetails?.id"
+              />
+            </div>
+            <div
+              v-else
+              class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
+            >
+              <FormationCard
+                :formation="allDetails?.away_formation"
+                :team="allDetails?.away?.id"
+                :match-id="allDetails?.id"
               />
             </div>
           </div>
@@ -172,6 +175,7 @@
         state.isError = false;
       });
   });
+  console.log(allDetails.value);
 </script>
 
 <style scoped></style>

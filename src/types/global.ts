@@ -25,6 +25,15 @@ export type IMatchprogress =
   | "penalty_shootout"
   | "finished";
 
+export enum IEventType {
+  Goal = "Goal",
+  SHOT = "Shot",
+  SHOT_ON_TARGET = "Shot On Target",
+  FOUL = "Foul",
+  CORNER = "Corner",
+  YELLOW_CARD = "Yellow Card",
+  RED_cARD = "Red Card",
+}
 export interface IPlayer extends ITable {
   description: string;
   full_name: string;
@@ -81,14 +90,16 @@ export interface IMatch extends ITable {
   in_charge: string;
   description: string;
   match_status: MatchStatusEnum;
-  home_team: Teams;
-  away_team: Teams;
+  home_team: string;
+  away_team: string;
   home_shots: number;
   away_shots: number;
   home_score: number;
   away_score: number;
   home_lineup: string;
   away_lineup: string;
+  home_formation: string;
+  away_formation: string;
   home_corners: number;
   away_corners: number;
   home_shots_on_target: number;
