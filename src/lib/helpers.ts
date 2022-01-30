@@ -7,3 +7,7 @@ export function getParameterByName(name: string, url?: string) {
   if (!results[2]) return "";
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
+export function n(number: string) {
+  return parseInt(number, 10);
+}

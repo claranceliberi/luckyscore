@@ -33,10 +33,10 @@ async function fetchMatchDetails(id: string) {
     }
 
     // get goals
-    let home_score = events?.filter(
+    const home_score = events?.filter(
       (e) => e.type === IEventType.Goal && e.team_id === match?.home.id,
     ).length;
-    let away_score = events?.filter(
+    const away_score = events?.filter(
       (e) => e.type === IEventType.Goal && e.team_id === match?.away.id,
     ).length;
 

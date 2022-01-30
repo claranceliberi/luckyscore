@@ -4,10 +4,15 @@
     aria-label=".form-select-lg example"
     @change="input"
   >
-    <option selected>{{ selectProps.placeholder }}</option>
+    <option :selected="!modelValue || modelValue.length < 1">
+      {{ selectProps.placeholder }}
+    </option>
     <option
       v-for="opt in selectProps.options"
       :key="opt.value"
+      :class="`${opt.selected ? 'bg-gray-200' : ''}`"
+      :disabled="opt.selected"
+      :selected="opt.value === modelValue"
       :value="opt.value"
     >
       {{ opt.label }}
@@ -18,15 +23,21 @@
 <script setup lang="ts">
   interface Props {
     placeholder: string;
-    options: Array<{ value: string; label: string }>;
+    modelValue: string;
+    options: Array<{ value: string; label: string; selected?: boolean }>;
   }
   const selectProps = withDefaults(defineProps<Props>(), {
     placeholder: "Open this select menu",
+    modelValue: "",
   });
 
-  const emit = defineEmits<{ (e: "update:modelValue", id: string): void }>();
+  const emit =
+    defineEmits<{ (e: "update:modelValue", id: string | null): void }>();
 
   function input(e: Event) {
-    emit("update:modelValue", (e.target as HTMLInputElement).value);
+    const val = (e.target as HTMLInputElement).value;
+    console.log(selectProps.modelValue);
+    if (val === selectProps.placeholder) emit("update:modelValue", null);
+    else emit("update:modelValue", val);
   }
 </script>
