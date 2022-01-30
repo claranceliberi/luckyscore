@@ -99,7 +99,7 @@
   }
 
   function getLineups(allie: "HOME" | "AWAY") {
-    if (allie === "HOME")
+    if (allie == "HOME")
       return Object.keys(homePlayersLineup).map(
         (pos) =>
           homePlayersLineup[n(pos)] && {
@@ -109,12 +109,12 @@
           },
       );
 
-    return Object.keys(homePlayersLineup).map(
+    return Object.keys(awayPlayersLineup).map(
       (pos) =>
-        homePlayersLineup[n(pos)] && {
+        awayPlayersLineup[n(pos)] && {
           match: route.params.matchId,
           pitch_position: pos,
-          player_id: homePlayersLineup[n(pos)],
+          player_id: awayPlayersLineup[n(pos)],
         },
     );
   }
