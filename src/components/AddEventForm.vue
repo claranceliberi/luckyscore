@@ -1,8 +1,14 @@
 <script setup lang="ts">
   import SelectAtom from "./Atoms/SelectAtom.vue";
   import { onMounted, reactive, ref } from "vue";
-  import { IPlayerMatch } from "@/types/global";
+  import {
+    IMatchTeamJoin,
+    IPlayerMatch,
+    Teams,
+    IEventType,
+  } from "@/types/global";
   import { supabase } from "@/lib/supabase";
+  import { generateCommentary } from "@/lib/commentary";
   import { toast } from "@/plugins/toaster/vue-toast";
   const props = defineProps<NewEventProps>();
 
@@ -21,15 +27,34 @@
     assisted_by: string;
     optionsData: Options[];
     allData: IPlayerMatch[];
+    home_team: Teams | null;
+    away_team: Teams | null;
+    teams: Teams[];
+    commentary: string;
   }>({
     type: "",
     done_by: "",
     assisted_by: "",
     optionsData: [],
     allData: [],
+    home_team: null,
+    away_team: null,
+    commentary: "",
+    teams: [],
   });
 
   const isLoading = ref(true);
+
+  supabase
+    .from<IMatchTeamJoin>("match")
+    .select("*,away:away_team ( * ),home:home_team ( * )")
+    .eq("id", props.match + "")
+    .single()
+    .then((res) => {
+      data.home_team = res.data ? res?.data.home : null;
+      data.away_team = res.data ? res?.data.away : null;
+      console.log(data.home_team);
+    });
   supabase
     .from<IPlayerMatch>("player_match")
     .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
@@ -51,11 +76,88 @@
   }
   async function addEvent() {
     console.log(data);
+    const player = data.allData.find(
+      (player: IPlayerMatch) => player.player_id === data.done_by,
+    );
+    if (data.type === IEventType.Goal) {
+      await generateCommentary(
+        data.home_team?.name +
+          " FC VS " +
+          data.away_team?.name +
+          ", " +
+          player?.player.full_name +
+          " scores a goal (" +
+          data.home_team?.id ===
+          player?.player.team_id
+          ? data.home_team?.name + " )"
+          : data.away_team?.name + " )" + data.assisted_by !== ""
+          ? "assisted by " +
+            data.allData.find((e) => e.player_id === data.assisted_by)?.player
+              .full_name
+          : "" + " 56 minutes",
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (
+      data.type === IEventType.SHOT_ON_TARGET ||
+      data.type === IEventType.SHOT
+    ) {
+      await generateCommentary(
+        data.type +
+          " by " +
+          player?.player.full_name +
+          " who playes for " +
+          data.home_team?.id ===
+          player?.player.team_id
+          ? data.home_team?.name + ""
+          : data.away_team?.name + " 56 min",
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (
+      data.type === IEventType.YELLOW_CARD ||
+      data.type === IEventType.RED_CARD
+    ) {
+      await generateCommentary(
+        data.home_team?.name +
+          " FC VS " +
+          data.away_team?.name +
+          " " +
+          data.type +
+          " to " +
+          player?.player.full_name +
+          " who playes for " +
+          data.home_team?.id ===
+          player?.player.team_id
+          ? data.home_team?.name + ""
+          : data.away_team?.name + " 56 min",
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (
+      data.type === IEventType.FOUL ||
+      data.type === IEventType.OFFSIDE
+    ) {
+      await generateCommentary(
+        data.type + " by " + player?.player.full_name + " 56 min",
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (data.type === IEventType.CORNER) {
+      await generateCommentary(
+        data.type + " to team " + data.home_team?.id === player?.player.team_id
+          ? data.home_team?.name + ""
+          : data.away_team?.name + " 56 min by" + player?.player.full_name,
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    }
     if (data.type !== "" && data.done_by !== "") {
       await supabase
         .from("events")
         .insert({
           type: data.type,
+          commentary: data.commentary,
           match_id: props.match,
           player_id: data.done_by,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,
