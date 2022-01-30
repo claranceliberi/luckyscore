@@ -1,85 +1,89 @@
 <script setup lang="ts">
   import StatsBlockView from "@/components/molecules/StatsBlockMolecule.vue";
   import { supabase } from "@/lib/supabase";
-  import { IPlayerMatch } from "@/types/global";
+  import { Events, IPlayerStat } from "@/types/global";
   import { reactive, ref } from "vue";
 
-  interface IPlayerStat {
-    player: {
-      id: string;
-      name: string;
-    };
-    amount: number;
-    team: {
-      name: string;
-    };
-  }
-
-  let playersStats_fromDB: IPlayerMatch[] = reactive<IPlayerMatch[]>([]);
+  let playersStats_fromDB: Events[] = reactive<Events[]>([]);
   const goalsStats: Array<IPlayerStat> = reactive<Array<IPlayerStat>>([]);
   const assistsStats: Array<IPlayerStat> = reactive<Array<IPlayerStat>>([]);
   const yellowCardsStats: Array<IPlayerStat> = reactive<Array<IPlayerStat>>([]);
   const redCardsStats: Array<IPlayerStat> = reactive<Array<IPlayerStat>>([]);
   const loading = ref(true);
 
-  supabase
-    .from<IPlayerMatch>("player_match")
-    .select(
-      `
-      *,
-      player:  player_id(
-        *,
-        team: team_id(*))
+  function combineStatsByType(statsArray: Array<Events>, type: string) {
+    const results: Array<Events> = reactive([]);
+    statsArray.forEach(function (o) {
+      if (type === "assists" && o.assist_id !== null) {
+        results.push(o);
+      }
+      if (o.type.toLowerCase() === type) {
+        results.push(o);
+      }
+    });
+    return results;
+  }
 
-      `,
+  supabase
+    .from<Events>("events")
+    .select(
+      "*,player:player_id(*),assist_player:assist_id(*),team:team_id(id,name)",
     )
     .then((data) => {
       playersStats_fromDB = data.data || [];
+      const goal_only = combineStatsByType(playersStats_fromDB, "goal");
+      const redcard_only = combineStatsByType(playersStats_fromDB, "red card");
+      const yellowcard_only = combineStatsByType(
+        playersStats_fromDB,
+        "yellow card",
+      );
+      const assits_only = combineStatsByType(playersStats_fromDB, "assists");
 
-      playersStats_fromDB.map((singlePlayer) => {
+      goal_only.map((singlePlayer) => {
         // pushing goals into array of goalsStats
         goalsStats.push({
           player: {
             id: singlePlayer.player.id,
             name: singlePlayer.player.full_name,
           },
-          amount: singlePlayer.goals,
           team: {
             name: singlePlayer.player.team?.name + "",
           },
         });
+      });
 
-        // pushing assists into array of assistsStats
+      //   // pushing assists into array of assistsStats
+      assits_only.map((singlePlayer) => {
         assistsStats.push({
           player: {
-            id: singlePlayer.player.id,
-            name: singlePlayer.player.full_name,
+            id: singlePlayer.assist_player?.id,
+            name: singlePlayer.assist_player.full_name,
           },
-          amount: singlePlayer.assists,
           team: {
             name: singlePlayer.player.team?.name + "",
           },
         });
-
-        // pushing yellow cards into array of yellowCardsStats
+      });
+      //   // pushing yellow cards into array of yellowCardsStats
+      yellowcard_only.map((singlePlayer) => {
         yellowCardsStats.push({
           player: {
             id: singlePlayer.player.id,
             name: singlePlayer.player.full_name,
           },
-          amount: singlePlayer.yellow_card,
           team: {
             name: singlePlayer.player.team?.name + "",
           },
         });
+      });
 
-        // pushing red cards into array of redCardsStats
+      //   // pushing red cards into array of redCardsStats
+      redcard_only.map((singlePlayer) => {
         redCardsStats.push({
           player: {
             id: singlePlayer.player.id,
             name: singlePlayer.player.full_name,
           },
-          amount: singlePlayer.red_card,
           team: {
             name: singlePlayer.player.team?.name + "",
           },
