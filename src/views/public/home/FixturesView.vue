@@ -2,34 +2,53 @@
   import MatchDay from "@/components/matchday/MatchesInMatchDay.vue";
   import { supabase } from "@/lib/supabase";
   import { IFixtures } from "@/types/global";
-  import { reactive, ref } from "vue";
+  import { onMounted, onUnmounted, reactive, ref } from "vue";
   const fixtures = reactive<IFixtures>({} as IFixtures);
-  const match_in_matchdays: any = reactive({} as IFixtures);
+  let match_in_matchdays: any = reactive({} as IFixtures);
 
   const isLoading = ref(true);
-  supabase
-    .from("match")
-    .select(
-      `*, 
-     away_team:away_team(name),
-     home_team:home_team(name)
-    `,
-    )
-    .then((res) => {
-      const response_data = res.data || [];
-      fixtures.matches = res.data || [];
-      isLoading.value = false;
-      fixtures.name = "Matchday 1";
 
-      response_data.forEach((data) => {
-        if (
-          match_in_matchdays[data.match_day] == undefined ||
-          match_in_matchdays[data.match_day].length < 1
-        )
-          match_in_matchdays[data.match_day] = [data];
-        else match_in_matchdays[data.match_day].push(data);
+  const mySubscription = supabase
+    .from("match")
+    .on("*", (payload) => {
+      match_in_matchdays = {} as IFixtures;
+      getFixtureFromBD();
+    })
+    .subscribe();
+
+  function getFixtureFromBD() {
+    supabase
+      .from("match")
+      .select(
+        `*,
+       away_team:away_team(name),
+       home_team:home_team(name)
+      `,
+      )
+      .then((res) => {
+        const response_data = res.data || [];
+        fixtures.matches = res.data || [];
+        isLoading.value = false;
+        fixtures.name = "Matchday 1";
+
+        response_data.forEach((data) => {
+          if (
+            match_in_matchdays[data.match_day] == undefined ||
+            match_in_matchdays[data.match_day].length < 1
+          )
+            match_in_matchdays[data.match_day] = [data];
+          else match_in_matchdays[data.match_day].push(data);
+        });
       });
-    });
+  }
+
+  onMounted(() => {
+    getFixtureFromBD();
+  });
+
+  onUnmounted(() => {
+    mySubscription.unsubscribe();
+  });
 </script>
 
 <template>
