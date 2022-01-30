@@ -98,8 +98,6 @@ async function fetchMatchDetails(id: string) {
       (e) => e.type === IEventType.CORNER && e.team_id === match?.away.id,
     ).length;
 
-    console.log(events?.filter((e) => e.type === IEventType.RED_cARD));
-
     match ? (match.home_score = home_score || 0) : null;
     match ? (match.away_score = away_score || 0) : null;
     match ? (match.home_shots = home_shots || 0) : null;

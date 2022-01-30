@@ -82,8 +82,10 @@
   import { useRoute } from "vue-router";
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
   import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
-  import { onMounted, reactive } from "vue";
+  import { onMounted, onUnmounted, reactive } from "vue";
   import { MatchStatusEnum } from "@/types/global";
+  import { RealtimeSubscription } from "@supabase/supabase-js";
+  import { supabase } from "@/lib/supabase";
 
   const state = reactive<{
     isLoading: boolean;
@@ -101,7 +103,22 @@
   const route = useRoute();
   const id = route.params.id || "";
 
+  let mySubscription: RealtimeSubscription = supabase
+    .from("*")
+    .on("*", async (payload) => {
+      await fetchAllDetailsData();
+    })
+    .subscribe();
+
   onMounted(async () => {
+    await fetchAllDetailsData();
+  });
+
+  onUnmounted(() => {
+    mySubscription?.unsubscribe();
+  });
+
+  const fetchAllDetailsData = async () => {
     await fetchMatchDetails(id.toString())
       .catch(() => {
         state.isLoading = false;
@@ -175,7 +192,7 @@
         state.allDetails = allDetails;
         state.isError = false;
       });
-  });
+  };
 </script>
 
 <style scoped></style>

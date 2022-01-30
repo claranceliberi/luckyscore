@@ -3,7 +3,7 @@
   import { computed } from "vue";
 
   interface Props {
-    dashboard: boolean;
+    dashboard?: boolean;
     match: IMatchTeamJoin | null;
   }
   const props = withDefaults(defineProps<Props>(), {
