@@ -45,7 +45,7 @@
           },
           amount: singlePlayer.goals,
           team: {
-            name: singlePlayer.player.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
 
@@ -57,7 +57,7 @@
           },
           amount: singlePlayer.assists,
           team: {
-            name: singlePlayer.player.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
 
@@ -69,7 +69,7 @@
           },
           amount: singlePlayer.yellow_card,
           team: {
-            name: singlePlayer.player.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
 
@@ -81,7 +81,7 @@
           },
           amount: singlePlayer.red_card,
           team: {
-            name: singlePlayer.player.team.name,
+            name: singlePlayer.player.team?.name + "",
           },
         });
       });

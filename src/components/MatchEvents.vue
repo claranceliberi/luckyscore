@@ -46,6 +46,7 @@
           <span class="font-bold">{{ event.type + "  " }}</span>
           <span class="font-medium">by {{ " " + event.player.full_name }}</span>
         </h1>
+        <p class="text-gray-600 font-medium">{{ event.commentary }}</p>
         <p>{{ event.team.name }}</p>
       </div>
       <div v-if="data.events.length == 0">No events in this match yet</div>

@@ -32,7 +32,7 @@ export enum IEventType {
   FOUL = "Foul",
   CORNER = "Corner",
   YELLOW_CARD = "Yellow card",
-  RED_cARD = "Red card",
+  RED_CARD = "Red card",
   OFFSIDE = "Offside",
 }
 export interface IPlayer extends ITable {
@@ -132,6 +132,7 @@ export interface Events extends ITable {
   team_id: string;
   assist: string;
   type: string;
+  commentary: string;
   match_id: string;
   player: IPlayer;
   assist_player: IPlayer;
