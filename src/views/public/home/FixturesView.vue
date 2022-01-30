@@ -4,14 +4,13 @@
   import { IFixtures } from "@/types/global";
   import { onMounted, onUnmounted, reactive, ref } from "vue";
   const fixtures = reactive<IFixtures>({} as IFixtures);
-  let match_in_matchdays: any = reactive({} as IFixtures);
+  const match_in_matchdays: any = reactive({} as IFixtures);
 
   const isLoading = ref(true);
 
   const mySubscription = supabase
     .from("match")
     .on("*", (payload) => {
-      match_in_matchdays = {} as IFixtures;
       getFixtureFromBD();
     })
     .subscribe();
@@ -31,6 +30,10 @@
         isLoading.value = false;
         fixtures.name = "Matchday 1";
 
+        // make sure match_in_matchdays is empty before adding data
+        for (const key in match_in_matchdays) {
+          delete match_in_matchdays[key];
+        }
         response_data.forEach((data) => {
           if (
             match_in_matchdays[data.match_day] == undefined ||

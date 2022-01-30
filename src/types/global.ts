@@ -35,6 +35,9 @@ export enum IEventType {
   RED_cARD = "Red card",
   OFFSIDE = "Offside",
 }
+
+export enum IMatchStatus {}
+
 export interface IPlayer extends ITable {
   description: string;
   full_name: string;
