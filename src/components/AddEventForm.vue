@@ -83,11 +83,15 @@
       if (res) {
         data.home_score =
           res.data?.filter(
-            (event: Events) => event.team_id !== data.home_team?.id,
+            (event: Events) =>
+              event.team_id !== data.home_team?.id &&
+              event.type.toLowerCase() === "goal",
           ).length || 0;
         data.away_score =
           res.data?.filter(
-            (event: Events) => event.team_id !== data.away_team?.id,
+            (event: Events) =>
+              event.team_id !== data.away_team?.id &&
+              event.type.toLowerCase() === "goal",
           ).length || 0;
       }
     });
@@ -102,16 +106,30 @@
       await generateCommentary(
         `Player ${player?.player.full_name} scored for team ${
           data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name + ""
+            ? data.home_team?.name
+            : data.away_team?.name
+        } against ${
+          data.home_team?.id !== player?.player.team_id
+            ? data.home_team?.name
             : data.away_team?.name
         } to make it ${
           data.home_team?.id === player?.player.team_id
-            ? data.home_score + 1
-            : data.away_score + 1
+            ? ++data.home_score
+            : ++data.away_score
         }-${
           data.home_team?.id === player?.player.team_id
             ? data.away_score
             : data.home_score
+        } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
+        ${
+          data.assisted_by.trim() == ""
+            ? ""
+            : `assisted by ${
+                data.allData.find(
+                  (player: IPlayerMatch) =>
+                    player.player_id === data.assisted_by,
+                )?.player.full_name
+              }`
         }`,
       ).then((res) => {
         data.home_team?.id === player?.player.team_id;
