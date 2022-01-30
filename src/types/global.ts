@@ -126,11 +126,22 @@ export interface IMatchTeamJoin extends IMatch {
   home: Teams;
 }
 
+export interface IPlayerStat {
+  player: {
+    id: string;
+    name: string;
+  };
+  amount?: number;
+  team: {
+    name: string;
+  };
+}
+
 export interface Events extends ITable {
   id: string;
   player_id: string;
   team_id: string;
-  assist: string;
+  assist_id: string;
   type: string;
   commentary: string;
   match_id: string;
