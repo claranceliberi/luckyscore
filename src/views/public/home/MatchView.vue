@@ -129,7 +129,12 @@
         state.isError = true;
       })
       .then(() => {
-        const tempisLive = (allDetails.value as any).match_status === "live";
+        const tempisLive =
+          (allDetails.value as any).match_status ===
+            MatchStatusEnum.FIRST_HALF_ONGOING ||
+          (allDetails.value as any).match_status ===
+            MatchStatusEnum.SECOND_HALF_ONGOING ||
+          (allDetails.value as any).match_status === MatchStatusEnum.HALF_TIME;
         const tempisFinished =
           (allDetails.value as any).match_status === MatchStatusEnum.FULL_TIME;
 
@@ -191,7 +196,7 @@
           },
         ];
         state.isLoading = false;
-        state.isFinished = tempisFinished;
+        state.isFinished = tempisFinished || tempisLive;
         state.stats = tempstats;
         state.allDetails = allDetails;
         state.isError = false;
