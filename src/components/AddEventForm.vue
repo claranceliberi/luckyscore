@@ -6,10 +6,12 @@
     IPlayerMatch,
     Teams,
     IEventType,
+    Events,
   } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { generateCommentary } from "@/lib/commentary";
   import { toast } from "@/plugins/toaster/vue-toast";
+  import { fetchMatchDetails } from "@/composables/useMatchinfo";
   const props = defineProps<NewEventProps>();
 
   type NewEventProps = {
@@ -31,6 +33,8 @@
     away_team: Teams | null;
     teams: Teams[];
     commentary: string;
+    home_score: number;
+    away_score: number;
   }>({
     type: "",
     done_by: "",
@@ -41,6 +45,8 @@
     away_team: null,
     commentary: "",
     teams: [],
+    home_score: 0,
+    away_score: 0,
   });
 
   const isLoading = ref(true);
@@ -70,7 +76,22 @@
         });
       }
     });
-
+  supabase
+    .from<Events>("events")
+    .select("*")
+    .eq("match_id", props.match + "")
+    .then((res) => {
+      if (res) {
+        data.home_score =
+          res.data?.filter(
+            (event: Events) => event.team_id !== data.home_team?.id,
+          ).length || 0;
+        data.away_score =
+          res.data?.filter(
+            (event: Events) => event.team_id !== data.away_team?.id,
+          ).length || 0;
+      }
+    });
   async function eventSelectedType(type: string) {
     data.type = type;
   }
@@ -81,21 +102,21 @@
     );
     if (data.type === IEventType.Goal) {
       await generateCommentary(
-        data.home_team?.name +
-          " FC VS " +
-          data.away_team?.name +
-          ", " +
-          player?.player.full_name +
-          " scores a goal (" +
-          data.home_team?.id ===
-          player?.player.team_id
-          ? data.home_team?.name + " )"
-          : data.away_team?.name + " )" + data.assisted_by !== ""
-          ? "assisted by " +
-            data.allData.find((e) => e.player_id === data.assisted_by)?.player
-              .full_name
-          : "" + " 56 minutes",
+        `Player ${player?.player.full_name} scored for team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name + ""
+            : data.away_team?.name
+        } to make it ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_score + 1
+            : data.away_score + 1
+        }-${
+          data.home_team?.id === player?.player.team_id
+            ? data.away_score
+            : data.home_score
+        }`,
       ).then((res) => {
+        data.home_team?.id === player?.player.team_id;
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
     } else if (
@@ -103,14 +124,13 @@
       data.type === IEventType.SHOT
     ) {
       await generateCommentary(
-        data.type +
-          " by " +
-          player?.player.full_name +
-          " who playes for " +
-          data.home_team?.id ===
-          player?.player.team_id
-          ? data.home_team?.name + ""
-          : data.away_team?.name + " 56 min",
+        `${player?.player.full_name} makes ${
+          data.type
+        } but not goal scored team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } time 78 minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
@@ -119,18 +139,11 @@
       data.type === IEventType.RED_CARD
     ) {
       await generateCommentary(
-        data.home_team?.name +
-          " FC VS " +
-          data.away_team?.name +
-          " " +
-          data.type +
-          " to " +
-          player?.player.full_name +
-          " who playes for " +
-          data.home_team?.id ===
-          player?.player.team_id
-          ? data.home_team?.name + ""
-          : data.away_team?.name + " 56 min",
+        `${data.type} to ${player?.player.full_name} plays for ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } time 49 minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
@@ -139,20 +152,26 @@
       data.type === IEventType.OFFSIDE
     ) {
       await generateCommentary(
-        data.type + " by " + player?.player.full_name + " 56 min",
+        `${player?.player.full_name} plays for ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } makes a ${data.type} time 29 minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
     } else if (data.type === IEventType.CORNER) {
-      await generateCommentary(
-        data.type + " to team " + data.home_team?.id === player?.player.team_id
-          ? data.home_team?.name + ""
-          : data.away_team?.name + " 56 min by" + player?.player.full_name,
-      ).then((res) => {
+      await generateCommentary(`
+        ${data.type}  ${
+        data.home_team?.id === player?.player.team_id
+          ? data.home_team?.name
+          : data.away_team?.name
+      } ${player?.player.full_name},
+      `).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
     }
-    if (data.type !== "" && data.done_by !== "") {
+    if (data.type.trim() !== "" && data.done_by.trim() !== "") {
       await supabase
         .from("events")
         .insert({
@@ -181,6 +200,7 @@
     "Corner",
     "Yellow card",
     "Red card",
+    "Offside",
   ];
 </script>
 
