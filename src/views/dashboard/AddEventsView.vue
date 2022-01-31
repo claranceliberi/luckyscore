@@ -53,7 +53,6 @@
       SECOND_HALF_ONGOING: "Are you sure you want to start second half ?",
       FULL_TIME: "Are you sure you want to end the match",
     };
-    const matchId = route.params.matchId as string;
     const c = (status: MatchStatusEnum) => confirm(messages[status.toString()]);
 
     switch (status) {

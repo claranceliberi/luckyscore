@@ -146,7 +146,7 @@
           data.home_team?.id === player?.player.team_id
             ? data.home_team?.name
             : data.away_team?.name
-        } time 78 minutes`,
+        }  time 78 minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
