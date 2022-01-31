@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { reactive } from "vue";
+  import { onMounted, onUnmounted, reactive } from "vue";
   import { Events } from "@/types/global";
   import { supabase } from "@/lib/supabase";
+  import { RealtimeSubscription } from "@supabase/supabase-js";
   interface Props {
     match: string | string[];
   }
@@ -18,19 +19,45 @@
     isLoading: true,
   });
   const props = defineProps<Props>();
-
-  supabase
-    .from<Events>("events")
-    .select(
-      "*,player!events_player_id_fkey(id,full_name),team!events_team_id_fkey(id,name)",
-    )
-    .eq("match_id", props.match + "")
-    .then((res) => {
-      if (res) {
-        data.events = res.data || [];
-        data.isLoading = false;
-      }
-    });
+  let mySubscription: RealtimeSubscription = supabase
+    .from("*")
+    .on("*", async (payload) => {
+      await getMatchEvents();
+    })
+    .subscribe();
+  onMounted(async () => {
+    await getMatchEvents();
+  });
+  onUnmounted(() => {
+    mySubscription?.unsubscribe();
+  });
+  async function getMatchEvents() {
+    await supabase
+      .from<Events>("events")
+      .select(
+        "*,player!events_player_id_fkey(id,full_name),team!events_team_id_fkey(id,name)",
+      )
+      .eq("match_id", props.match + "")
+      .order("created_at", { ascending: false })
+      .then((res) => {
+        if (res) {
+          data.events = res.data || [];
+          data.isLoading = false;
+        }
+      });
+  }
+  // supabase
+  //   .from<Events>("events")
+  //   .select(
+  //     "*,player!events_player_id_fkey(id,full_name),team!events_team_id_fkey(id,name)",
+  //   )
+  //   .eq("match_id", props.match + "")
+  //   .then((res) => {
+  //     if (res) {
+  //       data.events = res.data || [];
+  //       data.isLoading = false;
+  //     }
+  //   });
 </script>
 
 <template>

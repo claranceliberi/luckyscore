@@ -3,7 +3,6 @@ import SignUp from "@/views/auth/SignupView.vue";
 import AddEventsView from "@/views/dashboard/AddEventsView.vue";
 import AddPlayerView from "@/views/dashboard/AddPlayerView.vue";
 import TeamDetailsView from "@/views/dashboard/TeamDetailsView.vue";
-import FormationsVue from "@/views/FormationsView.vue";
 import NewTeamView from "@/views/NewTeamView.vue";
 import NotFound from "@/views/NotFoundView.vue";
 import { createRouter, createWebHistory } from "vue-router";
@@ -13,7 +12,6 @@ import MatchesView from "~/views/dashboard/MatchesView.vue";
 import NewMatch from "~/views/dashboard/NewMatch.vue";
 import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
 import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
-import FormationsView from "@/views/dashboard/AddFormationsView.vue";
 import DashboardTeams from "~/views/dashboard/TeamsView.vue";
 import Dashboard from "~/views/DashboardView.vue";
 import Fixtures from "~/views/public/home/FixturesView.vue";
@@ -45,11 +43,6 @@ const routes = [
         name: "NewDashboardMatch",
         component: NewMatch,
       },
-      {
-        path: "/dashboard/matches/:matchId/formation",
-        name: "MatchFormations",
-        component: FormationsView,
-      },
 
       {
         path: "/dashboard/teams/new",
@@ -73,11 +66,6 @@ const routes = [
         component: AddEventsView,
       },
     ],
-  },
-  {
-    path: "/formations",
-    name: "Formations",
-    component: FormationsVue,
   },
   {
     path: "/",
