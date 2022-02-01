@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IMatchprogress, MatchStatusEnum } from "@/types/global";
+  import { MatchStatusEnum } from "@/types/global";
   import Vue from "vue";
 
   interface Props {
