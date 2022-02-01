@@ -17,6 +17,7 @@
     )
     .then((res) => {
       const response_data = res.data || [];
+
       fixtures.matches = res.data || [];
       isLoading.value = false;
       fixtures.name = "Matchday 1";
@@ -33,27 +34,25 @@
 </script>
 
 <template>
-  <div
-    v-if="!isLoading && Object.keys(match_in_matchdays).length > 0"
-    class="my-6"
-  >
-    <div
-      v-for="[key, value] of Object.entries(match_in_matchdays)"
-      :key="key"
-      class="my-6"
-    >
-      <MatchDay
-        url="/match/:matchId"
-        :name="'Matchday ' + key"
-        :matches="value"
-      />
+  <div class="my-6">
+    <div v-if="!isLoading && Object.keys(match_in_matchdays).length > 0">
+      <div
+        v-for="[key, value] of Object.entries(match_in_matchdays)"
+        :key="key"
+      >
+        <MatchDay
+          url="/match/:matchId"
+          :name="'Matchday ' + key"
+          :matches="value"
+        />
+      </div>
     </div>
-  </div>
-  <div v-else-if="isLoading">
-    <h1>Loading fixtures...</h1>
-  </div>
 
-  <div v-else>
-    <h1>Something went wrong</h1>
+    <span v-else-if="isLoading">Loading fixtures...</span>
+
+    <span v-else-if="Object.keys(match_in_matchdays).length === 0"
+      >No fixtures to show</span
+    >
+    <span v-else>Something went wrong</span>
   </div>
 </template>

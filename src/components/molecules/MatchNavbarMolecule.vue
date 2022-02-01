@@ -11,7 +11,10 @@
   });
 
   const scoreBoard = computed(() => {
-    if (props.match)
+    if (props.match) {
+      console.log(
+        new Date().valueOf() - parseInt(props.match?.first_half_started_at),
+      );
       return {
         homeTeam: props.match.home.name,
         awayTeam: props.match.away.name,
@@ -28,6 +31,8 @@
         isFullTime: props.match.match_status == MatchStatusEnum.FULL_TIME,
         date: new Date(props.match.to_be_played_at).toLocaleDateString(),
       };
+    }
+
     return null;
   });
 </script>

@@ -79,7 +79,9 @@
   import { useRoute } from "vue-router";
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
   import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
-  import { onMounted, reactive } from "vue";
+  import { computed, onMounted, reactive } from "vue";
+  import { MatchStatusEnum } from "@/types/global";
+  import { isMatchLive } from "@/composables/isLive";
 
   const state = reactive<{
     isLoading: boolean;
@@ -94,8 +96,13 @@
     homeSelected: true,
   });
 
+  allDetails.value = null;
   const route = useRoute();
   const id = route.params.id || "";
+  const isLive = computed(() => {
+    if (!state.allDetails) return false;
+    return isMatchLive(state.allDetails.value.status);
+  });
 
   onMounted(async () => {
     await fetchMatchDetails(id.toString())
@@ -104,9 +111,10 @@
         state.isError = true;
       })
       .then(() => {
-        const tempisLive = (allDetails.value as any).match_status === "live";
+        const tempisLive =
+          (allDetails.value as any).match_status === isLive.value;
         const tempisFinished =
-          (allDetails.value as any).match_status === "finished";
+          (allDetails.value as any).match_status === MatchStatusEnum.FULL_TIME;
 
         //stats
 

@@ -77,14 +77,14 @@
 
       <div class="line bg-gray-400 h-20"></div>
       <div class="flex-initial items-center">
-        <div>
+        <div v-if="time">
           {{
             new Date(time)?.toString().split(" ")[2] +
             " " +
             new Date(time)?.toString().split(" ")[1]
           }}
         </div>
-        <div>
+        <div v-if="time">
           {{
             new Date(time)?.toString().split(" ")[4].split(":")[0] +
             ":" +
