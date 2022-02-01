@@ -25,6 +25,8 @@
 
   const scoreBoard = computed(() => {
     if (props.match) {
+      console.log(props.match);
+
       console.log(
         new Date().valueOf() - parseInt(props.match?.first_half_started_at),
       );
