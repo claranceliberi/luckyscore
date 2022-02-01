@@ -74,8 +74,6 @@
     singleResults.match_played =
       singleResults.loss + singleResults.wins + singleResults.draws;
 
-    console.log(singleResults);
-
     allResults.push(singleResults);
   });
 

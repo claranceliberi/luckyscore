@@ -1,16 +1,19 @@
 <script setup lang="ts">
-  import { useRoute } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
   import MatchNavbarMolecule from "../../components/molecules/MatchNavbarMolecule.vue";
   import MatchEvents from "@/components/MatchEvents.vue";
   import AddEventForm from "@/components/AddEventForm.vue";
-  import { IMatch, IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
+  import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { ref, computed, onBeforeMount } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
+  import { toast } from "@/plugins/toaster/vue-toast";
 
-  const router = useRoute();
+  const route = useRoute();
+  const router = useRouter();
 
   const match = ref<IMatchTeamJoin | null>(null);
+
   const loading = ref(true);
   const isLive = computed(() => {
     if (match.value)
@@ -23,16 +26,26 @@
     return false;
   });
 
+  const isExactLive = computed(() => {
+    if (match.value)
+      return (
+        match.value.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
+        match.value.match_status == MatchStatusEnum.SECOND_HALF_ONGOING
+      );
+
+    return false;
+  });
   onBeforeMount(async () => {
     const { data } = await supabase
       .from<IMatchTeamJoin>("match")
       .select("*,away:away_team ( * ),home:home_team ( * )")
-      .eq("id", router.params.matchId as string);
+      .eq("id", route.params.matchId as string);
     if (data) match.value = data[0];
+
     loading.value = false;
   });
 
-  function changeMatchStatus(status: MatchStatusEnum) {
+  async function changeMatchStatus(status: MatchStatusEnum) {
     const messages: Record<string, string> = {
       NO_LINEUP: "Are you sure you want to set up match ?",
       FIRST_HALF_ONGOING: "Are you sure you want to start the match ?",
@@ -40,27 +53,81 @@
       SECOND_HALF_ONGOING: "Are you sure you want to start second half ?",
       FULL_TIME: "Are you sure you want to end the match",
     };
-
     const c = (status: MatchStatusEnum) => confirm(messages[status.toString()]);
 
     switch (status) {
       case MatchStatusEnum.NO_LINEUP:
-        if (c(MatchStatusEnum.NO_LINEUP)) console.log("we want to make lineup");
+        if (c(MatchStatusEnum.NO_LINEUP))
+          router.push(`/dashboard/matches/${route.params.matchId}/formation`);
         break;
       case MatchStatusEnum.FIRST_HALF_ONGOING:
-        if (c(MatchStatusEnum.FIRST_HALF_ONGOING))
-          console.log("we want to start match");
+        if (c(MatchStatusEnum.FIRST_HALF_ONGOING)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.FIRST_HALF_ONGOING,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Match started");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.FIRST_HALF_ONGOING;
+          }
+        }
         break;
       case MatchStatusEnum.HALF_TIME:
-        if (c(MatchStatusEnum.HALF_TIME))
-          console.log("we want to end first half ");
+        if (c(MatchStatusEnum.HALF_TIME)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.HALF_TIME,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Half In");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.HALF_TIME;
+          }
+        }
+
         break;
       case MatchStatusEnum.SECOND_HALF_ONGOING:
-        if (c(MatchStatusEnum.SECOND_HALF_ONGOING))
-          console.log("we want to start second half ");
+        if (c(MatchStatusEnum.SECOND_HALF_ONGOING)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.SECOND_HALF_ONGOING,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Second half ongoing");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.SECOND_HALF_ONGOING;
+          }
+        }
         break;
       case MatchStatusEnum.FULL_TIME:
-        if (c(MatchStatusEnum.FULL_TIME)) console.log("we want to end match ");
+        if (c(MatchStatusEnum.FULL_TIME)) {
+          const { data: updateData, error: updateError } = await supabase
+            .from("match")
+            .update({
+              match_status: MatchStatusEnum.FULL_TIME,
+            })
+            .match({ id: route.params.matchId });
+
+          if (updateError) toast.error(updateError?.message);
+          else {
+            toast.success("Match has ended succesfully");
+            if (match.value)
+              match.value.match_status = MatchStatusEnum.FULL_TIME;
+          }
+        }
         break;
       default:
         alert("Incorect Choice made");
@@ -177,14 +244,18 @@
           </div>
         </div>
 
-        <AddEventForm></AddEventForm>
+        <AddEventForm
+          v-if="isExactLive"
+          :match="route.params.matchId"
+        ></AddEventForm>
+        <div v-else>Waiting for match to start/restart</div>
       </div>
       <div v-else>
         <div class="mt-10">We need to take some rest..., The match is over</div>
       </div>
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 flex flex-col items-center">
-      <MatchEvents :events-data="eventsData"></MatchEvents>
+      <MatchEvents :match="route.params.matchId"></MatchEvents>
       <div class="flex-1"></div>
     </div>
   </div>

@@ -1,9 +1,22 @@
 <script lang="ts" setup>
-  import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
-  import { computed } from "vue";
+  import { IMatchTeamJoin, MatchStatusEnum, Teams } from "@/types/global";
+  import { computed, onMounted, onUnmounted, reactive } from "vue";
+  import { Events } from "@/types/global";
+  import { supabase } from "@/lib/supabase";
+  import { RealtimeSubscription } from "@supabase/supabase-js";
+
+  const data = reactive<{
+    homeScore: number;
+    awayScore: number;
+    isLoading: boolean;
+  }>({
+    homeScore: 0,
+    awayScore: 0,
+    isLoading: true,
+  });
 
   interface Props {
-    dashboard: boolean;
+    dashboard?: boolean;
     match: IMatchTeamJoin | null;
   }
   const props = withDefaults(defineProps<Props>(), {
@@ -18,7 +31,6 @@
       return {
         homeTeam: props.match.home.name,
         awayTeam: props.match.away.name,
-        scores: `${props.match.home_score} -  ${props.match.away_score}`,
         shouldShowScores:
           props.match.match_status == MatchStatusEnum.FULL_TIME ||
           props.match.match_status == MatchStatusEnum.FIRST_HALF_ONGOING ||
@@ -35,6 +47,42 @@
 
     return null;
   });
+
+  let mySubscription: RealtimeSubscription = supabase
+    .from("*")
+    .on("*", async (payload) => {
+      await getMatchEvents();
+    })
+    .subscribe();
+  onMounted(async () => {
+    await getMatchEvents();
+  });
+  onUnmounted(() => {
+    mySubscription?.unsubscribe();
+  });
+  async function getMatchEvents() {
+    await supabase
+      .from<Events>("events")
+      .select("*")
+      .eq("match_id", props.match?.id + "")
+      .then((res) => {
+        if (res) {
+          data.homeScore =
+            res.data?.filter(
+              (event) =>
+                event.type.toLowerCase() === "goal" &&
+                event.team_id === props.match?.home.id,
+            ).length || 0;
+          data.awayScore =
+            res.data?.filter(
+              (event) =>
+                event.type.toLowerCase() === "goal" &&
+                event.team_id === props.match?.away.id,
+            ).length || 0;
+          data.isLoading = false;
+        }
+      });
+  }
 </script>
 
 <template>
@@ -62,11 +110,7 @@
         <p class="text-white text-lg">{{ scoreBoard?.homeTeam }}</p>
       </div>
       <div class="flex flex-col items-center gap-1 text-lg text-white">
-        <h1>
-          {{
-            scoreBoard?.shouldShowScores ? scoreBoard.scores : scoreBoard?.date
-          }}
-        </h1>
+        <h1>{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
         <p class="text-gray-400">
           {{
             scoreBoard?.isLive
@@ -75,7 +119,7 @@
               ? "HT"
               : scoreBoard?.isFullTime
               ? "FT"
-              : scoreBoard?.date
+              : ""
           }}
         </p>
       </div>

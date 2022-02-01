@@ -11,7 +11,7 @@
             :away-team="match.away_team.name"
             :home-score="match.home_score"
             :away-score="match.away_score"
-            :time="`${match.time}${match.to_be_played_at}`"
+            :time="match.to_be_played_at"
             :match-status="match.match_status"
           />
         </router-link>

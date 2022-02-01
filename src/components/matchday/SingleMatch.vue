@@ -15,22 +15,46 @@
 </script>
 <template>
   <div class="px-10">
-    <!-- <div
-      v-if="matchStatus === 'Live'"
-      class="flex items-center justify-between mr-18"
-    >
-      <p class="text-red-500">
-        {{ matchStatus }}
-      </p>
-      <small class="text-red-500 mr-5">05'</small>
-    </div>
+    <!-- match on going -->
     <div
-      v-else-if="matchStatus === 'Finished'"
+      v-if="
+        matchStatus === MatchStatusEnum.FIRST_HALF_ONGOING ||
+        matchStatus === MatchStatusEnum.SECOND_HALF_ONGOING
+      "
       class="flex items-center justify-between mr-18"
     >
       <small class="text-red-500"></small>
-      <p class="text-red-500 mr-5">FT</p>
-    </div> -->
+      <small class="text-red-500 mr-5">05'</small>
+    </div>
+
+    <!-- match not started  -->
+    <div
+      v-else-if="
+        matchStatus === MatchStatusEnum.NO_STARTED ||
+        matchStatus === MatchStatusEnum.NO_LINEUP
+      "
+      class="flex items-center justify-between mr-18"
+    >
+      <small class="text-red-500"></small>
+      <small class="text-red-500 mr-5">&emsp;</small>
+    </div>
+    <!-- full time match  -->
+
+    <div
+      v-else-if="matchStatus === MatchStatusEnum.HALF_TIME"
+      class="flex items-center justify-between mr-18"
+    >
+      <small class="text-red-500"></small>
+      <small class="text-red-500 mr-3">Half Time</small>
+    </div>
+
+    <div
+      v-else-if="matchStatus === MatchStatusEnum.FULL_TIME"
+      class="flex items-center justify-between mr-18"
+    >
+      <small class="text-red-500"></small>
+      <small class="text-red-500 mr-5">FT</small>
+    </div>
 
     <div
       class="flex justify-between flex-wrap items-center font-medium text-sm"

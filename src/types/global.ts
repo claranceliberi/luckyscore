@@ -17,11 +17,26 @@ export interface ILink {
   href: string;
 }
 
+export enum IEventType {
+  GOAL = "Goal",
+  SHOT = "Shot",
+  SHOT_ON_TARGET = "Shot on target",
+  FOUL = "Foul",
+  CORNER = "Corner",
+  YELLOW_CARD = "Yellow card",
+  RED_CARD = "Red card",
+  OFFSIDE = "Offside",
+}
+
+export enum IMatchStatus {}
+
 export interface IPlayer extends ITable {
   description: string;
   full_name: string;
   id: string;
-  team: Teams;
+  team?: Teams;
+  created_at: string;
+  team_id: string;
 }
 export interface PlayerMatchCreate {
   match: string;
@@ -71,20 +86,28 @@ export interface IMatch extends ITable {
   in_charge: string;
   description: string;
   match_status: MatchStatusEnum;
-  home_team: Teams;
-  away_team: Teams;
+  home_team: string;
+  away_team: string;
   home_shots: number;
   away_shots: number;
   home_score: number;
   away_score: number;
   home_lineup: string;
   away_lineup: string;
+  home_formation: string;
+  away_formation: string;
   home_corners: number;
   away_corners: number;
   home_shots_on_target: number;
   away_shots_on_target: number;
   home_fouls: number;
   away_fouls: number;
+  home_yellow_cards: number;
+  away_yellow_cards: number;
+  home_red_cards: number;
+  away_red_cards: number;
+  home_offsides: number;
+  away_offsides: number;
   result_status: string;
   first_half_started_at: string;
   first_half_ended_at: string;
@@ -96,6 +119,31 @@ export interface IMatch extends ITable {
 export interface IMatchTeamJoin extends IMatch {
   away: Teams;
   home: Teams;
+}
+
+export interface IPlayerStat {
+  player: {
+    id: string;
+    name: string;
+  };
+  amount?: number;
+  team: {
+    name: string;
+  };
+}
+
+export interface Events extends ITable {
+  id: string;
+  player_id: string;
+  team_id: string;
+  assist_id: string;
+  type: string;
+  commentary: string;
+  match_id: string;
+  player: IPlayer;
+  assist_player: IPlayer;
+  team: Teams;
+  match: IMatch;
 }
 
 export interface IFixtures {

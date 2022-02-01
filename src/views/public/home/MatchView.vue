@@ -32,20 +32,23 @@
               </div>
             </div>
             <div
+              v-if="state.homeSelected"
               class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
             >
               <FormationCard
-                :formation="
-                  state.homeSelected
-                    ? state.allDetails?.value?.home_formation
-                    : state.allDetails?.value?.away_formation
-                "
-                :team="
-                  state.homeSelected
-                    ? state.allDetails?.value?.home_team?.id
-                    : state.allDetails?.value?.away_team?.id
-                "
-                :match-id="state.allDetails?.value?.id"
+                :formation="allDetails?.home_formation"
+                :team="allDetails?.home?.id"
+                :match-id="allDetails?.id"
+              />
+            </div>
+            <div
+              v-else
+              class="forms flex justify-around items-center flex-wrap gap-5 mt-4"
+            >
+              <FormationCard
+                :formation="allDetails?.away_formation"
+                :team="allDetails?.away?.id"
+                :match-id="allDetails?.id"
               />
             </div>
           </div>
@@ -64,7 +67,7 @@
           </div>
         </div>
       </div>
-      <LiveTable></LiveTable>
+      <LiveEvents :events="allEvents || []"></LiveEvents>
     </div>
   </div>
   <div v-else class="my-10">Match not found</div>
@@ -72,15 +75,21 @@
 
 <script setup lang="ts">
   import MatchInfo from "@/components/MatchView/MatchInfo.vue";
-  import LiveTable from "@/components/MatchView/LiveTable.vue";
+  import LiveEvents from "@/components/MatchView/LiveEvents.vue";
   import MatchStats from "@/components/MatchView/MatchStats.vue";
   import MatchPrediction from "@/components/MatchView/MatchPrediction.vue";
   import FormationCard from "@/components/formations/FormationCard.vue";
   import { useRoute } from "vue-router";
   import MatchNavbarMolecule from "@/components/molecules/MatchNavbarMolecule.vue";
-  import { fetchMatchDetails, allDetails } from "@/composables/useMatchinfo";
-  import { computed, onMounted, reactive } from "vue";
+  import {
+    fetchMatchDetails,
+    allDetails,
+    allEvents,
+  } from "@/composables/useMatchinfo";
+  import { computed, onMounted, onUnmounted, reactive } from "vue";
   import { MatchStatusEnum } from "@/types/global";
+  import { RealtimeSubscription } from "@supabase/supabase-js";
+  import { supabase } from "@/lib/supabase";
   import { isMatchLive } from "@/composables/isLive";
 
   const state = reactive<{
@@ -104,7 +113,22 @@
     return isMatchLive(state.allDetails.value.status);
   });
 
+  let mySubscription: RealtimeSubscription = supabase
+    .from("*")
+    .on("*", async (payload) => {
+      await fetchAllDetailsData();
+    })
+    .subscribe();
+
   onMounted(async () => {
+    await fetchAllDetailsData();
+  });
+
+  onUnmounted(() => {
+    mySubscription?.unsubscribe();
+  });
+
+  const fetchAllDetailsData = async () => {
     await fetchMatchDetails(id.toString())
       .catch(() => {
         state.isLoading = false;
@@ -112,7 +136,11 @@
       })
       .then(() => {
         const tempisLive =
-          (allDetails.value as any).match_status === isLive.value;
+          (allDetails.value as any).match_status ===
+            MatchStatusEnum.FIRST_HALF_ONGOING ||
+          (allDetails.value as any).match_status ===
+            MatchStatusEnum.SECOND_HALF_ONGOING ||
+          (allDetails.value as any).match_status === MatchStatusEnum.HALF_TIME;
         const tempisFinished =
           (allDetails.value as any).match_status === MatchStatusEnum.FULL_TIME;
 
@@ -174,12 +202,12 @@
           },
         ];
         state.isLoading = false;
-        state.isFinished = tempisFinished;
+        state.isFinished = tempisFinished || tempisLive;
         state.stats = tempstats;
         state.allDetails = allDetails;
         state.isError = false;
       });
-  });
+  };
 </script>
 
 <style scoped></style>
