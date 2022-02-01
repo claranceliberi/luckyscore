@@ -1,9 +1,12 @@
 <script lang="ts" setup>
   import { IMatchTeamJoin, MatchStatusEnum, Teams } from "@/types/global";
-  import { computed, onMounted, onUnmounted, reactive } from "vue";
+  import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
   import { Events } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { RealtimeSubscription } from "@supabase/supabase-js";
+
+  import moment from "moment";
+  import { useMatchProgress } from "@/composables/useMatchProgres";
 
   const data = reactive<{
     homeScore: number;
@@ -23,13 +26,20 @@
     dashboard: false,
   });
 
+  const currentMinute = ref();
+
+  setInterval(() => {
+    if (props.match) {
+      currentMinute.value = useMatchProgress(
+        props.match.match_status,
+        props.match.first_half_started_at,
+        props.match.second_half_started_at,
+      );
+    }
+  }, 10000);
+
   const scoreBoard = computed(() => {
     if (props.match) {
-      console.log(props.match);
-
-      console.log(
-        new Date().valueOf() - parseInt(props.match?.first_half_started_at),
-      );
       return {
         homeTeam: props.match.home.name,
         awayTeam: props.match.away.name,
@@ -116,12 +126,12 @@
         <p class="text-gray-400">
           {{
             scoreBoard?.isLive
-              ? "Live"
+              ? currentMinute || "Loading..."
               : scoreBoard?.isHalfTime
               ? "HT"
               : scoreBoard?.isFullTime
               ? "FT"
-              : ""
+              : "Loading"
           }}
         </p>
       </div>

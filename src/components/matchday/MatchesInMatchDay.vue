@@ -1,7 +1,7 @@
 <template>
   <h1 class="font-bold">{{ name }}</h1>
   <div class="grid md:grid-cols-3 sm:grid-cols-1 gap-6 mt-3">
-    <div v-for="(match, index) in matches" :key="index">
+    <div v-for="match in props.matches" :key="match.id">
       <div
         class="border-[#DEE2E6] border rounded py-8 cursor-pointer hover:bg-[#FFFFFF]"
       >
@@ -13,6 +13,8 @@
             :away-score="match.away_score"
             :time="match.to_be_played_at"
             :match-status="match.match_status"
+            :first-half-started-at="match.first_half_started_at"
+            :second-half-started-at="match.second_half_started_at"
           />
         </router-link>
       </div>
@@ -33,11 +35,3 @@
   }
   const props = defineProps<Props>();
 </script>
-
-<style scoped>
-  /* .game-box {
-    border: 1px solid #dee2e6;
-    box-sizing: border-box;
-    border-radius: 4px;
-  } */
-</style>

@@ -21,7 +21,6 @@
     )
     .then((res) => {
       fixtures.matches = res.data || [];
-
       isLoading.value = false;
     });
 </script>
