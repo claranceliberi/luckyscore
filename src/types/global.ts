@@ -17,14 +17,6 @@ export interface ILink {
   href: string;
 }
 
-export type IMatchprogress =
-  | "not_started"
-  | "first_half"
-  | "half_time"
-  | "second_half"
-  | "penalty_shootout"
-  | "finished";
-
 export enum IEventType {
   GOAL = "Goal",
   SHOT = "Shot",

@@ -21,14 +21,14 @@
     )
     .then((res) => {
       fixtures.matches = res.data || [];
+
       isLoading.value = false;
     });
 </script>
 
 <template>
-  <div v-if="!isLoading && fixtures.matches.length > 0" class="my-6">
-    <div class="my-6 flex justify-between">
-      <h1 class="text-2xl font-bold">Matches</h1>
+  <div class="my-6">
+    <div class="float-right">
       <router-link to="/dashboard/matches/new">
         <button
           style="border-radius: 28px"
@@ -38,17 +38,20 @@
         </button>
       </router-link>
     </div>
-    <MatchDay
-      url="/dashboard/live/:matchId/add-events"
-      name=""
-      :matches="fixtures.matches"
-    />
-  </div>
-  <div v-else-if="isLoading">
-    <h1>Loading...</h1>
-  </div>
+    <div v-if="!isLoading && fixtures.matches.length > 0" class="my-6">
+      <div class="my-6 flex justify-between">
+        <h1 class="text-2xl font-bold">Matches</h1>
+      </div>
 
-  <div v-else>
-    <h1>Something went wrong</h1>
+      <MatchDay
+        url="/dashboard/live/:matchId/add-events"
+        name=""
+        :matches="fixtures.matches"
+      />
+    </div>
+    <span v-else-if="isLoading">Loading...</span>
+    <span v-else-if="fixtures.matches.length === 0">No matches to show</span>
+
+    <span v-else>Something went wrong</span>
   </div>
 </template>

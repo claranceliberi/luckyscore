@@ -86,10 +86,11 @@
     allDetails,
     allEvents,
   } from "@/composables/useMatchinfo";
-  import { onMounted, onUnmounted, reactive } from "vue";
+  import { computed, onMounted, onUnmounted, reactive } from "vue";
   import { MatchStatusEnum } from "@/types/global";
   import { RealtimeSubscription } from "@supabase/supabase-js";
   import { supabase } from "@/lib/supabase";
+  import { isMatchLive } from "@/composables/isLive";
 
   const state = reactive<{
     isLoading: boolean;
@@ -104,8 +105,13 @@
     homeSelected: true,
   });
 
+  allDetails.value = null;
   const route = useRoute();
   const id = route.params.id || "";
+  const isLive = computed(() => {
+    if (!state.allDetails) return false;
+    return isMatchLive(state.allDetails.value.status);
+  });
 
   let mySubscription: RealtimeSubscription = supabase
     .from("*")

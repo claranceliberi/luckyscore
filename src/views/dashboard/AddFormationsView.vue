@@ -82,8 +82,6 @@
         })
         .match({ id: route.params.matchId });
 
-      console.log("match formations updated", updateData);
-
       if (updateError) toast.error(updateError?.message);
 
       const { data, error } = await supabase
