@@ -54,6 +54,7 @@
       FULL_TIME: "Are you sure you want to end the match",
     };
     const c = (status: MatchStatusEnum) => confirm(messages[status.toString()]);
+    const currentTime = new Date().toLocaleTimeString();
 
     switch (status) {
       case MatchStatusEnum.NO_LINEUP:
@@ -66,14 +67,19 @@
             .from("match")
             .update({
               match_status: MatchStatusEnum.FIRST_HALF_ONGOING,
+              first_half_started_at: currentTime,
             })
             .match({ id: route.params.matchId });
 
           if (updateError) toast.error(updateError?.message);
           else {
             toast.success("Match started");
-            if (match.value)
+
+            if (match.value) {
+              // set some match important info without reload
               match.value.match_status = MatchStatusEnum.FIRST_HALF_ONGOING;
+              match.value.first_half_started_at = currentTime;
+            }
           }
         }
         break;
@@ -83,14 +89,17 @@
             .from("match")
             .update({
               match_status: MatchStatusEnum.HALF_TIME,
+              first_half_ended_at: currentTime,
             })
             .match({ id: route.params.matchId });
 
           if (updateError) toast.error(updateError?.message);
           else {
             toast.success("Half In");
-            if (match.value)
+            if (match.value) {
               match.value.match_status = MatchStatusEnum.HALF_TIME;
+              match.value.first_half_ended_at = currentTime;
+            }
           }
         }
 
@@ -101,14 +110,17 @@
             .from("match")
             .update({
               match_status: MatchStatusEnum.SECOND_HALF_ONGOING,
+              second_half_started_at: currentTime,
             })
             .match({ id: route.params.matchId });
 
           if (updateError) toast.error(updateError?.message);
           else {
             toast.success("Second half ongoing");
-            if (match.value)
+            if (match.value) {
               match.value.match_status = MatchStatusEnum.SECOND_HALF_ONGOING;
+              match.value.second_half_started_at = currentTime;
+            }
           }
         }
         break;
@@ -118,14 +130,17 @@
             .from("match")
             .update({
               match_status: MatchStatusEnum.FULL_TIME,
+              second_half_ended_at: currentTime,
             })
             .match({ id: route.params.matchId });
 
           if (updateError) toast.error(updateError?.message);
           else {
             toast.success("Match has ended succesfully");
-            if (match.value)
+            if (match.value) {
               match.value.match_status = MatchStatusEnum.FULL_TIME;
+              match.value.second_half_ended_at = currentTime;
+            }
           }
         }
         break;
