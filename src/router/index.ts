@@ -11,6 +11,7 @@ import IndexDashboard from "~/views/dashboard/IndexView.vue";
 import MatchesView from "~/views/dashboard/MatchesView.vue";
 import NewMatch from "~/views/dashboard/NewMatch.vue";
 import MatchDetailsView from "~/views/dashboard/MatchDetailsView.vue";
+import FormationsView from "@/views/dashboard/AddFormationsView.vue";
 import AdminMatchFixturesView from "~/views/dashboard/AdminMatchFixturesView.vue";
 import DashboardTeams from "~/views/dashboard/TeamsView.vue";
 import Dashboard from "~/views/DashboardView.vue";
@@ -43,7 +44,11 @@ const routes = [
         name: "NewDashboardMatch",
         component: NewMatch,
       },
-
+      {
+        path: "/dashboard/matches/:matchId/formation",
+        name: "MatchFormations",
+        component: FormationsView,
+      },
       {
         path: "/dashboard/teams/new",
         name: "newTeam",
