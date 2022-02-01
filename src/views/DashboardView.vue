@@ -25,7 +25,7 @@
 
     if (!authUser && !window.location.hash) {
       console.error("no user");
-      // router.push("/signin");
+      router.push("/signin");
       loading.value = false;
     } else {
       loading.value = false;
