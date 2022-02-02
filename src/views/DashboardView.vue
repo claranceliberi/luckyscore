@@ -19,19 +19,19 @@
   ];
 
   async function checkAuthUser() {
-    loading.value = true;
+    loading.value = false;
 
     const authUser = await supabase.auth.user();
 
     if (!authUser && !window.location.hash) {
       console.error("no user");
-      router.push("/signin");
+      // router.push("/signin");
       loading.value = false;
     } else {
       loading.value = false;
     }
 
-    user.value = authUser?.user_metadata as SupabaseAuthUser;
+    // user.value = authUser?.user_metadata as SupabaseAuthUser;
   }
 
   onBeforeMount(async () => {
