@@ -60,7 +60,7 @@
       <div
         v-for="match in matches"
         :key="match.id"
-        class="flex justify-between w-[25rem] border-2 bg-white my-4 py-5 px-8 rounded-lg"
+        class="flex justify-between w-[30rem] border-2 bg-white my-4 py-5 px-8 rounded-lg"
       >
         <div>
           <div class="flex items-center space-x-2 font-bold py-2">
@@ -74,7 +74,7 @@
         </div>
 
         <div
-          class="text-white bg-primary p-2 flex flex-col justify-between items-center rouned-md"
+          class="text-white bg-primary p-2 flex flex-col justify-between items-center rounded-xl"
         >
           <p>{{ match.away_score }}</p>
           <p>{{ match.home_score }}</p>
