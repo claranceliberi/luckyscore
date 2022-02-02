@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Events } from "@/types/global";
+  import { Events, IEventType } from "@/types/global";
 
   type LiveEventsProps = {
     events: Events[];
@@ -14,19 +14,62 @@
       No events in this match.
     </div>
     <div>
-      <div v-for="event in props.events" :key="event.id" class="my-5">
-        <div class="flex gap-4 items-center mb-1">
-          <h1 class="font-black">{{ event.type }}</h1>
-          <p class="text-xs bg-gray-200 px-2 py-1 rounded-full">
-            {{ event.team?.name }}
-          </p>
+      <div v-for="event in props.events" :key="event.id">
+        <div class="">
+          <div class="flex items-center mb-1 mt-4">
+            <img
+              v-if="event.type === IEventType.GOAL"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/goal.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.SHOT"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/free-kick.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.FOUL"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/foul.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.CORNER"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/corner-kick.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.RED_CARD"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/red.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.YELLOW_CARD"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/yellow.png"
+              :alt="event.type"
+            />
+            <h1 class="ml-3">
+              <span class="font-bold">{{ event.type + "  " }}</span>
+              <span class="font-medium"
+                >by {{ " " + event.player.full_name }}</span
+              >
+            </h1>
+          </div>
+          <div v-if="event.event_image_url" class="flex justify-center py-4">
+            <img
+              class="rounded max-h-40"
+              :src="event.event_image_url"
+              :alt="event.commentary"
+            />
+          </div>
+          <p class="text-gray-600 font-medium">{{ event.commentary }}</p>
+          <p>{{ event.team.name }}</p>
         </div>
-        <p>
-          {{
-            event.commentary ||
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis atque eligendi eum labore et quae ex tempore in ipsa, fuga perferendis aspernatur maiores neque a ut possimus accusamus corporis quas."
-          }}
-        </p>
       </div>
     </div>
   </div>

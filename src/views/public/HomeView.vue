@@ -25,8 +25,8 @@
   onBeforeRouteUpdate((to) => {
     console.log(
       "before update",
-      routesWithoutMenu.includes(to.name.toString()),
-      to.name.toString(),
+      routesWithoutMenu.includes(to.name!.toString()),
+      to.name!.toString(),
     );
     if (to.name)
       showMenu.value = !routesWithoutMenu.includes(to.name.toString());
