@@ -27,17 +27,23 @@
     dashboard: false,
   });
 
-  const currentMinute = ref();
+  const played = computed(
+    () =>
+      props.match?.match_status !== MatchStatusEnum.NO_LINEUP &&
+      props.match?.match_status !== MatchStatusEnum.NO_STARTED,
+  );
 
-  setInterval(() => {
-    if (props.match) {
-      currentMinute.value = useMatchProgress(
-        props.match.match_status,
-        props.match.first_half_started_at,
-        props.match.second_half_started_at,
-      );
-    }
-  }, 60000);
+  let currentMinute = computed(() => null);
+
+  if (props.match) {
+    const { currentMatchMinute } = useMatchProgress(
+      props.match.match_status,
+      props.match.first_half_started_at,
+      props.match.second_half_started_at,
+    );
+
+    currentMinute = computed(() => currentMatchMinute.value);
+  }
 
   const scoreBoard = computed(() => {
     if (props.match) {
@@ -74,25 +80,30 @@
     mySubscription?.unsubscribe();
   });
   async function getMatchEvents() {
+    console.log("getMatchEvents");
     await supabase
       .from<Events>("events")
       .select("*")
-      .eq("match_id", props.match?.id + "")
-      .then((res) => {
+      .eq("match_id", props.match?.id)
+      .order("created_at", { ascending: false })
+      .then(async (res) => {
         if (res) {
-          data.homeScore =
+          data.isLoading = false;
+
+          const homeScore =
             res.data?.filter(
               (event) =>
                 event.type.toLowerCase() === "goal" &&
                 event.team_id === props.match?.home.id,
             ).length || 0;
-          data.awayScore =
+          const awayScore =
             res.data?.filter(
               (event) =>
                 event.type.toLowerCase() === "goal" &&
                 event.team_id === props.match?.away.id,
             ).length || 0;
-          data.isLoading = false;
+          data.homeScore = homeScore;
+          data.awayScore = awayScore;
         }
       });
   }
@@ -122,20 +133,34 @@
         </svg>
         <p class="text-white text-lg">{{ scoreBoard?.homeTeam }}</p>
       </div>
-      <div class="flex flex-col items-center gap-1 text-lg text-white">
-        <h1>{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
-        <p :class="scoreBoard?.isLive ? 'text-green-400' : 'text-gray-400'">
+      <div
+        class="flex flex-col justify-center items-center gap-1 text-lg text-white"
+      >
+        <h1 v-if="played">{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
+        <p
+          :class="
+            scoreBoard?.isLive ||
+            props.match?.match_status === MatchStatusEnum.HALF_TIME
+              ? 'text-green-400'
+              : 'text-gray-400'
+          "
+        >
           {{
             scoreBoard?.isLive
-              ? `${10}'` || "Loading..."
+              ? `${currentMinute}'` || "Loading..."
               : scoreBoard?.isHalfTime
               ? "HT"
               : scoreBoard?.isFullTime
               ? "FT"
-              : "Loading"
+              : "Vs"
           }}
         </p>
-        <span v-if="scoreBoard?.isLive" class="-translate-x-5"
+        <span
+          v-if="
+            scoreBoard?.isLive ||
+            props.match?.match_status === MatchStatusEnum.HALF_TIME
+          "
+          class="-translate-x-5"
           ><LiveIndicator
         /></span>
       </div>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, reactive } from "vue";
-  import { Events, IEventType } from "@/types/global";
+  import { Events, IEventType, IMatchTeamJoin } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { RealtimeSubscription } from "@supabase/supabase-js";
   interface Props {
     match: string | string[];
+    details: IMatchTeamJoin | null;
   }
   // interface MatchEvent {
   //   id: number;
@@ -13,9 +14,13 @@
   // }
   const data = reactive<{
     events: Events[];
+    home_score: number;
+    away_score: number;
     isLoading: boolean;
   }>({
     events: [],
+    away_score: 0,
+    home_score: 0,
     isLoading: true,
   });
   const props = defineProps<Props>();
@@ -39,10 +44,37 @@
       )
       .eq("match_id", props.match + "")
       .order("created_at", { ascending: false })
-      .then((res) => {
+      .then(async (res) => {
         if (res) {
           data.events = res.data || [];
           data.isLoading = false;
+
+          const homeScore =
+            res.data?.filter(
+              (event) =>
+                event.type.toLowerCase() === "goal" &&
+                event.team_id === props.details?.home.id,
+            ).length || 0;
+          const awayScore =
+            res.data?.filter(
+              (event) =>
+                event.type.toLowerCase() === "goal" &&
+                event.team_id === props.details?.away.id,
+            ).length || 0;
+          if (data.home_score !== homeScore || data.away_score !== awayScore) {
+            data.home_score = homeScore;
+            data.away_score = awayScore;
+            const { data: updateData, error } = await supabase
+              .from("match")
+              .update({
+                home_score: homeScore,
+                away_score: awayScore,
+              })
+              .match({ id: props.match });
+            if (error) {
+              console.log(error);
+            }
+          }
         }
       });
   }
