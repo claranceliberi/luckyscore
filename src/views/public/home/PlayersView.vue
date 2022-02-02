@@ -30,7 +30,13 @@
 <template>
   <div v-if="!isLoading">
     <div class="bg-white grid md:grid-cols-9 gap-2 p-3 sm:grid-cols-5">
-      <div v-for="(player, index) in players" :key="index">
+      <div
+        v-for="(player, index) in players
+          .map((value) => ({ value, sort: Math.random() }))
+          .sort((a, b) => a.sort - b.sort)
+          .map(({ value }) => value)"
+        :key="index"
+      >
         <PlayerCard :name="player.name" :team="player.team" />
       </div>
     </div>
