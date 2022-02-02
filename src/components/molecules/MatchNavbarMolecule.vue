@@ -135,7 +135,7 @@
         <p
           :class="
             scoreBoard?.isLive ||
-            props.match.match_status === MatchStatusEnum.HALF_TIME
+            props.match?.match_status === MatchStatusEnum.HALF_TIME
               ? 'text-green-400'
               : 'text-gray-400'
           "
@@ -153,7 +153,7 @@
         <span
           v-if="
             scoreBoard?.isLive ||
-            props.match.match_status === MatchStatusEnum.HALF_TIME
+            props.match?.match_status === MatchStatusEnum.HALF_TIME
           "
           class="-translate-x-5"
           ><LiveIndicator
