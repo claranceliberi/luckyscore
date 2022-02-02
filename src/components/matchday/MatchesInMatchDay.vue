@@ -1,9 +1,9 @@
 <template>
   <h1 class="font-bold">{{ name }}</h1>
-  <div class="grid md:grid-cols-3 sm:grid-cols-1 gap-6 mt-3">
+  <div class="flex flex-wrap gap-4 pt-5">
     <div v-for="match in props.matches" :key="match.id">
       <div
-        class="border-[#DEE2E6] border rounded py-8 cursor-pointer hover:bg-[#FFFFFF]"
+        class="border-[#DEE2E6] border-2 w-[26rem] rounded py-8 cursor-pointer hover:bg-[#FFFFFF]"
       >
         <router-link :to="props.url.replace(/:[\w]+/gi, match.id)">
           <SingleMatch

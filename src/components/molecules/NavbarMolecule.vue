@@ -17,7 +17,7 @@
     class="nav flex px-20 justify-between items-center bg-white"
     :class="`${rounded ? 'rounded-full h-16 mt-8' : 'h-20'}`"
   >
-    <div class="logo">
+    <router-link to="/" class="logo">
       <svg
         width="115"
         height="32"
@@ -46,7 +46,7 @@
           fill="white"
         />
       </svg>
-    </div>
+    </router-link>
     <div class="links">
       <ul class="flex space-x-16 font-medium text-sm">
         <li
