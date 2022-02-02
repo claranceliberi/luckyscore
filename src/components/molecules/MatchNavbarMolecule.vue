@@ -7,6 +7,7 @@
 
   import moment from "moment";
   import { useMatchProgress } from "@/composables/useMatchProgres";
+  import LiveIndicator from "../Atoms/LiveIndicator.vue";
 
   const data = reactive<{
     homeScore: number;
@@ -123,10 +124,10 @@
       </div>
       <div class="flex flex-col items-center gap-1 text-lg text-white">
         <h1>{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
-        <p class="text-gray-400">
+        <p :class="scoreBoard?.isLive ? 'text-green-400' : 'text-gray-400'">
           {{
             scoreBoard?.isLive
-              ? currentMinute || "Loading..."
+              ? `${10}'` || "Loading..."
               : scoreBoard?.isHalfTime
               ? "HT"
               : scoreBoard?.isFullTime
@@ -134,6 +135,9 @@
               : "Loading"
           }}
         </p>
+        <span v-if="scoreBoard?.isLive" class="-translate-x-5"
+          ><LiveIndicator
+        /></span>
       </div>
       <div class="flex flex-col items-center gap-4">
         <svg
