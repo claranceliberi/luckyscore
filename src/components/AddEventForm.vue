@@ -154,6 +154,10 @@
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
+      if (data.type === IEventType.SHOT_ON_TARGET)
+        data.event_image_url = await generateThumbnail(
+          "saving shot on goal  football europe",
+        );
     } else if (
       data.type === IEventType.YELLOW_CARD ||
       data.type === IEventType.RED_CARD
