@@ -2,7 +2,8 @@
   import { isMatchLive } from "@/composables/isLive";
   import { useMatchProgress } from "@/composables/useMatchProgres";
   import { MatchStatusEnum } from "@/types/global";
-  import Vue, { ref } from "vue";
+  import Vue, { computed, ref } from "vue";
+  import LiveIndicator from "@/components/Atoms/LiveIndicator.vue";
 
   interface Props {
     homeTeam: string;
@@ -17,55 +18,67 @@
 
   const props = defineProps<Props>();
   const matchTime = ref();
-  const isLive = isMatchLive(props.matchStatus);
+  const isLive = ref(false);
 
-  matchTime.value = useMatchProgress(
-    props.matchStatus,
-    props.firstHalfStartedAt,
-    props.secondHalfStartedAt,
-  );
+  setInterval(() => {
+    isLive.value = isMatchLive(props.matchStatus);
+    matchTime.value = useMatchProgress(
+      props.matchStatus,
+      props.firstHalfStartedAt,
+      props.secondHalfStartedAt,
+    );
+  }, 20000);
 </script>
 <template>
   <div class="px-10">
-    <!-- match on going -->
-    <div
-      v-if="
-        matchStatus === MatchStatusEnum.FIRST_HALF_ONGOING ||
-        matchStatus === MatchStatusEnum.SECOND_HALF_ONGOING
-      "
-      class="flex items-center justify-between mr-18"
-    >
-      <small class="text-red-500"></small>
-      <small class="text-red-500 mr-5">{{ isLive ? matchTime : "" }}</small>
-    </div>
+    <div class="flex justify-end">
+      <div v-if="isLive">
+        <LiveIndicator />
+      </div>
+      <div>
+        <!-- match on going -->
+        <div
+          v-if="
+            matchStatus === MatchStatusEnum.FIRST_HALF_ONGOING ||
+            matchStatus === MatchStatusEnum.SECOND_HALF_ONGOING
+          "
+          class="flex items-center justify-between mr-18"
+        >
+          <small class="text-green-500"></small>
+          <small class="text-green-500 mr-5">{{
+            isLive ? matchTime : ""
+          }}</small>
+        </div>
 
-    <!-- match not started  -->
-    <div
-      v-else-if="
-        matchStatus === MatchStatusEnum.NO_STARTED ||
-        matchStatus === MatchStatusEnum.NO_LINEUP
-      "
-      class="flex items-center justify-between mr-18"
-    >
-      <small class="text-red-500"></small>
-      <small class="text-red-500 mr-5">&emsp;</small>
-    </div>
-    <!-- full time match  -->
+        <!-- match not started  -->
+        <div
+          v-else-if="
+            matchStatus === MatchStatusEnum.NO_STARTED ||
+            matchStatus === MatchStatusEnum.NO_LINEUP
+          "
+          class="flex items-center justify-between mr-18"
+        >
+          <small class="text-black"></small>
+          <small class="text-black mr-5">&emsp;</small>
+        </div>
+        <!-- full time match  -->
 
-    <div
-      v-else-if="matchStatus === MatchStatusEnum.HALF_TIME"
-      class="flex items-center justify-between mr-18"
-    >
-      <small class="text-red-500"></small>
-      <small class="text-red-500 mr-3">Half Time</small>
-    </div>
+        <div
+          v-else-if="matchStatus === MatchStatusEnum.HALF_TIME"
+          class="flex items-center justify-between mr-18"
+        >
+          <small class="text-green-500"></small>
+          <small class="text-green-500 mr-3">HF</small>
+        </div>
 
-    <div
-      v-else-if="matchStatus === MatchStatusEnum.FULL_TIME"
-      class="flex items-center justify-between mr-18"
-    >
-      <small class="text-red-500"></small>
-      <small class="text-red-500 mr-5">FT</small>
+        <div
+          v-else-if="matchStatus === MatchStatusEnum.FULL_TIME"
+          class="flex items-center justify-between mr-18"
+        >
+          <small class="text-black-500"></small>
+          <small class="text-black mr-5">FT</small>
+        </div>
+      </div>
     </div>
 
     <div
@@ -94,7 +107,7 @@
       </div>
 
       <div
-        v-if="matchStatus === MatchStatusEnum.FULL_TIME"
+        v-if="matchStatus === MatchStatusEnum.FULL_TIME || isLive"
         class="flex-row w-10 text-white rounded text-center"
       >
         <div
