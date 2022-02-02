@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, reactive } from "vue";
-  import { Events } from "@/types/global";
+  import { Events, IEventType } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { RealtimeSubscription } from "@supabase/supabase-js";
   interface Props {
@@ -69,12 +69,61 @@
 
     <div>
       <div v-for="event in data.events" :key="event.id">
-        <h1 class="mb-1 mt-4">
-          <span class="font-bold">{{ event.type + "  " }}</span>
-          <span class="font-medium">by {{ " " + event.player.full_name }}</span>
-        </h1>
-        <p class="text-gray-600 font-medium">{{ event.commentary }}</p>
-        <p>{{ event.team.name }}</p>
+        <div class="">
+          <div class="flex items-center mb-1 mt-4">
+            <img
+              v-if="event.type === IEventType.GOAL"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/goal.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.SHOT"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/free-kick.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.FOUL"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/foul.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.CORNER"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/corner-kick.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.RED_CARD"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/red.png"
+              :alt="event.type"
+            />
+            <img
+              v-else-if="event.type === IEventType.YELLOW_CARD"
+              class="max-w-6 max-h-6"
+              src="@/assets/icons/images/yellow.png"
+              :alt="event.type"
+            />
+            <h1 class="ml-3">
+              <span class="font-bold">{{ event.type + "  " }}</span>
+              <span class="font-medium"
+                >by {{ " " + event.player.full_name }}</span
+              >
+            </h1>
+          </div>
+          <div v-if="event.event_image_url" class="flex justify-center py-4">
+            <img
+              class="rounded max-h-40"
+              :src="event.event_image_url"
+              :alt="event.commentary"
+            />
+          </div>
+          <p class="text-gray-600 font-medium">{{ event.commentary }}</p>
+          <p>{{ event.team.name }}</p>
+        </div>
       </div>
       <div v-if="data.events.length == 0">No events in this match yet</div>
     </div>

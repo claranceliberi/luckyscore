@@ -9,7 +9,7 @@
     Events,
   } from "@/types/global";
   import { supabase } from "@/lib/supabase";
-  import { generateCommentary } from "@/lib/commentary";
+  import { generateCommentary, generateThumbnail } from "@/lib/commentary";
   import { toast } from "@/plugins/toaster/vue-toast";
   import { fetchMatchDetails } from "@/composables/useMatchinfo";
   const props = defineProps<NewEventProps>();
@@ -35,6 +35,7 @@
     commentary: string;
     home_score: number;
     away_score: number;
+    event_image_url: string;
   }>({
     type: "",
     done_by: "",
@@ -47,6 +48,7 @@
     teams: [],
     home_score: 0,
     away_score: 0,
+    event_image_url: "",
   });
 
   const isLoading = ref(true);
@@ -103,38 +105,40 @@
       (player: IPlayerMatch) => player.player_id === data.done_by,
     );
     if (data.type === IEventType.GOAL) {
-      await generateCommentary(
-        `Player ${player?.player.full_name} scored for team ${
-          data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        } against ${
-          data.home_team?.id !== player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        } to make it ${
-          data.home_team?.id === player?.player.team_id
-            ? ++data.home_score
-            : ++data.away_score
-        }-${
-          data.home_team?.id === player?.player.team_id
-            ? data.away_score
-            : data.home_score
-        } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
-        ${
-          data.assisted_by.trim() == ""
-            ? ""
-            : `assisted by ${
-                data.allData.find(
-                  (player: IPlayerMatch) =>
-                    player.player_id === data.assisted_by,
-                )?.player.full_name
-              }`
-        }`,
-      ).then((res) => {
-        data.home_team?.id === player?.player.team_id;
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
+      // await generateCommentary(
+      //   `Player ${player?.player.full_name} scored for team ${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? data.home_team?.name
+      //       : data.away_team?.name
+      //   } against ${
+      //     data.home_team?.id !== player?.player.team_id
+      //       ? data.home_team?.name
+      //       : data.away_team?.name
+      //   } to make it ${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? ++data.home_score
+      //       : ++data.away_score
+      //   }-${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? data.away_score
+      //       : data.home_score
+      //   } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
+      //   ${
+      //     data.assisted_by.trim() == ""
+      //       ? ""
+      //       : `assisted by ${
+      //           data.allData.find(
+      //             (player: IPlayerMatch) =>
+      //               player.player_id === data.assisted_by,
+      //           )?.player.full_name
+      //         }`
+      //   }`,
+      // ).then((res) => {
+      //   data.home_team?.id === player?.player.team_id;
+      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      // });
+
+      data.event_image_url = await generateThumbnail("goal celebration");
     } else if (
       data.type === IEventType.SHOT_ON_TARGET ||
       data.type === IEventType.SHOT
@@ -193,6 +197,7 @@
         .insert({
           type: data.type,
           commentary: data.commentary,
+          event_image_url: data.event_image_url,
           match_id: props.match,
           player_id: data.done_by,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,

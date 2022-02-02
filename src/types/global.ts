@@ -144,6 +144,7 @@ export interface Events extends ITable {
   assist_player: IPlayer;
   team: Teams;
   match: IMatch;
+  event_image_url?: string;
 }
 
 export interface IFixtures {
