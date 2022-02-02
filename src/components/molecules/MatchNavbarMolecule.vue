@@ -27,6 +27,12 @@
     dashboard: false,
   });
 
+  const played = computed(
+    () =>
+      props.match?.match_status !== MatchStatusEnum.NO_LINEUP &&
+      props.match?.match_status !== MatchStatusEnum.NO_STARTED,
+  );
+
   const currentMinute = ref();
 
   setInterval(() => {
@@ -122,17 +128,19 @@
         </svg>
         <p class="text-white text-lg">{{ scoreBoard?.homeTeam }}</p>
       </div>
-      <div class="flex flex-col items-center gap-1 text-lg text-white">
-        <h1>{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
+      <div
+        class="flex flex-col justify-center items-center gap-1 text-lg text-white"
+      >
+        <h1 v-if="played">{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
         <p :class="scoreBoard?.isLive ? 'text-green-400' : 'text-gray-400'">
           {{
             scoreBoard?.isLive
-              ? `${10}'` || "Loading..."
+              ? `${currentMinute}'` || "Loading..."
               : scoreBoard?.isHalfTime
               ? "HT"
               : scoreBoard?.isFullTime
               ? "FT"
-              : "Loading"
+              : "Vs"
           }}
         </p>
         <span v-if="scoreBoard?.isLive" class="-translate-x-5"
