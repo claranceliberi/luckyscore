@@ -36,7 +36,7 @@
         props.match.second_half_started_at,
       );
     }
-  }, 10000);
+  }, 60000);
 
   const scoreBoard = computed(() => {
     if (props.match) {

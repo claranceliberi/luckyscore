@@ -102,10 +102,26 @@ async function fetchMatchDetails(id: string) {
 
     match ? (match.home_score = home_score || 0) : null;
     match ? (match.away_score = away_score || 0) : null;
-    match ? (match.home_shots = home_shots || 0) : null;
-    match ? (match.away_shots = away_shots || 0) : null;
-    match ? (match.home_shots_on_target = home_shots_on_target || 0) : null;
-    match ? (match.away_shots_on_target = away_shots_on_target || 0) : null;
+    match
+      ? (match.home_shots =
+          Number(home_shots) +
+            Number(home_shots_on_target) +
+            Number(home_score) || 0)
+      : null;
+    match
+      ? (match.away_shots =
+          Number(away_shots) +
+            Number(away_shots_on_target) +
+            Number(away_score) || 0)
+      : null;
+    match
+      ? (match.home_shots_on_target =
+          Number(home_shots_on_target) + Number(home_score) || 0)
+      : null;
+    match
+      ? (match.away_shots_on_target =
+          Number(away_shots_on_target) + Number(away_score) || 0)
+      : null;
     match ? (match.home_fouls = home_fouls || 0) : null;
     match ? (match.away_fouls = away_fouls || 0) : null;
     match ? (match.home_yellow_cards = home_yellow_cards || 0) : null;
