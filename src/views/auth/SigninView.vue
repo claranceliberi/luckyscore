@@ -5,7 +5,7 @@
 
   const route = useRoute();
 
-  const REDIRECT_URL = "https://luckyscore.vercel.app/dashboard";
+  const REDIRECT_URL = "https://www.luckyscore.live/dashboard";
 
   async function signIn(provider: "google" | "github" | "facebook") {
     const { user, session, error } = await supabase.auth.signIn(
