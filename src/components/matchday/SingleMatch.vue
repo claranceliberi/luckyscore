@@ -18,13 +18,16 @@
 
   const props = defineProps<Props>();
   const matchTime = ref();
-  const isLive = computed(() => isMatchLive(props.matchStatus));
+  const isLive = ref(false);
 
-  matchTime.value = useMatchProgress(
-    props.matchStatus,
-    props.firstHalfStartedAt,
-    props.secondHalfStartedAt,
-  );
+  setInterval(() => {
+    isLive.value = isMatchLive(props.matchStatus);
+    matchTime.value = useMatchProgress(
+      props.matchStatus,
+      props.firstHalfStartedAt,
+      props.secondHalfStartedAt,
+    );
+  }, 20000);
 </script>
 <template>
   <div class="px-10">
@@ -104,7 +107,7 @@
       </div>
 
       <div
-        v-if="matchStatus === MatchStatusEnum.FULL_TIME"
+        v-if="matchStatus === MatchStatusEnum.FULL_TIME || isLive"
         class="flex-row w-10 text-white rounded text-center"
       >
         <div
