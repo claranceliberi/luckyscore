@@ -17,13 +17,16 @@
 
   const props = defineProps<Props>();
   const matchTime = ref();
-  const isLive = isMatchLive(props.matchStatus);
+  const isLive = ref(false);
 
-  matchTime.value = useMatchProgress(
-    props.matchStatus,
-    props.firstHalfStartedAt,
-    props.secondHalfStartedAt,
-  );
+  setInterval(() => {
+    isLive.value = isMatchLive(props.matchStatus);
+    matchTime.value = useMatchProgress(
+      props.matchStatus,
+      props.firstHalfStartedAt,
+      props.secondHalfStartedAt,
+    );
+  }, 1000);
 </script>
 <template>
   <div class="px-10">
