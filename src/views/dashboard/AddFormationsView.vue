@@ -110,7 +110,10 @@
 
       const { data, error } = await supabase
         .from("player_match")
-        .insert([...getLineups("HOME"), ...getLineups("AWAY")]);
+        .insert([
+          ...getLineups("HOME").filter((p) => !!p.player_id),
+          ...getLineups("AWAY").filter((p) => !!p.player_id),
+        ]);
 
       if (data) {
         router.back();
