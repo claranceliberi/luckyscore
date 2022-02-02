@@ -1,17 +1,29 @@
 <script setup lang="ts">
+  import { isMatchLive } from "@/composables/isLive";
+  import { useMatchProgress } from "@/composables/useMatchProgres";
   import { MatchStatusEnum } from "@/types/global";
-  import Vue from "vue";
+  import Vue, { ref } from "vue";
 
   interface Props {
     homeTeam: string;
     awayTeam: string;
     homeScore: number;
     awayScore: number;
+    firstHalfStartedAt: string;
+    secondHalfStartedAt: string;
     time: string;
     matchStatus: MatchStatusEnum;
   }
 
   const props = defineProps<Props>();
+  const matchTime = ref();
+  const isLive = isMatchLive(props.matchStatus);
+
+  matchTime.value = useMatchProgress(
+    props.matchStatus,
+    props.firstHalfStartedAt,
+    props.secondHalfStartedAt,
+  );
 </script>
 <template>
   <div class="px-10">
@@ -24,7 +36,7 @@
       class="flex items-center justify-between mr-18"
     >
       <small class="text-red-500"></small>
-      <small class="text-red-500 mr-5">05'</small>
+      <small class="text-red-500 mr-5">{{ isLive ? matchTime : "" }}</small>
     </div>
 
     <!-- match not started  -->
