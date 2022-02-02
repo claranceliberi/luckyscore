@@ -69,7 +69,7 @@
     </div>
 
     <div
-      class="flex justify-between flex-wrap items-center font-medium text-sm"
+      class="flex justify-between flex-wrap items-center font-medium text-xs"
     >
       <div class="flex-none">
         <div

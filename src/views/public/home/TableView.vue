@@ -18,8 +18,6 @@
     .subscribe();
 
   function getTableStats() {
-    console.log("Hi there!");
-
     supabase
       .from<ITableStatistics>("team")
       .select(
