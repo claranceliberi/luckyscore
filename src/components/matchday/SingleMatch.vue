@@ -17,17 +17,18 @@
   }
 
   const props = defineProps<Props>();
-  const matchTime = ref();
-  const isLive = ref(false);
 
-  setInterval(() => {
-    isLive.value = isMatchLive(props.matchStatus);
-    matchTime.value = useMatchProgress(
-      props.matchStatus,
-      props.firstHalfStartedAt,
-      props.secondHalfStartedAt,
-    );
-  }, 60000);
+  const isLive = computed(() => isMatchLive(props.matchStatus));
+
+  const { currentMatchMinute } = useMatchProgress(
+    props.matchStatus,
+    props.firstHalfStartedAt,
+    props.secondHalfStartedAt,
+  );
+
+  const matchTime = computed(() => currentMatchMinute.value);
+
+  // }, 600);
 </script>
 <template>
   <div class="px-10">
@@ -45,9 +46,9 @@
           class="flex items-center justify-between mr-18"
         >
           <small class="text-green-500"></small>
-          <small class="text-green-500 mr-5">{{
-            isLive ? matchTime : ""
-          }}</small>
+          <small class="text-green-500 mr-5">
+            {{ isLive ? `${matchTime}'` : "" }}</small
+          >
         </div>
 
         <!-- match not started  -->

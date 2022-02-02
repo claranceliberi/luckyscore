@@ -33,17 +33,17 @@
       props.match?.match_status !== MatchStatusEnum.NO_STARTED,
   );
 
-  const currentMinute = ref();
+  let currentMinute = computed(() => null);
 
-  setInterval(() => {
-    if (props.match) {
-      currentMinute.value = useMatchProgress(
-        props.match.match_status,
-        props.match.first_half_started_at,
-        props.match.second_half_started_at,
-      );
-    }
-  }, 60000);
+  if (props.match) {
+    const { currentMatchMinute } = useMatchProgress(
+      props.match.match_status,
+      props.match.first_half_started_at,
+      props.match.second_half_started_at,
+    );
+
+    currentMinute = computed(() => currentMatchMinute.value);
+  }
 
   const scoreBoard = computed(() => {
     if (props.match) {
@@ -132,7 +132,14 @@
         class="flex flex-col justify-center items-center gap-1 text-lg text-white"
       >
         <h1 v-if="played">{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
-        <p :class="scoreBoard?.isLive ? 'text-green-400' : 'text-gray-400'">
+        <p
+          :class="
+            scoreBoard?.isLive ||
+            props.match.match_status === MatchStatusEnum.HALF_TIME
+              ? 'text-green-400'
+              : 'text-gray-400'
+          "
+        >
           {{
             scoreBoard?.isLive
               ? `${currentMinute}'` || "Loading..."
@@ -143,7 +150,12 @@
               : "Vs"
           }}
         </p>
-        <span v-if="scoreBoard?.isLive" class="-translate-x-5"
+        <span
+          v-if="
+            scoreBoard?.isLive ||
+            props.match.match_status === MatchStatusEnum.HALF_TIME
+          "
+          class="-translate-x-5"
           ><LiveIndicator
         /></span>
       </div>
