@@ -27,7 +27,7 @@
       props.firstHalfStartedAt,
       props.secondHalfStartedAt,
     );
-  }, 20000);
+  }, 60000);
 </script>
 <template>
   <div class="px-10">
