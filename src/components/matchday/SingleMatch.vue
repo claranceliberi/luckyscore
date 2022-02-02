@@ -97,7 +97,7 @@
       </div>
 
       <div
-        v-if="matchStatus === MatchStatusEnum.FULL_TIME"
+        v-if="matchStatus === MatchStatusEnum.FULL_TIME || isLive"
         class="flex-row w-10 text-white rounded text-center"
       >
         <div

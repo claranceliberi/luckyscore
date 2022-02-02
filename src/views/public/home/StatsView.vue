@@ -37,6 +37,7 @@
         playersStats_fromDB,
         "yellow card",
       );
+      console.log(goal_only);
       const assits_only = combineStatsByType(playersStats_fromDB, "assists");
 
       goal_only.map((singlePlayer) => {
@@ -47,7 +48,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.player.team?.name + "",
+            name: singlePlayer.team?.name + "",
           },
         });
       });
@@ -60,7 +61,7 @@
             name: singlePlayer.assist_player.full_name,
           },
           team: {
-            name: singlePlayer.player.team?.name + "",
+            name: singlePlayer.team?.name + "",
           },
         });
       });
@@ -72,7 +73,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.player.team?.name + "",
+            name: singlePlayer.team?.name + "",
           },
         });
       });
@@ -85,7 +86,7 @@
             name: singlePlayer.player.full_name,
           },
           team: {
-            name: singlePlayer.player.team?.name + "",
+            name: singlePlayer.team?.name + "",
           },
         });
       });
