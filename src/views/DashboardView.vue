@@ -19,7 +19,7 @@
   ];
 
   async function checkAuthUser() {
-    loading.value = true;
+    loading.value = false;
 
     const authUser = await supabase.auth.user();
 
