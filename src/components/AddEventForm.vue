@@ -143,17 +143,17 @@
       data.type === IEventType.SHOT_ON_TARGET ||
       data.type === IEventType.SHOT
     ) {
-      await generateCommentary(
-        `${player?.player.full_name} makes ${
-          data.type
-        } but not goal scored team ${
-          data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        }  time 78 minutes`,
-      ).then((res) => {
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
+      // await generateCommentary(
+      //   `${player?.player.full_name} makes ${
+      //     data.type
+      //   } but not goal scored team ${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? data.home_team?.name
+      //       : data.away_team?.name
+      //   }  time 78 minutes`,
+      // ).then((res) => {
+      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      // });
       if (data.type === IEventType.SHOT_ON_TARGET)
         data.event_image_url = await generateThumbnail(
           "saving shot on goal  football europe",
@@ -162,38 +162,38 @@
       data.type === IEventType.YELLOW_CARD ||
       data.type === IEventType.RED_CARD
     ) {
-      await generateCommentary(
-        `${data.type} to ${player?.player.full_name} plays for ${
-          data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        } time 49 minutes`,
-      ).then((res) => {
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
+      // await generateCommentary(
+      //   `${data.type} to ${player?.player.full_name} plays for ${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? data.home_team?.name
+      //       : data.away_team?.name
+      //   } time 49 minutes`,
+      // ).then((res) => {
+      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      // });
     } else if (
       data.type === IEventType.FOUL ||
       data.type === IEventType.OFFSIDE
     ) {
-      await generateCommentary(
-        `${player?.player.full_name} plays for ${
-          data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        } makes a ${data.type} time 29 minutes`,
-      ).then((res) => {
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
+      // await generateCommentary(
+      //   `${player?.player.full_name} plays for ${
+      //     data.home_team?.id === player?.player.team_id
+      //       ? data.home_team?.name
+      //       : data.away_team?.name
+      //   } makes a ${data.type} time 29 minutes`,
+      // ).then((res) => {
+      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      // });
     } else if (data.type === IEventType.CORNER) {
-      await generateCommentary(`
-        ${data.type}  ${
-        data.home_team?.id === player?.player.team_id
-          ? data.home_team?.name
-          : data.away_team?.name
-      } ${player?.player.full_name},
-      `).then((res) => {
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
+      // await generateCommentary(`
+      //   ${data.type}  ${
+      //   data.home_team?.id === player?.player.team_id
+      //     ? data.home_team?.name
+      //     : data.away_team?.name
+      // } ${player?.player.full_name},
+      // `).then((res) => {
+      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      // });
     }
     if (data.type.trim() !== "" && data.done_by.trim() !== "") {
       await supabase

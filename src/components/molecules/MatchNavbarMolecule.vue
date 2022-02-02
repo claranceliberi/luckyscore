@@ -80,25 +80,30 @@
     mySubscription?.unsubscribe();
   });
   async function getMatchEvents() {
+    console.log("getMatchEvents");
     await supabase
       .from<Events>("events")
       .select("*")
-      .eq("match_id", props.match?.id + "")
-      .then((res) => {
+      .eq("match_id", props.match?.id)
+      .order("created_at", { ascending: false })
+      .then(async (res) => {
         if (res) {
-          data.homeScore =
+          data.isLoading = false;
+
+          const homeScore =
             res.data?.filter(
               (event) =>
                 event.type.toLowerCase() === "goal" &&
                 event.team_id === props.match?.home.id,
             ).length || 0;
-          data.awayScore =
+          const awayScore =
             res.data?.filter(
               (event) =>
                 event.type.toLowerCase() === "goal" &&
                 event.team_id === props.match?.away.id,
             ).length || 0;
-          data.isLoading = false;
+          data.homeScore = homeScore;
+          data.awayScore = awayScore;
         }
       });
   }

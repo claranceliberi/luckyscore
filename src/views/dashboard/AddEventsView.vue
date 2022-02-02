@@ -270,7 +270,7 @@
       </div>
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 flex flex-col items-center">
-      <MatchEvents :match="route.params.matchId"></MatchEvents>
+      <MatchEvents :match="route.params.matchId" :details="match"></MatchEvents>
       <div class="flex-1"></div>
     </div>
   </div>
