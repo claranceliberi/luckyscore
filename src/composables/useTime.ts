@@ -1,11 +1,14 @@
 export async function getCurrentTime(): Promise<string> {
-  const rawResponse = await fetch("http://worldclockapi.com/api/json/utc/now", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+  const rawResponse = await fetch(
+    "https://world-clock.p.rapidapi.com/json/utc/now",
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "world-clock.p.rapidapi.com",
+        "x-rapidapi-key": "3c9ea630f3msh9837a71cf695b9ap1e13afjsnfebd187ddce9",
+      },
     },
-  });
+  );
   const content = await rawResponse.json();
   console.log(content);
   return content.currentDateTime;
