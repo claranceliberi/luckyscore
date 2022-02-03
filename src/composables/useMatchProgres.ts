@@ -17,7 +17,7 @@ export function useMatchProgress(
       );
       const started = moment(_started).format("DD/MM/YYYY, H:mm:ss");
 
-      currentMatchMinute.value = moment(currentDate).diff(started, "seconds");
+      currentMatchMinute.value = moment(currentDate).diff(started, "minutes");
     }
 
     if (match_status === MatchStatusEnum.SECOND_HALF_ONGOING) {
