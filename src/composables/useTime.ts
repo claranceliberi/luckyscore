@@ -24,10 +24,21 @@ export function calculateTimeDifferenceInMinutes(
     Number(startTimes[0]) * 60 * 60 +
     Number(startTimes[1]) * 60 +
     Number(startTimes[2]);
-  const currentSecs =
+
+  let currentSecs =
     Number(currentTimes[0]) * 60 * 60 +
     Number(currentTimes[1]) * 60 +
     Number(currentTimes[2]);
+
+  if (
+    (Number(startTimes[0]) > 12 && Number(currentTimes[0]) < 12) ||
+    Number(startTimes[0]) > Number(currentTimes[0])
+  ) {
+    currentSecs =
+      (Number(currentTimes[0]) + 23) * 60 * 60 +
+      Number(currentTimes[1]) * 60 +
+      Number(currentTimes[2]);
+  }
 
   let number = (currentSecs - startSecs) / 60;
   number = number > 0 ? number : 0;
