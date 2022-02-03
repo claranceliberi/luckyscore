@@ -20,9 +20,6 @@ export function calculateTimeDifferenceInMinutes(
   const startTimes = started.split(":");
   const currentTimes = current.split(":");
 
-  startTimes[0] = exceeds12Checker(startTimes[0]);
-  currentTimes[0] = exceeds12Checker(currentTimes[0]);
-
   const startSecs =
     Number(startTimes[0]) * 60 * 60 +
     Number(startTimes[1]) * 60 +
@@ -32,7 +29,10 @@ export function calculateTimeDifferenceInMinutes(
     Number(currentTimes[1]) * 60 +
     Number(currentTimes[2]);
 
-  return parseInt((currentSecs - startSecs) / 60 + "");
+  let number = (currentSecs - startSecs) / 60;
+  number = number > 0 ? number : 0;
+
+  return parseInt(number + "");
 }
 
 //function to return hours, minutes and seconds from given date
@@ -43,12 +43,4 @@ export function getTime(date: Date) {
   const currentSeconds = currentTime.getSeconds();
 
   return `${currentHours}:${currentMinutes}:${currentSeconds}`;
-}
-
-export function exceeds12Checker(date: string) {
-  const number = Number(date);
-  // if (number > 12) {
-  //   return (number - 12).toString();
-  // }
-  return date;
 }
