@@ -64,7 +64,13 @@
                   >
                 </h1>
               </div>
-              <div class="font-bold text-gray-600">70'</div>
+              <div class="font-bold text-gray-600">
+                {{
+                  event.time % 90 > 0
+                    ? `${event.time}+ ${event.time % 90}`
+                    : event.time
+                }}'
+              </div>
             </div>
             <div v-if="event.event_image_url" class="flex justify-center pb-2">
               <img

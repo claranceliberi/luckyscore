@@ -145,6 +145,7 @@ export interface Events extends ITable {
   team: Teams;
   match: IMatch;
   event_image_url?: string;
+  time: number;
 }
 
 export interface IFixtures {
