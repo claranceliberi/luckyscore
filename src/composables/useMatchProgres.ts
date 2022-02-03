@@ -31,6 +31,8 @@ export function useMatchProgress(
       );
       currentMatchMinute.value = minutes <= 45 ? 45 + minutes : 90 + "+";
     }
+
+    localStorage.setItem("currentTime", currentMatchMinute.value);
   }
 
   calculateTime();
