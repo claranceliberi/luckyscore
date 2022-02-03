@@ -76,7 +76,7 @@
             <p
               class="w-fit text-white bg-gray-500 my-2 ml-2 text-sm rounded-full px-4"
             >
-              {{ event.team.name }}
+              {{ event.team?.name }}
             </p>
             <p class="text-gray-600 font-medium px-2">{{ event.commentary }}</p>
           </div>
