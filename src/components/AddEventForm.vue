@@ -101,6 +101,8 @@
     data.type = type;
   }
   async function addEvent() {
+    const time = localStorage.getItem("currentTime");
+    console.log(time);
     const player = data.allData.find(
       (player: IPlayerMatch) => player.player_id === data.done_by,
     );
@@ -204,6 +206,7 @@
           event_image_url: data.event_image_url,
           match_id: props.match,
           player_id: data.done_by,
+          time: time,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,
           team_id: data.allData.find(
             (player: IPlayerMatch) => player.player_id === data.done_by,

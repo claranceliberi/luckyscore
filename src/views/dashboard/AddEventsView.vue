@@ -5,13 +5,19 @@
   import AddEventForm from "@/components/AddEventForm.vue";
   import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
   import { supabase } from "@/lib/supabase";
-  import { ref, computed, onBeforeMount } from "vue";
+  import { ref, computed, onBeforeMount, reactive } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
   import { toast } from "@/plugins/toaster/vue-toast";
   import { getCurrentTime, getTime } from "@/composables/useTime";
 
   const route = useRoute();
   const router = useRouter();
+
+  const state = reactive<{
+    homeSelected?: boolean;
+  }>({
+    homeSelected: true,
+  });
 
   const match = ref<IMatchTeamJoin | null>(null);
 
@@ -243,20 +249,28 @@
       <div v-if="isLive">
         <h1 class="font-bold text-lg mt-12">Match events</h1>
 
-        <div class="teams__header flex mt-4">
+        <div class="teams__header flex">
           <div
-            class="active cursor-pointer text-primary w-1/2 pb-4 border-b-2 border-primary"
+            :class="`active cursor-pointer ${
+              state.homeSelected ? 'text-primary' : 'text-appgrey'
+            } w-1/2 pb-4 border-b-2 ${
+              state.homeSelected ? 'border-primary' : 'border-gray-200'
+            }`"
+            @click="state.homeSelected = true"
           >
             <p class="text-center">
               {{ match?.home.name }}
             </p>
           </div>
           <div
-            class="w-1/2 cursor-pointer pb-4 text-appgrey border-b-2 border-gray-200"
+            :class="`w-1/2 cursor-pointer pb-4 ${
+              !state.homeSelected ? 'text-primary' : 'text-appgrey'
+            } border-b-2 ${
+              !state.homeSelected ? 'border-primary' : 'border-gray-200'
+            }`"
+            @click="state.homeSelected = false"
           >
-            <p>
-              {{ match?.away.name }}
-            </p>
+            <p>{{ match?.away.name }}</p>
           </div>
         </div>
 

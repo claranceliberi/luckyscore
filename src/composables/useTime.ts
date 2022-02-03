@@ -10,7 +10,6 @@ export async function getCurrentTime(): Promise<string> {
     },
   );
   const content = await rawResponse.json();
-  console.log(content);
   return content.currentDateTime;
 }
 
@@ -18,14 +17,11 @@ export function calculateTimeDifferenceInMinutes(
   started: string,
   current: string,
 ) {
-  console.log(started, current);
   const startTimes = started.split(":");
   const currentTimes = current.split(":");
 
   startTimes[0] = exceeds12Checker(startTimes[0]);
   currentTimes[0] = exceeds12Checker(currentTimes[0]);
-
-  //   exceeds12Checker(startTimes[0]);
 
   const startSecs =
     Number(startTimes[0]) * 60 * 60 +
