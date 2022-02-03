@@ -47,8 +47,8 @@ export function getTime(date: Date) {
 
 export function exceeds12Checker(date: string) {
   const number = Number(date);
-  if (number > 12) {
-    return (number - 12).toString();
-  }
+  // if (number > 12) {
+  //   return (number - 12).toString();
+  // }
   return date;
 }
