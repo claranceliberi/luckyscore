@@ -5,7 +5,6 @@
   import { supabase } from "@/lib/supabase";
   import { RealtimeSubscription } from "@supabase/supabase-js";
 
-  import moment from "moment";
   import { useMatchProgress } from "@/composables/useMatchProgres";
   import LiveIndicator from "../Atoms/LiveIndicator.vue";
 

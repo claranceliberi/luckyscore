@@ -56,11 +56,11 @@
     <div v-else-if="matches.length < 1">
       <p class="mt-4">No matches found on match day {{ activeMatchDay }} .</p>
     </div>
-    <div v-else class="flex gap-4">
+    <div v-else class="flex gap-4 flex-wrap">
       <div
         v-for="match in matches"
         :key="match.id"
-        class="flex justify-between w-[30rem] border-2 bg-white my-4 py-5 px-8 rounded-lg"
+        class="flex justify-between flex-w w-[30rem] border-2 bg-white my-4 py-5 px-8 rounded-lg"
       >
         <div>
           <div class="flex items-center space-x-2 font-bold py-2">

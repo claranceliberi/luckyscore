@@ -44,8 +44,21 @@
   const match = ref<IMatchTeamJoin | null>(null);
   const loading = ref(true);
 
-  async function handleNext() {
+  async function handleNext(e: Event) {
+    e.preventDefault();
+
     if (step.value === 1) {
+      const top11players = getLineups("HOME")
+        .map((p) => parseInt(p.pitch_position))
+        .filter((p) => p < 12);
+      if (
+        top11players.length < 1 ||
+        top11players.reduce((sum, a) => sum + a) < 66
+      ) {
+        toast.error("Please select top 11 players for each team");
+        return;
+      }
+
       if (
         !matchFormationData.home_formation ||
         matchFormationData.home_formation.length < 1
@@ -58,6 +71,17 @@
       }
     }
     if (step.value === 2) {
+      const top11players = getLineups("AWAY")
+        .map((p) => parseInt(p.pitch_position))
+        .filter((p) => p < 12);
+      if (
+        top11players.length < 1 ||
+        top11players.reduce((sum, a) => sum + a) < 66
+      ) {
+        toast.error("Please select top 11 players for each team");
+        return;
+      }
+
       if (
         !matchFormationData.away_formation ||
         matchFormationData.away_formation.length < 1
@@ -86,7 +110,10 @@
 
       const { data, error } = await supabase
         .from("player_match")
-        .insert([...getLineups("HOME"), ...getLineups("AWAY")]);
+        .insert([
+          ...getLineups("HOME").filter((p) => !!p.player_id),
+          ...getLineups("AWAY").filter((p) => !!p.player_id),
+        ]);
 
       if (data) {
         router.back();
@@ -98,23 +125,17 @@
 
   function getLineups(allie: "HOME" | "AWAY") {
     if (allie == "HOME")
-      return Object.keys(homePlayersLineup).map(
-        (pos) =>
-          homePlayersLineup[n(pos)] && {
-            match: route.params.matchId,
-            pitch_position: pos,
-            player_id: homePlayersLineup[n(pos)],
-          },
-      );
+      return Object.keys(homePlayersLineup).map((pos) => ({
+        match: route.params.matchId,
+        pitch_position: pos,
+        player_id: homePlayersLineup[n(pos)],
+      }));
 
-    return Object.keys(awayPlayersLineup).map(
-      (pos) =>
-        awayPlayersLineup[n(pos)] && {
-          match: route.params.matchId,
-          pitch_position: pos,
-          player_id: awayPlayersLineup[n(pos)],
-        },
-    );
+    return Object.keys(awayPlayersLineup).map((pos) => ({
+      match: route.params.matchId,
+      pitch_position: pos,
+      player_id: awayPlayersLineup[n(pos)],
+    }));
   }
 
   onBeforeMount(async () => {
@@ -159,7 +180,7 @@
       <h4 class="text-base font-bold">{{ step }} outof 2</h4>
     </div>
     <!-- first step -->
-    <div v-if="step === 1" class="pt-10">
+    <form v-if="step === 1" class="pt-10" @submit="handleNext">
       <div>
         <p class="pb-2 font-medium">{{ match?.home.name }} formation:</p>
         <SelectAtom
@@ -167,82 +188,94 @@
           title="Home team formation"
           placeholder="Select"
           :options="formations"
+          required
         />
       </div>
 
-      <div
-        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
-        :key="pos"
-        class="grid grid-cols-5"
-      >
-        <div>
-          <p>Position: {{ pos }}</p>
-        </div>
+      <div v-for="pos in 18" :key="pos">
+        <h2 v-if="pos === 12" class="py-2 font-bold text-lg">Substitutions</h2>
+        <div class="grid grid-cols-5">
+          <div>
+            <p v-if="pos < 12">Position: {{ pos }}</p>
+            <p class="w-10"></p>
+          </div>
 
-        <div class="col-span-3">
-          <p class="pb-2">Player:</p>
-          <SelectAtom
-            v-model="homePlayersLineup[pos]"
-            title="Home team"
-            placeholder="Select Player"
-            :options="
-              homePlayers?.map((p) => ({
-                label: p.full_name,
-                value: p.id,
-                selected: Object.values(homePlayersLineup).includes(p.id),
-              }))
-            "
-          />
+          <div class="col-span-3">
+            <p class="pb-2">Player:</p>
+            <SelectAtom
+              v-model="homePlayersLineup[pos]"
+              title="Home team"
+              placeholder="Select Player"
+              :required="pos < 12"
+              :options="
+                homePlayers?.map((p) => ({
+                  label: p.full_name,
+                  value: p.id,
+                  selected: Object.values(homePlayersLineup).includes(p.id),
+                }))
+              "
+            />
+          </div>
         </div>
       </div>
-    </div>
+
+      <div class="pt-6 text-right">
+        <button
+          type="submit"
+          style="border-radius: 28px"
+          class="bg-primary px-8 py-4 w-auto h-14 rounded-3xl text-white"
+        >
+          Next step
+        </button>
+      </div>
+    </form>
     <!-- second step -->
-    <div v-if="step === 2" class="pt-10">
+    <form v-if="step === 2" class="pt-10" @submit="handleNext">
       <div>
         <p class="pb-2">{{ match?.away.name }} formation:</p>
         <SelectAtom
           v-model="matchFormationData.away_formation"
           title="Home team formation"
           placeholder="Select"
+          required
           :options="formations"
         />
       </div>
-      <div
-        v-for="pos in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
-        :key="pos"
-        class="grid grid-cols-5"
-      >
-        <div>
-          <p>Position: {{ pos }}</p>
-        </div>
+      <div v-for="pos in 18" :key="pos">
+        <h2 v-if="pos === 12" class="py-2 font-bold text-lg">Substitutions</h2>
+        <div class="grid grid-cols-5">
+          <div>
+            <p v-if="pos < 12">Position: {{ pos }}</p>
+            <p class="w-10"></p>
+          </div>
 
-        <div class="col-span-3">
-          <p class="pb-2">Player:</p>
-          <SelectAtom
-            v-model="awayPlayersLineup[pos]"
-            title="Home team"
-            placeholder="Select Player"
-            :options="
-              awayPlayers?.map((p) => ({
-                label: p.full_name,
-                value: p.id,
-                selected: Object.values(awayPlayersLineup).includes(p.id),
-              }))
-            "
-          />
+          <div class="col-span-3">
+            <p class="pb-2">Player:</p>
+            <SelectAtom
+              v-model="awayPlayersLineup[pos]"
+              :required="pos < 12"
+              title="Home team"
+              placeholder="Select Player"
+              :options="
+                awayPlayers?.map((p) => ({
+                  label: p.full_name,
+                  value: p.id,
+                  selected: Object.values(awayPlayersLineup).includes(p.id),
+                }))
+              "
+            />
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="pt-6 text-right">
-      <button
-        style="border-radius: 28px"
-        type="button"
-        class="bg-primary px-8 py-4 w-auto h-14 rounded-3xl text-white"
-        @click="handleNext"
-      >
-        {{ step < 3 ? "Next step" : "Create match" }}
-      </button>
-    </div>
+      <div class="pt-6 text-right">
+        <button
+          style="border-radius: 28px"
+          type="submit"
+          class="bg-primary px-8 py-4 w-auto h-14 rounded-3xl text-white"
+        >
+          Create match
+        </button>
+      </div>
+    </form>
   </div>
 </template>

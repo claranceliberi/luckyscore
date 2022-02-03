@@ -29,7 +29,9 @@
 
 <template>
   <div v-if="!isLoading">
-    <div class="bg-white grid md:grid-cols-9 gap-2 p-3 sm:grid-cols-5">
+    <div
+      class="bg-white grid gap-2 p-3 2xl:grid-cols-10 md:grid-cols-8 sm:grid-cols-4 xs:grid-cols-3"
+    >
       <div
         v-for="(player, index) in players
           .map((value) => ({ value, sort: Math.random() }))
