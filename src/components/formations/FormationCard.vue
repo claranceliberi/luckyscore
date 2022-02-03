@@ -13,6 +13,7 @@
   const props = defineProps<FormationProps>();
   const team = reactive({
     players: [] as IPlayerMatch[],
+    subbs: [] as IPlayerMatch[],
     goalkeeper: {} as IPlayerMatch | undefined,
   });
   console.log(props);
@@ -30,6 +31,14 @@
           res.data?.filter(
             (player: IPlayerMatch) =>
               player.pitch_position !== 1 &&
+              player.pitch_position >= 2 &&
+              player.pitch_position <= 11 &&
+              player.player.team_id == props.team,
+          ) || [];
+        team.subbs =
+          res.data?.filter(
+            (player: IPlayerMatch) =>
+              player.pitch_position >= 12 &&
               player.player.team_id == props.team,
           ) || [];
         isLoading.value = false;
@@ -84,6 +93,19 @@
       <p v-if="team.players.length < 10" class="text-red-500">
         Pitch players number is less than ten.
       </p>
+    </div>
+  </div>
+  <div v-if="team.subbs.length > 0" class="w-full bg-white px-4 py-6 rounded">
+    <h1 class="font-semibold text-2xl text-black-600 mb-2">Substitutes</h1>
+    <div class="">
+      <div
+        v-for="(player, index) in team.subbs"
+        :key="index"
+        class="flex cursor-pointer gap-3"
+      >
+        <span class="subb w-6 h-6 md:w-10 md:h-10"></span>
+        <span class="pt-2">{{ player.player.full_name }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -150,6 +172,13 @@
     background-color: #c4c4c4;
     border-radius: 50%;
     position: absolute;
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+
+  .subb {
+    background-color: #c4c4c4;
+    border-radius: 50%;
     border: 2px solid #fff;
     cursor: pointer;
   }

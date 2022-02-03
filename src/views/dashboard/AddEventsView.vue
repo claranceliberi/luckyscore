@@ -8,6 +8,7 @@
   import { ref, computed, onBeforeMount } from "vue";
   import { PostgrestResponse } from "@supabase/supabase-js";
   import { toast } from "@/plugins/toaster/vue-toast";
+  import { getCurrentTime, getTime } from "@/composables/useTime";
 
   const route = useRoute();
   const router = useRouter();
@@ -54,7 +55,7 @@
       FULL_TIME: "Are you sure you want to end the match",
     };
     const c = (status: MatchStatusEnum) => confirm(messages[status.toString()]);
-    const currentTime = new Date().toLocaleTimeString();
+    const currentTime = getTime(new Date(await getCurrentTime()));
 
     switch (status) {
       case MatchStatusEnum.NO_LINEUP:
@@ -78,7 +79,7 @@
             if (match.value) {
               // set some match important info without reload
               match.value.match_status = MatchStatusEnum.FIRST_HALF_ONGOING;
-              match.value.first_half_started_at = currentTime;
+              match.value.first_half_started_at = currentTime.toString();
             }
           }
         }
