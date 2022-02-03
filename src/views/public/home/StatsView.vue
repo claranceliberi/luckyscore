@@ -14,7 +14,7 @@
   function combineStatsByType(statsArray: Array<Events>, type: string) {
     const results: Array<Events> = reactive([]);
     statsArray.forEach(function (o) {
-      if (type === "assists" && o.assist_id !== null) {
+      if (type === "assists" && o.assist_id !== null && o.type === "Goal") {
         results.push(o);
       }
       if (o.type.toLowerCase() === type) {
