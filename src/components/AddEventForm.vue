@@ -16,6 +16,7 @@
 
   type NewEventProps = {
     match: string | string[];
+    team: string | string[];
   };
 
   type Options = {
@@ -36,6 +37,7 @@
     home_score: number;
     away_score: number;
     event_image_url: string;
+    is_disabled: boolean;
   }>({
     type: "",
     done_by: "",
@@ -49,6 +51,7 @@
     home_score: 0,
     away_score: 0,
     event_image_url: "",
+    is_disabled: false,
   });
 
   const isLoading = ref(true);
@@ -70,10 +73,11 @@
       if (res) {
         data.allData = res.data || [];
         res.data?.forEach((element) => {
-          data.optionsData.push({
-            value: element.player_id,
-            label: element.player.full_name,
-          });
+          if (element.player.team_id === props.team)
+            data.optionsData.push({
+              value: element.player_id,
+              label: element.player.full_name,
+            });
         });
       }
     });
@@ -101,8 +105,12 @@
     data.type = type;
   }
   async function addEvent() {
+    data.is_disabled = true;
+    const done_by = data.done_by;
+    const type = data.type;
+    data.done_by = "";
+    data.type = "";
     const time = localStorage.getItem("currentTime");
-    console.log(time);
     const player = data.allData.find(
       (player: IPlayerMatch) => player.player_id === data.done_by,
     );
@@ -197,15 +205,15 @@
       //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       // });
     }
-    if (data.type.trim() !== "" && data.done_by.trim() !== "") {
+    if (type.trim() !== "" && done_by.trim() !== "") {
       await supabase
         .from("events")
         .insert({
-          type: data.type,
+          type: type,
           commentary: data.commentary,
           event_image_url: data.event_image_url,
           match_id: props.match,
-          player_id: data.done_by,
+          player_id: done_by,
           time: time,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,
           team_id: data.allData.find(
@@ -213,7 +221,8 @@
           )?.player.team_id,
         })
         .then(async () => {
-          toast.success(`${data.type} added successfully`);
+          data.is_disabled = false;
+          toast.success(`${type} added successfully`);
           data.type = "";
           data.done_by = "";
           data.assisted_by = "";
@@ -269,7 +278,8 @@
       class="bg-primary text-white mt-2 p-4 px-8 rounded-full"
       @click="addEvent()"
     >
-      Add Event
+      <span v-if="!data.is_disabled">Add Event</span
+      ><span v-else>Adding ...</span>
     </button>
   </div>
 </template>
