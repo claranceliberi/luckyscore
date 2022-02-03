@@ -21,7 +21,8 @@ export function useMatchProgress(
         first_half_started_at,
         getTime(date),
       );
-      currentMatchMinute.value = minutes <= 45 ? minutes : 45 + "+";
+      currentMatchMinute.value =
+        minutes <= 45 ? minutes : 45 + "+" + (minutes - 45);
     }
     if (match_status === MatchStatusEnum.SECOND_HALF_ONGOING) {
       const date = new Date(await getCurrentTime());
@@ -29,7 +30,8 @@ export function useMatchProgress(
         second_half_started_at,
         getTime(date),
       );
-      currentMatchMinute.value = minutes <= 45 ? 45 + minutes : 90 + "+";
+      currentMatchMinute.value =
+        minutes <= 45 ? 45 + minutes : 90 + "+" + (minutes - 45);
     }
 
     localStorage.setItem("currentTime", currentMatchMinute.value);
