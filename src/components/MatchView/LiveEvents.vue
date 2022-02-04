@@ -9,7 +9,7 @@
 
 <template>
   <div
-    class="bg-white flex justify-center text-gray-700 shadow-sm p-4 w-full md:w-1/2"
+    class="bg-white flex justify-center text-gray-700 shadow-sm p-4 w-full rounded md:w-1/2"
   >
     <div>
       <h1 class="font-black mt-4 mb-8">Timeline</h1>
