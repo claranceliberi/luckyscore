@@ -68,9 +68,17 @@
           class="user w-6 h-6 md:w-10 md:h-10"
           :class="`u${player.pitch_position}-${props.formation}`"
         >
-          <span class="p-names">{{
-            player.player.full_name.split(" ")[0]
-          }}</span>
+          <span
+            v-if="player.player.full_name.split(` `)[0].length > 3"
+            class="p-names"
+            >{{ player.player.full_name.split(" ")[0] }}</span
+          >
+          <span
+            v-else-if="player.player.full_name.split(` `)[1].length > 3"
+            class="p-names"
+            >{{ player.player.full_name.split(" ")[1] }}</span
+          >
+          <span v-else class="p-names">{{ player.player.full_name }}</span>
         </div>
         <div class="face-of-goal"></div>
       </div>

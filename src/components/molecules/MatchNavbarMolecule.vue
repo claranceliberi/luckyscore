@@ -37,6 +37,7 @@
   if (props.match) {
     const { currentMatchMinute } = useMatchProgress(
       props.match.match_status,
+      props.match + "",
       props.match.first_half_started_at,
       props.match.second_half_started_at,
     );

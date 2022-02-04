@@ -105,12 +105,20 @@
     data.type = type;
   }
   async function addEvent() {
+    if (data.done_by == "") {
+      toast.error("Please select a player");
+      return;
+    }
+    if (data.type === "") {
+      toast.error("Please select event");
+      return;
+    }
     data.is_disabled = true;
     const done_by = data.done_by;
     const type = data.type;
     data.done_by = "";
     data.type = "";
-    const time = localStorage.getItem("currentTime");
+    const time = localStorage.getItem(`${props.match}_currentTime`);
     const player = data.allData.find(
       (player: IPlayerMatch) => player.player_id === done_by,
     );

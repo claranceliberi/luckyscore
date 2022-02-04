@@ -7,6 +7,7 @@
       >
         <router-link :to="props.url.replace(/:[\w]+/gi, match.id)">
           <SingleMatch
+            :match="match.id"
             :home-team="match.home_team.name"
             :away-team="match.away_team.name"
             :home-score="match.home_score"
