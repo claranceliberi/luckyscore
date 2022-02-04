@@ -275,8 +275,14 @@
         </div>
 
         <AddEventForm
-          v-if="isExactLive"
+          v-if="isExactLive && state.homeSelected"
           :match="route.params.matchId"
+          :team="match?.home.id"
+        ></AddEventForm>
+        <AddEventForm
+          v-if="isExactLive && !state.homeSelected"
+          :match="route.params.matchId"
+          :team="match?.away.id"
         ></AddEventForm>
         <div v-else>Waiting for match to start/restart</div>
       </div>

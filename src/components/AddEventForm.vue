@@ -16,6 +16,7 @@
 
   type NewEventProps = {
     match: string | string[];
+    team: string | string[];
   };
 
   type Options = {
@@ -70,10 +71,11 @@
       if (res) {
         data.allData = res.data || [];
         res.data?.forEach((element) => {
-          data.optionsData.push({
-            value: element.player_id,
-            label: element.player.full_name,
-          });
+          if (element.player.team_id === props.team)
+            data.optionsData.push({
+              value: element.player_id,
+              label: element.player.full_name,
+            });
         });
       }
     });
