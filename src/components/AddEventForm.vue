@@ -112,7 +112,7 @@
     data.type = "";
     const time = localStorage.getItem("currentTime");
     const player = data.allData.find(
-      (player: IPlayerMatch) => player.player_id === data.done_by,
+      (player: IPlayerMatch) => player.player_id === done_by,
     );
     if (data.type === IEventType.GOAL) {
       // await generateCommentary(
@@ -216,9 +216,7 @@
           player_id: done_by,
           time: time,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,
-          team_id: data.allData.find(
-            (player: IPlayerMatch) => player.player_id === data.done_by,
-          )?.player.team_id,
+          team_id: props.team,
         })
         .then(async () => {
           data.is_disabled = false;
