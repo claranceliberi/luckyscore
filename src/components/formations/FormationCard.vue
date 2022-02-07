@@ -16,7 +16,7 @@
     subbs: [] as IPlayerMatch[],
     goalkeeper: {} as IPlayerMatch | undefined,
   });
-  console.log(props);
+
   const isLoading = ref(true);
   supabase
     .from<IPlayerMatch>("player_match")

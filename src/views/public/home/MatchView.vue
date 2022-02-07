@@ -116,7 +116,6 @@
   let mySubscription: RealtimeSubscription = supabase
     .from("*")
     .on("*", async (payload) => {
-      console.log(payload);
       await fetchAllDetailsData();
     })
     .subscribe();

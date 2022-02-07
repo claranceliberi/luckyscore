@@ -37,7 +37,6 @@
         playersStats_fromDB,
         "yellow card",
       );
-      console.log(goal_only);
       const assits_only = combineStatsByType(playersStats_fromDB, "assists");
 
       goal_only.map((singlePlayer) => {
