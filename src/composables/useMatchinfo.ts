@@ -26,11 +26,11 @@ async function fetchMatchDetails(id: string) {
       .order("created_at", { ascending: false });
 
     if (error1) {
-      console.log("error", error1);
+      console.error("error", error1);
       return;
     }
     if (error) {
-      console.log("error", error);
+      console.error("error", error);
       return;
     }
 
@@ -140,8 +140,6 @@ async function fetchMatchDetails(id: string) {
     // store response to allDetails
     allDetails.value = match;
     allEvents.value = events;
-    console.log("got match!", match);
-    console.log("got events!", events);
   } catch (err) {
     console.error("Error retrieving match data from db", err);
   }

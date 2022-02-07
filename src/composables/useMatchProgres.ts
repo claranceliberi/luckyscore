@@ -47,7 +47,6 @@ export function useMatchProgress(
 const calculateTimeDiff = (data1: Date, data2: Date) => {
   const date1 = new Date(data1);
   const date2 = new Date(data2);
-  console.log(date1.getTime());
   const timeDiff = Math.abs(date2.getTime() - date1.getTime());
   const diffMinutes = Math.ceil(timeDiff / (1000 * 60));
   return diffMinutes;

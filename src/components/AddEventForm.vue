@@ -95,7 +95,6 @@
               (event.team_id == data.away_team?.id &&
                 event.type.toLowerCase() === "own goal"),
           ).length || 0;
-        console.log("home: ", data.home_score);
         data.away_score =
           res.data?.filter(
             (event: Events) =>
@@ -104,7 +103,6 @@
               (event.team_id == data.home_team?.id &&
                 event.type.toLowerCase() === "own goal"),
           ).length || 0;
-        console.log("away: ", data.away_score);
       }
     });
   async function eventSelectedType(type: string) {

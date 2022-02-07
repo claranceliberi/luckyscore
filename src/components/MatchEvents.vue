@@ -75,7 +75,7 @@
               })
               .match({ id: props.match });
             if (error) {
-              console.log(error);
+              console.error(error);
             }
           }
         }
