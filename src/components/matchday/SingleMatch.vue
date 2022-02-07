@@ -14,6 +14,7 @@
     secondHalfStartedAt: string;
     time: string;
     matchStatus: MatchStatusEnum;
+    match: string | string[];
   }
 
   const props = defineProps<Props>();
@@ -22,6 +23,7 @@
 
   const { currentMatchMinute } = useMatchProgress(
     props.matchStatus,
+    props.match + "",
     props.firstHalfStartedAt,
     props.secondHalfStartedAt,
   );
@@ -47,7 +49,7 @@
         >
           <small class="text-green-500"></small>
           <small class="text-green-500 mr-5">
-            {{ isLive ? `${matchTime}'` : "" }}</small
+            {{ isLive ? `${matchTime || 0}'` : "" }}</small
           >
         </div>
 

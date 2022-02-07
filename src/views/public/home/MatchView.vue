@@ -114,7 +114,7 @@
   });
 
   let mySubscription: RealtimeSubscription = supabase
-    .from("events")
+    .from("*")
     .on("*", async (payload) => {
       console.log(payload);
       await fetchAllDetailsData();

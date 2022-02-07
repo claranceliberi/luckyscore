@@ -11,6 +11,7 @@ const currentMatchMinute = ref();
 
 export function useMatchProgress(
   match_status: MatchStatusEnum,
+  matchId: string,
   first_half_started_at: string,
   second_half_started_at: string,
 ) {
@@ -34,7 +35,7 @@ export function useMatchProgress(
         minutes <= 45 ? 45 + minutes : 90 + "+" + (minutes - 45);
     }
 
-    localStorage.setItem("currentTime", currentMatchMinute.value);
+    localStorage.setItem(`${matchId}_currentTime`, currentMatchMinute.value);
   }
 
   calculateTime();

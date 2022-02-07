@@ -6,15 +6,14 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export async function generateCommentary(keywords: string) {
-  // return await openai.createCompletion("text-davinci-001", {
-  //   prompt: `Make football commentary from the following keywords:\n\n${keywords}`,
-  //   temperature: 0.3,
-  //   max_tokens: 60,
-  //   top_p: 1,
-  //   frequency_penalty: 0.8,
-  //   presence_penalty: 0,
-  // });
-  return "" as unknown as Promise<any>;
+  return await openai.createCompletion("text-davinci-001", {
+    prompt: `Make football commentary from the following keywords:\n\n${keywords}`,
+    temperature: 0.3,
+    max_tokens: 60,
+    top_p: 1,
+    frequency_penalty: 0.8,
+    presence_penalty: 0,
+  });
 }
 
 export async function generateThumbnail(keywords: string) {

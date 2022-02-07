@@ -90,120 +90,127 @@
         data.home_score =
           res.data?.filter(
             (event: Events) =>
-              event.team_id !== data.home_team?.id &&
-              event.type.toLowerCase() === "goal",
+              (event.team_id == data.home_team?.id &&
+                event.type.toLowerCase() === "goal") ||
+              (event.team_id == data.away_team?.id &&
+                event.type.toLowerCase() === "own goal"),
           ).length || 0;
+        console.log("home: ", data.home_score);
         data.away_score =
           res.data?.filter(
             (event: Events) =>
-              event.team_id !== data.away_team?.id &&
-              event.type.toLowerCase() === "goal",
+              (event.team_id == data.away_team?.id &&
+                event.type.toLowerCase() === "goal") ||
+              (event.team_id == data.home_team?.id &&
+                event.type.toLowerCase() === "own goal"),
           ).length || 0;
+        console.log("away: ", data.away_score);
       }
     });
   async function eventSelectedType(type: string) {
     data.type = type;
   }
   async function addEvent() {
+    if (data.done_by == "") {
+      toast.error("Please select a player");
+      return;
+    }
+    if (data.type === "") {
+      toast.error("Please select event");
+      return;
+    }
     data.is_disabled = true;
     const done_by = data.done_by;
     const type = data.type;
     data.done_by = "";
     data.type = "";
-    const time = localStorage.getItem("currentTime");
+    let time = localStorage.getItem(`${props.match}_currentTime`);
+
     const player = data.allData.find(
-      (player: IPlayerMatch) => player.player_id === data.done_by,
+      (player: IPlayerMatch) => player.player_id === done_by,
     );
-    if (data.type === IEventType.GOAL) {
-      // await generateCommentary(
-      //   `Player ${player?.player.full_name} scored for team ${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? data.home_team?.name
-      //       : data.away_team?.name
-      //   } against ${
-      //     data.home_team?.id !== player?.player.team_id
-      //       ? data.home_team?.name
-      //       : data.away_team?.name
-      //   } to make it ${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? ++data.home_score
-      //       : ++data.away_score
-      //   }-${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? data.away_score
-      //       : data.home_score
-      //   } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
-      //   ${
-      //     data.assisted_by.trim() == ""
-      //       ? ""
-      //       : `assisted by ${
-      //           data.allData.find(
-      //             (player: IPlayerMatch) =>
-      //               player.player_id === data.assisted_by,
-      //           )?.player.full_name
-      //         }`
-      //   }`,
-      // ).then((res) => {
-      //   data.home_team?.id === player?.player.team_id;
-      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      // });
+    if (type === IEventType.GOAL) {
+      await generateCommentary(
+        `Player ${player?.player.full_name} scored for team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } against ${
+          data.home_team?.id !== player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } to make it ${
+          data.home_team?.id === player?.player.team_id
+            ? ++data.home_score
+            : ++data.away_score
+        }-${
+          data.home_team?.id === player?.player.team_id
+            ? data.away_score
+            : data.home_score
+        } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
+        ${
+          data.assisted_by.trim() == ""
+            ? ""
+            : `assisted by ${
+                data.allData.find(
+                  (player: IPlayerMatch) =>
+                    player.player_id === data.assisted_by,
+                )?.player.full_name
+              }`
+        }, ${time} minutes`,
+      ).then((res) => {
+        data.home_team?.id === player?.player.team_id;
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
 
       data.event_image_url = await generateThumbnail("goal celebration");
-    } else if (
-      data.type === IEventType.SHOT_ON_TARGET ||
-      data.type === IEventType.SHOT
-    ) {
-      // await generateCommentary(
-      //   `${player?.player.full_name} makes ${
-      //     data.type
-      //   } but not goal scored team ${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? data.home_team?.name
-      //       : data.away_team?.name
-      //   }  time 78 minutes`,
-      // ).then((res) => {
-      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      // });
-      if (data.type === IEventType.SHOT_ON_TARGET)
+    } else if (type === IEventType.SHOT_ON_TARGET || type === IEventType.SHOT) {
+      await generateCommentary(
+        `${player?.player.full_name} makes ${type} but not goal scored team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        },  ${time} minutes`,
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+      if (type === IEventType.SHOT_ON_TARGET)
         data.event_image_url = await generateThumbnail(
           "saving shot on goal  football europe",
         );
     } else if (
-      data.type === IEventType.YELLOW_CARD ||
-      data.type === IEventType.RED_CARD
+      type === IEventType.YELLOW_CARD ||
+      type === IEventType.RED_CARD
     ) {
-      // await generateCommentary(
-      //   `${data.type} to ${player?.player.full_name} plays for ${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? data.home_team?.name
-      //       : data.away_team?.name
-      //   } time 49 minutes`,
-      // ).then((res) => {
-      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      // });
-    } else if (
-      data.type === IEventType.FOUL ||
-      data.type === IEventType.OFFSIDE
-    ) {
-      // await generateCommentary(
-      //   `${player?.player.full_name} plays for ${
-      //     data.home_team?.id === player?.player.team_id
-      //       ? data.home_team?.name
-      //       : data.away_team?.name
-      //   } makes a ${data.type} time 29 minutes`,
-      // ).then((res) => {
-      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      // });
-    } else if (data.type === IEventType.CORNER) {
-      // await generateCommentary(`
-      //   ${data.type}  ${
-      //   data.home_team?.id === player?.player.team_id
-      //     ? data.home_team?.name
-      //     : data.away_team?.name
-      // } ${player?.player.full_name},
-      // `).then((res) => {
-      //   data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      // });
+      await generateCommentary(
+        `${type} to ${player?.player.full_name} plays for ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        }, ${time} minutes`,
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (type === IEventType.FOUL || type === IEventType.OFFSIDE) {
+      await generateCommentary(
+        `${player?.player.full_name} plays for ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } makes a ${type}, ${time} minutes`,
+      ).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+    } else if (type === IEventType.CORNER) {
+      await generateCommentary(`
+        ${type}  ${
+        data.home_team?.id === player?.player.team_id
+          ? data.home_team?.name
+          : data.away_team?.name
+      } ${player?.player.full_name},
+       ${time} minutes`).then((res) => {
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
     }
     if (type.trim() !== "" && done_by.trim() !== "") {
       await supabase
@@ -216,9 +223,7 @@
           player_id: done_by,
           time: time,
           assist_id: data.assisted_by == "" ? null : data.assisted_by,
-          team_id: data.allData.find(
-            (player: IPlayerMatch) => player.player_id === data.done_by,
-          )?.player.team_id,
+          team_id: props.team,
         })
         .then(async () => {
           data.is_disabled = false;
@@ -231,6 +236,7 @@
   }
   const eventTypes = [
     "Goal",
+    "Own Goal",
     "Shot",
     "Shot on target",
     "Foul",

@@ -40,6 +40,7 @@
   if (props.match) {
     const { currentMatchMinute } = useMatchProgress(
       props.match.match_status,
+      props.match.id + "",
       props.match.first_half_started_at,
       props.match.second_half_started_at,
     );
@@ -70,7 +71,7 @@
   });
 
   let mySubscription: RealtimeSubscription = supabase
-    .from("*")
+    .from("events")
     .on("*", async (payload) => {
       await getMatchEvents();
       await getScoredPlayers();
@@ -103,7 +104,6 @@
   }
 
   async function getMatchEvents() {
-    console.log("getMatchEvents");
     await supabase
       .from<Events>("events")
       .select("*")
@@ -116,14 +116,18 @@
           const homeScore =
             res.data?.filter(
               (event) =>
-                event.type.toLowerCase() === "goal" &&
-                event.team_id === props.match?.home.id,
+                (event.type.toLowerCase() === "goal" &&
+                  event.team_id === props.match?.home.id) ||
+                (event.type.toLowerCase() === "own goal" &&
+                  event.team_id === props.match?.away.id),
             ).length || 0;
           const awayScore =
             res.data?.filter(
               (event) =>
-                event.type.toLowerCase() === "goal" &&
-                event.team_id === props.match?.away.id,
+                (event.type.toLowerCase() === "goal" &&
+                  event.team_id === props.match?.away.id) ||
+                (event.type.toLowerCase() === "own goal" &&
+                  event.team_id === props.match?.home.id),
             ).length || 0;
           data.homeScore = homeScore;
           data.awayScore = awayScore;
