@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { IMatchTeamJoin, MatchStatusEnum, Teams } from "@/types/global";
   import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
-  import { Events } from "@/types/global";
+  import { Events, IPlayer } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { RealtimeSubscription } from "@supabase/supabase-js";
 
@@ -17,6 +17,9 @@
     awayScore: 0,
     isLoading: true,
   });
+
+  type IGoals = Partial<Events>;
+  const goals = reactive<Partial<IGoals>>({});
 
   interface Props {
     dashboard?: boolean;
@@ -70,14 +73,33 @@
     .from("*")
     .on("*", async (payload) => {
       await getMatchEvents();
+      await getScoredPlayers();
     })
     .subscribe();
   onMounted(async () => {
     await getMatchEvents();
+    await getScoredPlayers();
   });
   onUnmounted(() => {
     mySubscription?.unsubscribe();
   });
+
+  async function getScoredPlayers() {
+    const { data, error } = await supabase
+      .from<Partial<Events> & Partial<IPlayer> & any>("events")
+      .select(
+        `id,time,type,team_id,
+        player!events_player_id_fkey!inner(*),
+        assist_player:assist_id(*)
+      `,
+      )
+      .eq("match_id", props.match?.id)
+      .eq("type", "Goal")
+      .order("time", { ascending: true });
+
+    console.log(data);
+  }
+
   async function getMatchEvents() {
     console.log("getMatchEvents");
     await supabase
@@ -114,7 +136,7 @@
   >
     <div
       :class="`w-full ${
-        props.dashboard ? '' : 'md:w-3/5'
+        props.dashboard ? '' : 'md:w-5/6 lg:w-4/5'
       } bg-primary flex gap-6 md:gap-24 justify-center py-10 rounded`"
     >
       <div class="flex flex-col items-center gap-4">

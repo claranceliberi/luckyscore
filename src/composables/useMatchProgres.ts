@@ -39,7 +39,6 @@ export function useMatchProgress(
 
   calculateTime();
   setInterval(calculateTime, 50000);
-
   return { currentMatchMinute };
 }
 
