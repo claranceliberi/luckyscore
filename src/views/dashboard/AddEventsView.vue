@@ -70,7 +70,7 @@
         break;
       case MatchStatusEnum.FIRST_HALF_ONGOING:
         if (c(MatchStatusEnum.FIRST_HALF_ONGOING)) {
-          const { data: updateData, error: updateError } = await supabase
+          const { error: updateError } = await supabase
             .from("match")
             .update({
               match_status: MatchStatusEnum.FIRST_HALF_ONGOING,
@@ -83,16 +83,17 @@
             toast.success("Match started");
 
             if (match.value) {
-              // set some match important info without reload
+              // set some match important info with reload
               match.value.match_status = MatchStatusEnum.FIRST_HALF_ONGOING;
               match.value.first_half_started_at = currentTime.toString();
+              window.location.reload();
             }
           }
         }
         break;
       case MatchStatusEnum.HALF_TIME:
         if (c(MatchStatusEnum.HALF_TIME)) {
-          const { data: updateData, error: updateError } = await supabase
+          const { error: updateError } = await supabase
             .from("match")
             .update({
               match_status: MatchStatusEnum.HALF_TIME,
@@ -113,7 +114,7 @@
         break;
       case MatchStatusEnum.SECOND_HALF_ONGOING:
         if (c(MatchStatusEnum.SECOND_HALF_ONGOING)) {
-          const { data: updateData, error: updateError } = await supabase
+          const { error: updateError } = await supabase
             .from("match")
             .update({
               match_status: MatchStatusEnum.SECOND_HALF_ONGOING,
@@ -127,13 +128,14 @@
             if (match.value) {
               match.value.match_status = MatchStatusEnum.SECOND_HALF_ONGOING;
               match.value.second_half_started_at = currentTime;
+              window.location.reload();
             }
           }
         }
         break;
       case MatchStatusEnum.FULL_TIME:
         if (c(MatchStatusEnum.FULL_TIME)) {
-          const { data: updateData, error: updateError } = await supabase
+          const { error: updateError } = await supabase
             .from("match")
             .update({
               match_status: MatchStatusEnum.FULL_TIME,
@@ -156,17 +158,11 @@
         break;
     }
   }
-
-  const eventsData = [
-    { id: 1, type: "Corner", name: "Welding L2" },
-    { id: 2, type: "Shot on target", name: "Welding L4" },
-    { id: 3, type: "Yellow Card", name: "Yves Mugunga" },
-  ];
 </script>
 
 <template>
   <div v-if="loading">
-    <div class="mt-5">Feeding your screen some wonderfull stats..</div>
+    <div class="mt-5">Feeding your screen some wonderful stats..</div>
   </div>
   <div v-else-if="!match">
     <div>Something wrong happened!</div>
