@@ -104,6 +104,7 @@
   async function eventSelectedType(type: string) {
     data.type = type;
   }
+  console.log(`${props.match}_currentTime`);
   async function addEvent() {
     if (data.done_by == "") {
       toast.error("Please select a player");
@@ -118,11 +119,12 @@
     const type = data.type;
     data.done_by = "";
     data.type = "";
-    const time = localStorage.getItem(`${props.match}_currentTime`);
+    let time = localStorage.getItem(`${props.match}_currentTime`);
+
     const player = data.allData.find(
       (player: IPlayerMatch) => player.player_id === done_by,
     );
-    if (data.type === IEventType.GOAL) {
+    if (type === IEventType.GOAL) {
       await generateCommentary(
         `Player ${player?.player.full_name} scored for team ${
           data.home_team?.id === player?.player.team_id
@@ -150,66 +152,58 @@
                     player.player_id === data.assisted_by,
                 )?.player.full_name
               }`
-        }`,
+        }, ${time} minutes`,
       ).then((res) => {
         data.home_team?.id === player?.player.team_id;
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
 
       data.event_image_url = await generateThumbnail("goal celebration");
-    } else if (
-      data.type === IEventType.SHOT_ON_TARGET ||
-      data.type === IEventType.SHOT
-    ) {
+    } else if (type === IEventType.SHOT_ON_TARGET || type === IEventType.SHOT) {
       await generateCommentary(
-        `${player?.player.full_name} makes ${
-          data.type
-        } but not goal scored team ${
+        `${player?.player.full_name} makes ${type} but not goal scored team ${
           data.home_team?.id === player?.player.team_id
             ? data.home_team?.name
             : data.away_team?.name
-        }  time 78 minutes`,
+        },  ${time} minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
-      if (data.type === IEventType.SHOT_ON_TARGET)
+      if (type === IEventType.SHOT_ON_TARGET)
         data.event_image_url = await generateThumbnail(
           "saving shot on goal  football europe",
         );
     } else if (
-      data.type === IEventType.YELLOW_CARD ||
-      data.type === IEventType.RED_CARD
+      type === IEventType.YELLOW_CARD ||
+      type === IEventType.RED_CARD
     ) {
       await generateCommentary(
-        `${data.type} to ${player?.player.full_name} plays for ${
+        `${type} to ${player?.player.full_name} plays for ${
           data.home_team?.id === player?.player.team_id
             ? data.home_team?.name
             : data.away_team?.name
-        } time 49 minutes`,
+        }, ${time} minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
-    } else if (
-      data.type === IEventType.FOUL ||
-      data.type === IEventType.OFFSIDE
-    ) {
+    } else if (type === IEventType.FOUL || type === IEventType.OFFSIDE) {
       await generateCommentary(
         `${player?.player.full_name} plays for ${
           data.home_team?.id === player?.player.team_id
             ? data.home_team?.name
             : data.away_team?.name
-        } makes a ${data.type} time 29 minutes`,
+        } makes a ${type}, ${time} minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
-    } else if (data.type === IEventType.CORNER) {
+    } else if (type === IEventType.CORNER) {
       await generateCommentary(`
-        ${data.type}  ${
+        ${type}  ${
         data.home_team?.id === player?.player.team_id
           ? data.home_team?.name
           : data.away_team?.name
       } ${player?.player.full_name},
-      `).then((res) => {
+       ${time} minutes`).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
     }
@@ -237,6 +231,7 @@
   }
   const eventTypes = [
     "Goal",
+    "Own Goal",
     "Shot",
     "Shot on target",
     "Foul",
