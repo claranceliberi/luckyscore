@@ -79,7 +79,6 @@
     mySubscription?.unsubscribe();
   });
   async function getMatchEvents() {
-    console.log("getMatchEvents");
     await supabase
       .from<Events>("events")
       .select("*")
@@ -146,7 +145,7 @@
         >
           {{
             scoreBoard?.isLive
-              ? `${currentMinute}'` || "Loading..."
+              ? `${currentMinute || 0}'` || "Loading..."
               : scoreBoard?.isHalfTime
               ? "HT"
               : scoreBoard?.isFullTime

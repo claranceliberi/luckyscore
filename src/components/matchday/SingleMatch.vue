@@ -47,7 +47,7 @@
         >
           <small class="text-green-500"></small>
           <small class="text-green-500 mr-5">
-            {{ isLive ? `${matchTime}'` : "" }}</small
+            {{ isLive ? `${matchTime || 0}'` : "" }}</small
           >
         </div>
 
