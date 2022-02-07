@@ -25,7 +25,8 @@
     .then((res) => {
       if (res) {
         team.goalkeeper = res.data?.find(
-          (player: IPlayerMatch) => player.pitch_position === 1,
+          (player: IPlayerMatch) =>
+            player.pitch_position === 1 && player.player.team_id === props.team,
         );
         team.players =
           res.data?.filter(
