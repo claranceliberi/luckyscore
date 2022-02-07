@@ -205,11 +205,17 @@
           data.home_team?.id === player?.player.team_id
             ? data.home_team?.name
             : data.away_team?.name
-        },  ${time} minutes`,
+        }
+        VS ${
+          data.home_team?.id !== player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        }
+        }  ${time} minutes`,
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
-      data.event_image_url = await generateThumbnail("own goal celebration");
+      data.event_image_url = await generateThumbnail("scoring own goal");
     } else if (type === IEventType.CORNER) {
       await generateCommentary(`
         ${type}  ${
