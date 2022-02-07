@@ -228,7 +228,7 @@
                 />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
                 <span v-if="goal.assist_player" class="text-sm">
-                  ({{ goal.assist_player?.full_name }})</span
+                  ( {{ goal.assist_player?.full_name }} )</span
                 >
               </div>
               <div class="col-start-6 col-end-8 text-center">
@@ -257,7 +257,7 @@
                 />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
                 <span v-if="goal.assist_player" class="text-sm">
-                  ({{ goal.assist_player?.full_name }})</span
+                  ( {{ goal.assist_player?.full_name }} )</span
                 >
               </div>
             </template>
