@@ -103,7 +103,6 @@ async function handleUpdateUser(credentials: Credentials) {
  * Handles logging a user out of a supabase session
  */
 async function handleLogout() {
-  console.log("logging out");
   try {
     const { error } = await supabase.auth.signOut();
 

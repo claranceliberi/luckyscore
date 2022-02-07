@@ -19,6 +19,7 @@ export interface ILink {
 
 export enum IEventType {
   GOAL = "Goal",
+  OWN_GOAL = "Own Goal",
   SHOT = "Shot",
   SHOT_ON_TARGET = "Shot on target",
   FOUL = "Foul",

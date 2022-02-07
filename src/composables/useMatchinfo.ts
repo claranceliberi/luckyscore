@@ -26,20 +26,24 @@ async function fetchMatchDetails(id: string) {
       .order("created_at", { ascending: false });
 
     if (error1) {
-      console.log("error", error1);
+      console.error("error", error1);
       return;
     }
     if (error) {
-      console.log("error", error);
+      console.error("error", error);
       return;
     }
 
     // get goals
     const home_score = events?.filter(
-      (e) => e.type === IEventType.GOAL && e.team_id === match?.home.id,
+      (e) =>
+        (e.type === IEventType.GOAL && e.team_id === match?.home.id) ||
+        (e.type.toLowerCase() === "own goal" && e.team_id === match?.away.id),
     ).length;
     const away_score = events?.filter(
-      (e) => e.type === IEventType.GOAL && e.team_id === match?.away.id,
+      (e) =>
+        (e.type === IEventType.GOAL && e.team_id === match?.away.id) ||
+        (e.type === IEventType.OWN_GOAL && e.team_id === match?.home.id),
     ).length;
 
     // get shots
@@ -136,8 +140,6 @@ async function fetchMatchDetails(id: string) {
     // store response to allDetails
     allDetails.value = match;
     allEvents.value = events;
-    console.log("got match!", match);
-    console.log("got events!", events);
   } catch (err) {
     console.error("Error retrieving match data from db", err);
   }

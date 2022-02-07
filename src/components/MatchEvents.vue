@@ -48,18 +48,21 @@
         if (res) {
           data.events = res.data || [];
           data.isLoading = false;
-
           const homeScore =
             res.data?.filter(
               (event) =>
-                event.type.toLowerCase() === "goal" &&
-                event.team_id === props.details?.home.id,
+                (event.type.toLowerCase() === "goal" &&
+                  event.team_id === props.details?.home.id) ||
+                (event.type.toLowerCase() === "own goal" &&
+                  event.team_id === props.details?.away.id),
             ).length || 0;
           const awayScore =
             res.data?.filter(
               (event) =>
-                event.type.toLowerCase() === "goal" &&
-                event.team_id === props.details?.away.id,
+                (event.type.toLowerCase() === "goal" &&
+                  event.team_id === props.details?.away.id) ||
+                (event.type.toLowerCase() === "own goal" &&
+                  event.team_id === props.details?.home.id),
             ).length || 0;
           if (data.home_score !== homeScore || data.away_score !== awayScore) {
             data.home_score = homeScore;
@@ -72,7 +75,7 @@
               })
               .match({ id: props.match });
             if (error) {
-              console.log(error);
+              console.error(error);
             }
           }
         }

@@ -13,7 +13,6 @@
     .from("match")
     .on("*", (payload) => {
       getTableStats();
-      console.log("Hello");
     })
     .subscribe();
 
