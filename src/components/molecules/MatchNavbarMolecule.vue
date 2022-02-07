@@ -94,7 +94,8 @@
       `,
       )
       .eq("match_id", props.match?.id)
-      .eq("type", "Goal")
+      // .eq("type", "Goal")
+      .or("type.eq.Goal,type.eq.Red card")
       .order("created_at", { ascending: true });
 
     if (data) goals.value = data;
@@ -215,6 +216,12 @@
                   src="@/assets/icons/images/goal.png"
                   :alt="goal.type"
                 />
+                <img
+                  v-else-if="goal.type === IEventType.RED_CARD"
+                  class="max-w-4 max-h-4"
+                  src="@/assets/icons/images/red.png"
+                  :alt="goal.type"
+                />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
                 <span v-if="goal.assist_player" class="text-sm">
                   ({{ goal.assist_player?.full_name }})</span
@@ -236,6 +243,12 @@
                   v-if="goal.type === IEventType.GOAL"
                   class="max-w-4 max-h-4"
                   src="@/assets/icons/images/goal.png"
+                  :alt="goal.type"
+                />
+                <img
+                  v-else-if="goal.type === IEventType.RED_CARD"
+                  class="max-w-4 max-h-4"
+                  src="@/assets/icons/images/red.png"
                   :alt="goal.type"
                 />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
