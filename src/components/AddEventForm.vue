@@ -29,6 +29,7 @@
     done_by: string;
     assisted_by: string;
     optionsData: Options[];
+    opponentOptions: Options[];
     allData: IPlayerMatch[];
     home_team: Teams | null;
     away_team: Teams | null;
@@ -43,6 +44,7 @@
     done_by: "",
     assisted_by: "",
     optionsData: [],
+    opponentOptions: [],
     allData: [],
     home_team: null,
     away_team: null,
@@ -75,6 +77,11 @@
         res.data?.forEach((element) => {
           if (element.player.team_id === props.team)
             data.optionsData.push({
+              value: element.player_id,
+              label: element.player.full_name,
+            });
+          else
+            data.opponentOptions.push({
               value: element.player_id,
               label: element.player.full_name,
             });
@@ -242,6 +249,7 @@
     "Yellow card",
     "Red card",
     "Offside",
+    "Own Goal",
   ];
 </script>
 
@@ -266,12 +274,21 @@
       <SelectAtom
         v-model="data.done_by"
         placeholder="Select Player who shot"
-        :options="data.optionsData"
+        :options="
+          data.type == IEventType.OWN_GOAL
+            ? data.opponentOptions
+            : data.optionsData
+        "
       ></SelectAtom>
     </div>
     <h1 class="font-black mt-6 mb-4">Assisted by</h1>
     <div class="w-full md:w-1/2">
       <SelectAtom
+        v-if="
+          data.type == IEventType.GOAL ||
+          data.type == IEventType.SHOT ||
+          data.type == IEventType.SHOT_ON_TARGET
+        "
         v-model="data.assisted_by"
         placeholder="Select Player to assisted"
         :options="data.optionsData"
