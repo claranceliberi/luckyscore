@@ -54,7 +54,7 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.details?.home.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.details?.away.id),
+                  event.team_id === props.details?.home.id),
             ).length || 0;
           const awayScore =
             res.data?.filter(
@@ -62,11 +62,13 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.details?.away.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.details?.home.id),
+                  event.team_id === props.details?.away.id),
             ).length || 0;
           if (data.home_score !== homeScore || data.away_score !== awayScore) {
             data.home_score = homeScore;
             data.away_score = awayScore;
+            alert("in events");
+            console.log(homeScore, awayScore);
             const { data: updateData, error } = await supabase
               .from("match")
               .update({

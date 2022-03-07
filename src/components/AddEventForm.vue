@@ -189,6 +189,8 @@
         data.home_team?.id === player?.player.team_id;
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
+
+      data.event_image_url = await generateThumbnail("own goal scored");
     } else if (type === IEventType.SHOT_ON_TARGET || type === IEventType.SHOT) {
       await generateCommentary(
         `${player?.player.full_name} makes ${type} but not goal scored team ${
@@ -226,23 +228,6 @@
       ).then((res) => {
         data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
       });
-    } else if (type === IEventType.OWN_GOAL) {
-      await generateCommentary(
-        `${player?.player.full_name} scorers ${type} against his team ${
-          data.home_team?.id === player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        }
-        VS ${
-          data.home_team?.id !== player?.player.team_id
-            ? data.home_team?.name
-            : data.away_team?.name
-        }
-        }  ${time} minutes`,
-      ).then((res) => {
-        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
-      });
-      data.event_image_url = await generateThumbnail("scoring own goal");
     } else if (type === IEventType.CORNER) {
       await generateCommentary(`
         ${type}  ${

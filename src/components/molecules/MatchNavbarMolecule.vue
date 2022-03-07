@@ -119,7 +119,7 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.match?.home.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.match?.away.id),
+                  event.team_id === props.match?.home.id),
             ).length || 0;
           const awayScore =
             res.data?.filter(
@@ -127,7 +127,7 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.match?.away.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.match?.home.id),
+                  event.team_id === props.match?.away.id),
             ).length || 0;
           data.homeScore = homeScore;
           data.awayScore = awayScore;
