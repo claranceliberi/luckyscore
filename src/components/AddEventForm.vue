@@ -169,6 +169,26 @@
       });
 
       data.event_image_url = await generateThumbnail("goal celebration");
+    } else if (type === IEventType.OWN_GOAL) {
+      await generateCommentary(
+        `Player ${player?.player.full_name} scored own goal agains his team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } and made it ${
+          data.home_team?.id === player?.player.team_id
+            ? ++data.home_score
+            : ++data.away_score
+        }-${
+          data.home_team?.id === player?.player.team_id
+            ? data.away_score
+            : data.home_score
+        } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
+     , ${time} minutes`,
+      ).then((res) => {
+        data.home_team?.id === player?.player.team_id;
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
     } else if (type === IEventType.SHOT_ON_TARGET || type === IEventType.SHOT) {
       await generateCommentary(
         `${player?.player.full_name} makes ${type} but not goal scored team ${
@@ -249,7 +269,6 @@
     "Yellow card",
     "Red card",
     "Offside",
-    "Own Goal",
   ];
 </script>
 
@@ -281,19 +300,22 @@
         "
       ></SelectAtom>
     </div>
-    <h1 class="font-black mt-6 mb-4">Assisted by</h1>
-    <div class="w-full md:w-1/2">
-      <SelectAtom
-        v-if="
-          data.type == IEventType.GOAL ||
-          data.type == IEventType.SHOT ||
-          data.type == IEventType.SHOT_ON_TARGET
-        "
-        v-model="data.assisted_by"
-        placeholder="Select Player to assisted"
-        :options="data.optionsData"
-      ></SelectAtom>
-    </div>
+    <template
+      v-if="
+        data.type == IEventType.GOAL ||
+        data.type == IEventType.SHOT ||
+        data.type == IEventType.SHOT_ON_TARGET
+      "
+    >
+      <h1 class="font-black mt-6 mb-4">Assisted by</h1>
+      <div class="w-full md:w-1/2">
+        <SelectAtom
+          v-model="data.assisted_by"
+          placeholder="Select Player to assisted"
+          :options="data.optionsData"
+        ></SelectAtom>
+      </div>
+    </template>
 
     <button
       class="bg-primary text-white mt-2 p-4 px-8 rounded-full"
