@@ -129,8 +129,12 @@
                 (event.type.toLowerCase() === "own goal" &&
                   event.team_id === props.match?.away.id),
             ).length || 0;
-          data.homeScore = homeScore;
-          data.awayScore = awayScore;
+          data.homeScore = props.match?.forfeit
+            ? props.match.home_score
+            : homeScore;
+          data.awayScore = props.match?.forfeit
+            ? props.match.away_score
+            : awayScore;
         }
       });
   }
@@ -163,21 +167,26 @@
           <h1 v-if="played">{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
           <p
             :class="
-              scoreBoard?.isLive ||
-              props.match?.match_status === MatchStatusEnum.HALF_TIME
+              props.match?.forfeit
+                ? 'text-red-500'
+                : scoreBoard?.isLive ||
+                  props.match?.match_status === MatchStatusEnum.HALF_TIME
                 ? 'text-green-400'
                 : 'text-gray-400'
             "
           >
-            {{
-              scoreBoard?.isLive
-                ? `${currentMinute}'` || "Loading..."
-                : scoreBoard?.isHalfTime
-                ? "HT"
-                : scoreBoard?.isFullTime
-                ? "FT"
-                : "Vs"
-            }}
+            <template v-if="!props.match?.forfeit">
+              {{
+                scoreBoard?.isLive
+                  ? `${currentMinute}'` || "Loading..."
+                  : scoreBoard?.isHalfTime
+                  ? "HT"
+                  : scoreBoard?.isFullTime
+                  ? "FT"
+                  : "Vs"
+              }}
+            </template>
+            <template v-else> FRF </template>
           </p>
           <span
             v-if="

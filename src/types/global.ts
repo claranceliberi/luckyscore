@@ -115,6 +115,7 @@ export interface IMatch extends ITable {
   second_half_started_at: string;
   second_half_ended_at: string;
   to_be_played_at: string;
+  forfeit: boolean;
 }
 
 export interface IMatchTeamJoin extends IMatch {

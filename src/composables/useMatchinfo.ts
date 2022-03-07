@@ -104,8 +104,15 @@ async function fetchMatchDetails(id: string) {
       (e) => e.type === IEventType.CORNER && e.team_id === match?.away.id,
     ).length;
 
-    match ? (match.home_score = home_score || 0) : null;
-    match ? (match.away_score = away_score || 0) : null;
+    console.log(match);
+
+    match
+      ? (match.home_score = match.forfeit ? match.home_score : home_score || 0)
+      : null;
+    match
+      ? (match.away_score = match.forfeit ? match.home_score : away_score || 0)
+      : null;
+
     match
       ? (match.home_shots =
           Number(home_shots) +

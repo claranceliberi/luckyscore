@@ -38,49 +38,70 @@
   });
   async function getMatchEvents() {
     await supabase
-      .from<Events>("events")
-      .select(
-        "*,player!events_player_id_fkey(id,full_name),team!events_team_id_fkey(id,name)",
-      )
-      .eq("match_id", props.match + "")
-      .order("created_at", { ascending: false })
+      .from<IMatchTeamJoin>("match")
+      .select("*,away:away_team ( * ),home:home_team ( * )")
+      .eq("id", props.match as string)
       .then(async (res) => {
-        if (res) {
-          data.events = res.data || [];
-          data.isLoading = false;
-          const homeScore =
-            res.data?.filter(
-              (event) =>
-                (event.type.toLowerCase() === "goal" &&
-                  event.team_id === props.details?.home.id) ||
-                (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.details?.home.id),
-            ).length || 0;
-          const awayScore =
-            res.data?.filter(
-              (event) =>
-                (event.type.toLowerCase() === "goal" &&
-                  event.team_id === props.details?.away.id) ||
-                (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.details?.away.id),
-            ).length || 0;
-          if (data.home_score !== homeScore || data.away_score !== awayScore) {
-            data.home_score = homeScore;
-            data.away_score = awayScore;
-            alert("in events");
-            console.log(homeScore, awayScore);
-            const { data: updateData, error } = await supabase
-              .from("match")
-              .update({
-                home_score: homeScore,
-                away_score: awayScore,
-              })
-              .match({ id: props.match });
-            if (error) {
-              console.error(error);
+        const response_data = res.data || [];
+
+        await supabase
+          .from<Events>("events")
+          .select(
+            "*,player!events_player_id_fkey(id,full_name),team!events_team_id_fkey(id,name)",
+          )
+          .eq("match_id", props.match + "")
+          .order("created_at", { ascending: false })
+          .then(async (res) => {
+            if (res) {
+              data.events = res.data || [];
+              data.isLoading = false;
+              const homeScore =
+                res.data?.filter(
+                  (event) =>
+                    (event.type.toLowerCase() === "goal" &&
+                      event.team_id === props.details?.home.id) ||
+                    (event.type.toLowerCase() === "own goal" &&
+                      event.team_id === props.details?.home.id),
+                ).length || 0;
+              const awayScore =
+                res.data?.filter(
+                  (event) =>
+                    (event.type.toLowerCase() === "goal" &&
+                      event.team_id === props.details?.away.id) ||
+                    (event.type.toLowerCase() === "own goal" &&
+                      event.team_id === props.details?.away.id),
+                ).length || 0;
+
+              if (response_data.length > 0) {
+                if (!response_data[0].forfeit) {
+                  if (
+                    data.home_score !== homeScore ||
+                    data.away_score !== awayScore
+                  ) {
+                    data.home_score = homeScore;
+                    data.away_score = awayScore;
+                    alert("in events");
+                    console.log(homeScore, awayScore);
+
+                    const { data: updateData, error } = await supabase
+                      .from("match")
+                      .update({
+                        home_score: homeScore,
+                        away_score: awayScore,
+                      })
+                      .match({ id: props.match });
+                    if (error) {
+                      console.error(error);
+                    }
+                  }
+                } else {
+                  console.log("forfeit");
+                  data.home_score = response_data[0].home_score;
+                  data.away_score = response_data[0].away_score;
+                }
+              }
             }
-          }
-        }
+          });
       });
   }
   // supabase
