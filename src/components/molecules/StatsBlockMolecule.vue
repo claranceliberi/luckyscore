@@ -23,7 +23,7 @@
     results
       .sort((a, b) => (a.amount < b.amount ? 1 : -1))
       .filter((stat) => stat.amount > 0)
-      .splice(0, 11) || "",
+      .splice(0, 10) || "",
   );
 </script>
 
