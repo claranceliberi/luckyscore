@@ -1,4 +1,5 @@
 <template>
+<div class="mt-2">
   <h1 class="font-bold">{{ name }}</h1>
   <div class="flex flex-wrap gap-4 pt-5">
     <div v-for="match in props.matches" :key="match.id">
@@ -21,6 +22,7 @@
         </router-link>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
