@@ -81,7 +81,7 @@
                     data.home_score = homeScore;
                     data.away_score = awayScore;
                     alert("in events");
-                    console.log(homeScore, awayScore);
+                    // console.log(homeScore, awayScore);
 
                     const { data: updateData, error } = await supabase
                       .from("match")
@@ -91,11 +91,11 @@
                       })
                       .match({ id: props.match });
                     if (error) {
-                      console.error(error);
+                      // console.error(error);
                     }
                   }
                 } else {
-                  console.log("forfeit");
+                  // console.log("forfeit");
                   data.home_score = response_data[0].home_score;
                   data.away_score = response_data[0].away_score;
                 }

@@ -26,11 +26,11 @@ async function fetchMatchDetails(id: string) {
       .order("created_at", { ascending: false });
 
     if (error1) {
-      console.error("error", error1);
+      // console.error("error", error1);
       return;
     }
     if (error) {
-      console.error("error", error);
+      // console.error("error", error);
       return;
     }
 
@@ -104,7 +104,7 @@ async function fetchMatchDetails(id: string) {
       (e) => e.type === IEventType.CORNER && e.team_id === match?.away.id,
     ).length;
 
-    console.log(match);
+    // console.log(match);
 
     match
       ? (match.home_score = match.forfeit ? match.home_score : home_score || 0)
@@ -148,7 +148,7 @@ async function fetchMatchDetails(id: string) {
     allDetails.value = match;
     allEvents.value = events;
   } catch (err) {
-    console.error("Error retrieving match data from db", err);
+    // console.error("Error retrieving match data from db", err);
   }
 }
 

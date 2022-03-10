@@ -31,7 +31,7 @@
   });
 
   async function controlMenu(to: RouteLocationNormalized) {
-    console.log("route called");
+    // console.log("route called");
     if (route.name)
       showMenu.value = !routesWithoutMenu.includes(route.name.toString());
     else showMenu.value = true;

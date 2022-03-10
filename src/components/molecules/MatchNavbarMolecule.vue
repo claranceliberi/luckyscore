@@ -100,7 +100,7 @@
       .order("created_at", { ascending: true });
 
     if (data) goals.value = data;
-    else if (error) console.log(error);
+    else if (error) return error; //console.log(error);
   }
 
   async function getMatchEvents() {

@@ -29,7 +29,7 @@ async function handleLogin(credentials: Credentials) {
     }
   } catch (error) {
     const e = error as ApiError;
-    console.error("Error thrown:", e.message);
+    // console.error("Error thrown:", e.message);
     alert(e.message || error);
   }
 }
@@ -48,13 +48,13 @@ async function handleSignup(credentials: Credentials) {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) {
       alert(error.message);
-      console.error(error, error.message);
+      // console.error(error, error.message);
       return;
     }
     alert("Signup successful, confirmation mail should be sent soon!");
   } catch (err) {
     alert("Fatal error signing up");
-    console.error("signup error", err);
+    // console.error("signup error", err);
   }
 }
 
