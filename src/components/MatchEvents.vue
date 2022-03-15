@@ -80,7 +80,6 @@
                   ) {
                     data.home_score = homeScore;
                     data.away_score = awayScore;
-                    alert("in events");
                     // console.log(homeScore, awayScore);
 
                     const { data: updateData, error } = await supabase

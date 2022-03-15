@@ -67,27 +67,57 @@
       data.home_team = res.data ? res?.data.home : null;
       data.away_team = res.data ? res?.data.away : null;
     });
-  supabase
-    .from<IPlayerMatch>("player_match")
-    .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
-    .eq("match", props.match + "")
-    .then((res) => {
-      if (res) {
-        data.allData = res.data || [];
-        res.data?.forEach((element) => {
-          if (element.player.team_id === props.team)
-            data.optionsData.push({
-              value: element.player_id,
-              label: element.player.full_name,
-            });
-          else
-            data.opponentOptions.push({
-              value: element.player_id,
-              label: element.player.full_name,
-            });
-        });
-      }
-    });
+  let homeOptions = localStorage.getItem(
+    `match_data_${props.match}_${props.team}_data`,
+  );
+
+  let opponentOptions = localStorage.getItem(
+    `match_data_${props.match}_${props.team}_opponent`,
+  );
+
+  let allData = localStorage.getItem(`match_data_${props.match}_allData`);
+
+  if (homeOptions != null && opponentOptions != null && allData != null) {
+    // data.opponentOptions = JSON.parse(opponentOptions);
+    data.opponentOptions = JSON.parse(opponentOptions);
+    data.optionsData = JSON.parse(homeOptions);
+    data.allData = JSON.parse(allData);
+  } else {
+    supabase
+      .from<IPlayerMatch>("player_match")
+      .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
+      .eq("match", props.match + "")
+      .then((res) => {
+        if (res) {
+          data.allData = res.data || [];
+          res.data?.forEach((element) => {
+            if (element.player.team_id === props.team)
+              data.optionsData.push({
+                value: element.player_id,
+                label: element.player.full_name,
+              });
+            else
+              data.opponentOptions.push({
+                value: element.player_id,
+                label: element.player.full_name,
+              });
+          });
+          localStorage.setItem(
+            `match_data_${props.match}_${props.team}_opponent`,
+            JSON.stringify(data.opponentOptions),
+          );
+          localStorage.setItem(
+            `match_data_${props.match}_${props.team}_data`,
+            JSON.stringify(data.optionsData),
+          );
+
+          localStorage.setItem(
+            `match_data_${props.match}_allData`,
+            JSON.stringify(data.allData),
+          );
+        }
+      });
+  }
   supabase
     .from<Events>("events")
     .select("*")
