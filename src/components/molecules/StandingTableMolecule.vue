@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ITableStatistics } from "@/types/global";
+  import { ITableStatistics, MatchStatusEnum } from "@/types/global";
   import { reactive, ref } from "vue";
 
   interface ITeamStat {
@@ -41,30 +41,34 @@
     singleResults.team_name = singleTeam.name;
 
     singleTeam.home_match?.forEach((homeStats) => {
-      singleResults.goal_forward += homeStats.home_score;
-      singleResults.goal_against += homeStats.away_score;
-      if (homeStats.home_score > homeStats.away_score) {
-        singleResults.points += 3;
-        singleResults.wins += 1;
-      } else if (homeStats.home_score === homeStats.away_score) {
-        singleResults.points += 1;
-        singleResults.draws += 1;
-      } else {
-        singleResults.loss += 1;
+      if (homeStats.match_status === MatchStatusEnum.FULL_TIME) {
+        singleResults.goal_forward += homeStats.home_score;
+        singleResults.goal_against += homeStats.away_score;
+        if (homeStats.home_score > homeStats.away_score) {
+          singleResults.points += 3;
+          singleResults.wins += 1;
+        } else if (homeStats.home_score === homeStats.away_score) {
+          singleResults.points += 1;
+          singleResults.draws += 1;
+        } else {
+          singleResults.loss += 1;
+        }
       }
     });
 
     singleTeam.away_match?.forEach((awayStats) => {
-      singleResults.goal_forward += awayStats.away_score;
-      singleResults.goal_against += awayStats.home_score;
-      if (awayStats.away_score > awayStats.home_score) {
-        singleResults.points += 3;
-        singleResults.wins += 1;
-      } else if (awayStats.away_score === awayStats.home_score) {
-        singleResults.points += 1;
-        singleResults.draws += 1;
-      } else {
-        singleResults.loss += 1;
+      if (awayStats.match_status === MatchStatusEnum.FULL_TIME) {
+        singleResults.goal_forward += awayStats.away_score;
+        singleResults.goal_against += awayStats.home_score;
+        if (awayStats.away_score > awayStats.home_score) {
+          singleResults.points += 3;
+          singleResults.wins += 1;
+        } else if (awayStats.away_score === awayStats.home_score) {
+          singleResults.points += 1;
+          singleResults.draws += 1;
+        } else {
+          singleResults.loss += 1;
+        }
       }
     });
 

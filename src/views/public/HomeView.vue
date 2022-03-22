@@ -2,8 +2,12 @@
   import SubnavbarMoleculeVue from "@/components/molecules/SubnavbarMolecule.vue";
   import NavbarMolecule from "@/components/molecules/NavbarMolecule.vue";
   import { ILink } from "~/types/global";
-  import { onBeforeRouteUpdate, useRoute } from "vue-router";
-  import { ref } from "vue";
+  import {
+    onBeforeRouteUpdate,
+    RouteLocationNormalized,
+    useRoute,
+  } from "vue-router";
+  import { onBeforeMount, ref } from "vue";
   import router from "@/router";
 
   const route = useRoute();
@@ -22,9 +26,19 @@
   const routesWithoutMenu = ["MatchDetails"];
   const showMenu = ref(true);
 
-  onBeforeRouteUpdate((to) => {
-    if (to.name)
-      showMenu.value = !routesWithoutMenu.includes(to.name.toString());
+  onBeforeRouteUpdate(async (to) => {
+    await controlMenu(to);
+  });
+
+  async function controlMenu(to: RouteLocationNormalized) {
+    // console.log("route called");
+    if (route.name)
+      showMenu.value = !routesWithoutMenu.includes(route.name.toString());
+    else showMenu.value = true;
+  }
+
+  onBeforeMount(async () => {
+    await controlMenu(route);
   });
 </script>
 

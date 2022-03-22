@@ -1,12 +1,8 @@
 <script setup lang="ts">
   import { useRoute, useRouter } from "vue-router";
-  import MatchNavbarMolecule from "../../components/molecules/MatchNavbarMolecule.vue";
-  import MatchEvents from "@/components/MatchEvents.vue";
-  import AddEventForm from "@/components/AddEventForm.vue";
   import { IMatchTeamJoin, MatchStatusEnum } from "@/types/global";
   import { supabase } from "@/lib/supabase";
   import { ref, computed, onBeforeMount, reactive } from "vue";
-  import { PostgrestResponse } from "@supabase/supabase-js";
   import { toast } from "@/plugins/toaster/vue-toast";
   import { getCurrentTime, getTime } from "@/composables/useTime";
 
@@ -145,6 +141,14 @@
 
           if (updateError) toast.error(updateError?.message);
           else {
+            let time = localStorage.getItem(
+              `${route.params.matchId as string}_currentTime`,
+            );
+            localStorage.clear();
+            localStorage.setItem(
+              `${route.params.matchId as string}_currentTime`,
+              time ? time : "90",
+            );
             toast.success("Match has ended succesfully");
             if (match.value) {
               match.value.match_status = MatchStatusEnum.FULL_TIME;

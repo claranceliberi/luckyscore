@@ -96,11 +96,11 @@
       )
       .eq("match_id", props.match?.id)
       // .eq("type", "Goal")
-      .or("type.eq.Goal,type.eq.Red card")
+      .or("type.eq.Goal,type.eq.Own Goal,type.eq.Red card")
       .order("created_at", { ascending: true });
 
     if (data) goals.value = data;
-    else if (error) console.log(error);
+    else if (error) return error; //console.log(error);
   }
 
   async function getMatchEvents() {
@@ -119,7 +119,7 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.match?.home.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.match?.away.id),
+                  event.team_id === props.match?.home.id),
             ).length || 0;
           const awayScore =
             res.data?.filter(
@@ -127,10 +127,14 @@
                 (event.type.toLowerCase() === "goal" &&
                   event.team_id === props.match?.away.id) ||
                 (event.type.toLowerCase() === "own goal" &&
-                  event.team_id === props.match?.home.id),
+                  event.team_id === props.match?.away.id),
             ).length || 0;
-          data.homeScore = homeScore;
-          data.awayScore = awayScore;
+          data.homeScore = props.match?.forfeit
+            ? props.match.home_score
+            : homeScore;
+          data.awayScore = props.match?.forfeit
+            ? props.match.away_score
+            : awayScore;
         }
       });
   }
@@ -163,21 +167,26 @@
           <h1 v-if="played">{{ `${data.homeScore} - ${data.awayScore}` }}</h1>
           <p
             :class="
-              scoreBoard?.isLive ||
-              props.match?.match_status === MatchStatusEnum.HALF_TIME
+              props.match?.forfeit
+                ? 'text-red-500'
+                : scoreBoard?.isLive ||
+                  props.match?.match_status === MatchStatusEnum.HALF_TIME
                 ? 'text-green-400'
                 : 'text-gray-400'
             "
           >
-            {{
-              scoreBoard?.isLive
-                ? `${currentMinute}'` || "Loading..."
-                : scoreBoard?.isHalfTime
-                ? "HT"
-                : scoreBoard?.isFullTime
-                ? "FT"
-                : "Vs"
-            }}
+            <template v-if="!props.match?.forfeit">
+              {{
+                scoreBoard?.isLive
+                  ? `${currentMinute}'` || "Loading..."
+                  : scoreBoard?.isHalfTime
+                  ? "HT"
+                  : scoreBoard?.isFullTime
+                  ? "FT"
+                  : "Vs"
+              }}
+            </template>
+            <template v-else> FRF </template>
           </p>
           <span
             v-if="
@@ -226,8 +235,18 @@
                   src="@/assets/icons/images/red.png"
                   :alt="goal.type"
                 />
+                <img
+                  v-else-if="goal.type == IEventType.OWN_GOAL"
+                  class="max-w-4 max-h-4"
+                  src="@/assets/icons/images/goal.png"
+                  :alt="goal.type"
+                />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
-                <span v-if="goal.assist_player" class="text-sm">
+                <span v-if="goal.type === IEventType.OWN_GOAL">(OG)</span>
+                <span
+                  v-if="goal.assist_player && goal.type == IEventType.GOAL"
+                  class="text-sm"
+                >
                   ( {{ goal.assist_player?.full_name }} )</span
                 >
               </div>
@@ -255,8 +274,18 @@
                   src="@/assets/icons/images/red.png"
                   :alt="goal.type"
                 />
+                <img
+                  v-else-if="goal.type === IEventType.OWN_GOAL"
+                  class="max-w-4 max-h-4"
+                  src="@/assets/icons/images/goal.png"
+                  :alt="goal.type"
+                />
                 <span class="text-sm">{{ goal.player?.full_name }}</span>
-                <span v-if="goal.assist_player" class="text-sm">
+                <span v-if="goal.type === IEventType.OWN_GOAL">(OG)</span>
+                <span
+                  v-if="goal.assist_player && goal.type == IEventType.GOAL"
+                  class="text-sm"
+                >
                   ( {{ goal.assist_player?.full_name }} )</span
                 >
               </div>

@@ -86,7 +86,7 @@
   const teamsData = ref<Teams[]>([]);
   const teamsOptions = ref<SelectType[]>([]);
 
-  const matchDays = ref([1, 2, 3, 4, 5, 6]);
+  const matchDays = ref([1, 2, 3, 4, 5, 6, 7]);
 
   supabase
     .from<Teams>("team")

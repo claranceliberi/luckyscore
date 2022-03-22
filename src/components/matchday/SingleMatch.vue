@@ -10,6 +10,7 @@
     awayTeam: string;
     homeScore: number;
     awayScore: number;
+    forfeit: boolean;
     firstHalfStartedAt: string;
     secondHalfStartedAt: string;
     time: string;
@@ -41,7 +42,13 @@
       <div>
         <!-- match on going -->
         <div
-          v-if="
+          v-if="props.forfeit"
+          class="flex items-center justify-between mr-18"
+        >
+          <small class="text-red-500 mr-5"> FRF</small>
+        </div>
+        <div
+          v-else-if="
             matchStatus === MatchStatusEnum.FIRST_HALF_ONGOING ||
             matchStatus === MatchStatusEnum.SECOND_HALF_ONGOING
           "

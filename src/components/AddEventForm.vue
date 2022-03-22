@@ -29,6 +29,7 @@
     done_by: string;
     assisted_by: string;
     optionsData: Options[];
+    opponentOptions: Options[];
     allData: IPlayerMatch[];
     home_team: Teams | null;
     away_team: Teams | null;
@@ -43,6 +44,7 @@
     done_by: "",
     assisted_by: "",
     optionsData: [],
+    opponentOptions: [],
     allData: [],
     home_team: null,
     away_team: null,
@@ -65,22 +67,57 @@
       data.home_team = res.data ? res?.data.home : null;
       data.away_team = res.data ? res?.data.away : null;
     });
-  supabase
-    .from<IPlayerMatch>("player_match")
-    .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
-    .eq("match", props.match + "")
-    .then((res) => {
-      if (res) {
-        data.allData = res.data || [];
-        res.data?.forEach((element) => {
-          if (element.player.team_id === props.team)
-            data.optionsData.push({
-              value: element.player_id,
-              label: element.player.full_name,
-            });
-        });
-      }
-    });
+  let homeOptions = localStorage.getItem(
+    `match_data_${props.match}_${props.team}_data`,
+  );
+
+  let opponentOptions = localStorage.getItem(
+    `match_data_${props.match}_${props.team}_opponent`,
+  );
+
+  let allData = localStorage.getItem(`match_data_${props.match}_allData`);
+
+  if (homeOptions != null && opponentOptions != null && allData != null) {
+    // data.opponentOptions = JSON.parse(opponentOptions);
+    data.opponentOptions = JSON.parse(opponentOptions);
+    data.optionsData = JSON.parse(homeOptions);
+    data.allData = JSON.parse(allData);
+  } else {
+    supabase
+      .from<IPlayerMatch>("player_match")
+      .select("*,player!player_match_player_id_fkey(id,full_name,team_id)")
+      .eq("match", props.match + "")
+      .then((res) => {
+        if (res) {
+          data.allData = res.data || [];
+          res.data?.forEach((element) => {
+            if (element.player.team_id === props.team)
+              data.optionsData.push({
+                value: element.player_id,
+                label: element.player.full_name,
+              });
+            else
+              data.opponentOptions.push({
+                value: element.player_id,
+                label: element.player.full_name,
+              });
+          });
+          localStorage.setItem(
+            `match_data_${props.match}_${props.team}_opponent`,
+            JSON.stringify(data.opponentOptions),
+          );
+          localStorage.setItem(
+            `match_data_${props.match}_${props.team}_data`,
+            JSON.stringify(data.optionsData),
+          );
+
+          localStorage.setItem(
+            `match_data_${props.match}_allData`,
+            JSON.stringify(data.allData),
+          );
+        }
+      });
+  }
   supabase
     .from<Events>("events")
     .select("*")
@@ -162,6 +199,28 @@
       });
 
       data.event_image_url = await generateThumbnail("goal celebration");
+    } else if (type === IEventType.OWN_GOAL) {
+      await generateCommentary(
+        `Player ${player?.player.full_name} scored own goal agains his team ${
+          data.home_team?.id === player?.player.team_id
+            ? data.home_team?.name
+            : data.away_team?.name
+        } and made it ${
+          data.home_team?.id === player?.player.team_id
+            ? ++data.home_score
+            : ++data.away_score
+        }-${
+          data.home_team?.id === player?.player.team_id
+            ? data.away_score
+            : data.home_score
+        } ${data.home_team?.id === player?.player.team_id ? "home" : "away"}
+     , ${time} minutes`,
+      ).then((res) => {
+        data.home_team?.id === player?.player.team_id;
+        data.commentary = res.data.choices ? res.data.choices[0].text + "" : "";
+      });
+
+      data.event_image_url = await generateThumbnail("own goal scored");
     } else if (type === IEventType.SHOT_ON_TARGET || type === IEventType.SHOT) {
       await generateCommentary(
         `${player?.player.full_name} makes ${type} but not goal scored team ${
@@ -266,17 +325,29 @@
       <SelectAtom
         v-model="data.done_by"
         placeholder="Select Player who shot"
-        :options="data.optionsData"
+        :options="
+          data.type == IEventType.OWN_GOAL
+            ? data.opponentOptions
+            : data.optionsData
+        "
       ></SelectAtom>
     </div>
-    <h1 class="font-black mt-6 mb-4">Assisted by</h1>
-    <div class="w-full md:w-1/2">
-      <SelectAtom
-        v-model="data.assisted_by"
-        placeholder="Select Player to assisted"
-        :options="data.optionsData"
-      ></SelectAtom>
-    </div>
+    <template
+      v-if="
+        data.type == IEventType.GOAL ||
+        data.type == IEventType.SHOT ||
+        data.type == IEventType.SHOT_ON_TARGET
+      "
+    >
+      <h1 class="font-black mt-6 mb-4">Assisted by</h1>
+      <div class="w-full md:w-1/2">
+        <SelectAtom
+          v-model="data.assisted_by"
+          placeholder="Select Player to assisted"
+          :options="data.optionsData"
+        ></SelectAtom>
+      </div>
+    </template>
 
     <button
       class="bg-primary text-white mt-2 p-4 px-8 rounded-full"
