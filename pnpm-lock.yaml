@@ -16,7 +16,7 @@ specifiers:
   openai: ^2.0.2
   postcss: 8.4.12
   prettier: 2.6.0
-  sass: 1.49.9
+  sass: 1.50.0
   tailwindcss: 3.0.23
   typescript: 4.6.2
   vite: 2.8.6
@@ -47,10 +47,10 @@ devDependencies:
   eslint-plugin-vue: 8.5.0_eslint@8.11.0
   postcss: 8.4.12
   prettier: 2.6.0
-  sass: 1.49.9
+  sass: 1.50.0
   tailwindcss: 3.0.23_autoprefixer@10.4.4
   typescript: 4.6.2
-  vite: 2.8.6_sass@1.49.9
+  vite: 2.8.6_sass@1.50.0
   vite-plugin-eslint: 1.3.0_vite@2.8.6
   vue-tsc: 0.31.4_typescript@4.6.2
 
@@ -406,7 +406,7 @@ packages:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.8.6_sass@1.49.9
+      vite: 2.8.6_sass@1.50.0
       vue: 3.2.32
     dev: true
 
@@ -2424,8 +2424,8 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /sass/1.49.9:
-    resolution: {integrity: sha512-YlYWkkHP9fbwaFRZQRXgDi3mXZShslVmmo+FVK3kHLUELHHEYrCmL1x6IUjC7wLS6VuJSAFXRQS/DxdsC4xL1A==}
+  /sass/1.50.0:
+    resolution: {integrity: sha512-cLsD6MEZ5URXHStxApajEh7gW189kkjn4Rc8DQweMyF+o5HF5nfEz8QYLMlPsTOD88DknatTmBWkOcw5/LnJLQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -2672,12 +2672,12 @@ packages:
       '@rollup/pluginutils': 4.2.0
       eslint: 7.32.0
       rollup: 2.70.1
-      vite: 2.8.6_sass@1.49.9
+      vite: 2.8.6_sass@1.50.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite/2.8.6_sass@1.49.9:
+  /vite/2.8.6_sass@1.50.0:
     resolution: {integrity: sha512-e4H0QpludOVKkmOsRyqQ7LTcMUDF3mcgyNU4lmi0B5JUbe0ZxeBBl8VoZ8Y6Rfn9eFKYtdXNPcYK97ZwH+K2ug==}
     engines: {node: '>=12.2.0'}
     hasBin: true
@@ -2697,7 +2697,7 @@ packages:
       postcss: 8.4.12
       resolve: 1.22.0
       rollup: 2.70.1
-      sass: 1.49.9
+      sass: 1.50.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
